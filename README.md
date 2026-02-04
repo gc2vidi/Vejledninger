@@ -4,6 +4,8 @@
 
 Ved hver push til main, vil dokumentationen blive bygget og deployet til github pages.
 
+Siden er tilgængelig her: [Vejledninger](https://gc2vidi.github.io/Vejledninger/)
+
 ## Udvikling
 
 For at installere og køre projektet lokalt, skal du have node.js installeret.
