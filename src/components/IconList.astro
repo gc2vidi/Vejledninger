@@ -1,0 +1,38 @@
+---
+import { parse } from "node-html-parser";
+import { Icon } from "@astrojs/starlight/components";
+
+const html = await Astro.slots.render("default");
+const root = parse(html);
+const listItems = root.querySelectorAll("li");
+
+// Assuming that the `icon` prop has been passed correctly and is available
+const { icon, size } = Astro.props;
+
+// If size is not set, default to 1rem
+const iconSize = size || "1rem";
+---
+
+<style>
+  .icon-list {
+    list-style: none; /* Remove default list bullets */
+    padding-left: 0; /* Remove default padding if needed */
+  }
+
+  .icon-list li {
+    display: flex; /* Align icon and text horizontally */
+    align-items: center; /* Center icon and text vertically */
+    gap: 8px; /* Space between icon and text */
+  }
+</style>
+
+<ul class="icon-list">
+  {
+    listItems.map((item) => (
+      <li>
+        <Icon name={icon} size={iconSize} /> {/* Display icon as bullet */}
+        <Fragment set:html={item.innerHTML} />
+      </li>
+    ))
+  }
+</ul>

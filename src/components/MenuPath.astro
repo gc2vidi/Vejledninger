@@ -1,0 +1,15 @@
+---
+// props: { items?: string[] | string }
+const { items = [] } = Astro.props;
+const parts = Array.isArray(items)
+  ? items.filter(Boolean)
+  : String(items).split('→').map((p) => p.trim()).filter(Boolean);
+---
+<span class="menupath" aria-label="Menupath">
+  {parts.map((label, i) => (
+    <>
+      <kbd class="menu">{label}</kbd>
+      {i < parts.length - 1 && <span class="sep" aria-hidden="true">→</span>}
+    </>
+  ))}
+</span>

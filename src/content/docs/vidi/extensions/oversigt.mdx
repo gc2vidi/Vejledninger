@@ -1,0 +1,98 @@
+---
+title: Udvidelser
+description: Oversigt over udvidelser (extensions) i Vidi
+sidebar:
+  order: 1
+---
+
+## Hvad er Vidi-udvidelser?
+
+Udvidelser (på engelsk kaldet "extensions") er moduler der tilføjer ekstra funktionalitet ud over Vidi's standard-funktioner. De er ikke aktiveret som standard, men kan installeres og konfigureres efter behov af systemadministratoren.
+
+:::note[Terminologi]
+I Vidi og GC2 bruges det engelske begreb "extensions". I denne dokumentation bruger vi det danske "udvidelser".
+:::
+
+Udvidelser giver mulighed for at:
+- Tilføje specialiserede værktøjer til specifikke brancher eller use cases
+- Integrere med eksterne systemer og databaser
+- Udvide Vidi's funktionalitet uden at ændre kernesystemet
+
+## Tilgængelige udvidelser
+
+### Med UI i Vidi-menuen
+
+Disse udvidelser tilføjer knapper og funktionalitet direkte i Vidi-menuen:
+
+#### [Konfliksøgning](/vidi/vidi-menuen/konfliksoegning) (conflictSearch)
+Find overlappende features og generer konflikt-rapporter. Nyttigt til at identificere spatiale konflikter mellem forskellige lag.
+
+**Bruges til:** Byggesagsbehandling, ledningsføring, planlægning  
+**Extension-dokumentation:** [conflictSearch →](/vidi/extensions/conflictSearch)
+
+#### [Koordinater](/vidi/vidi-menuen/koordinater) (coordinates)
+Vis og arbejd med koordinater i forskellige koordinatsystemer. Konverter mellem WGS84 og ETRS89 UTM32N.
+
+**Bruges til:** Præcis positionsangivelse, feltarbejde, koordinat-deling  
+**Extension-dokumentation:** [coordinates →](/vidi/extensions/coordinates)
+
+#### [Skrå- og gadefoto](/vidi/vidi-menuen/skraa-gadefoto) (streetView)
+Integrer med Google Street View, Mapillary, Skråfoto og andre billedtjenester direkte fra kortet.
+
+**Bruges til:** Inspektion, dokumentation, orientering  
+**Extension-dokumentation:** [streetView →](/vidi/extensions/streetView)
+
+#### [Symboler](/vidi/vidi-menuen/symboler) (symbols)
+Placer og administrer SVG-symboler på kortet med skalering og rotation.
+
+**Bruges til:** Markering af interessepunkter, tematiske kort, præsentationer  
+**Extension-dokumentation:** [symbols →](/vidi/extensions/symbols)
+
+#### [Rutevejledning](/vidi/vaerktojslinjen/placering#vejvisning) (directions)
+Integration med Google Maps for rutevejledning til punkter på kortet.
+
+**Bruges til:** Feltarbejde, navigationshj ælp  
+**Extension-dokumentation:** [directions →](/vidi/extensions/directions)
+
+### Uden UI i Vidi-menuen
+
+Disse udvidelser fungerer "bag kulisserne" eller integreres i eksisterende funktioner:
+
+#### [Editor](/vidi/extensions/editor)
+Gør det muligt at redigere features direkte i kortet. Kræver konfiguration i GC2 og korrekte rettigheder.
+
+**Bruges til:** Dataredigering, feltarbejde, vedligeholdelse
+
+#### [Avancerede udvidelser](/vidi/extensions/avanceret)
+Embed, languages, og offlineMap - tekniske udvidelser til specielle formål.
+
+**Bruges til:** Integration, internationalisering, offline-brug
+
+## Aktivering af udvidelser
+
+Udvidelser aktiveres i GC2's kørselskonfiguration. Kontakt din systemadministrator for at få aktiveret specifikke udvidelser i jeres Vidi-installation.
+
+:::note[For administratorer]
+Læs mere om opsætning af udvidelser i GC2-dokumentationen (kommer snart).
+:::
+
+## Udvikling af egne udvidelser
+
+Vidi er open source, og det er muligt at udvikle egne udvidelser. For udviklere henvises til:
+
+- **GitHub repository**: [https://github.com/mapcentia/vidi](https://github.com/mapcentia/vidi)
+- **Extension documentation**: [https://github.com/mapcentia/vidi/tree/master/extensions](https://github.com/mapcentia/vidi/tree/master/extensions)
+
+## Oversigt over udvidelser
+
+| Udvidelse | UI i menu | Formål | Dokumentation |
+|-----------|-----------|--------|---------------|
+| **conflictSearch** | ✅ Ja | Konfliksøgning | [Læs mere →](/vidi/extensions/conflictSearch) |
+| **coordinates** | ✅ Ja | Koordinater | [Læs mere →](/vidi/extensions/coordinates) |
+| **streetView** | ✅ Ja | Skrå- og gadefoto | [Læs mere →](/vidi/extensions/streetView) |
+| **symbols** | ✅ Ja | Symboler | [Læs mere →](/vidi/extensions/symbols) |
+| **directions** | ⚠️ Værktøjslinje | Rutevejledning | [Læs mere →](/vidi/extensions/directions) |
+| **editor** | ❌ Nej | Redigering | [Læs mere →](/vidi/extensions/editor) |
+| **embed** | ❌ Nej | Embedding | [Læs mere →](/vidi/extensions/avanceret) |
+| **languages** | ❌ Nej | Sprog | [Læs mere →](/vidi/extensions/avanceret) |
+| **offlineMap** | ❌ Nej | Offline kort | [Læs mere →](/vidi/extensions/avanceret) |

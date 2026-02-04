@@ -1,0 +1,303 @@
+---
+title: Print
+description: Print kort til PDF eller PNG
+sidebar:
+  order: 9
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er print-funktionen?
+
+Print-funktionen gør det muligt at eksportere kortet til PDF eller PNG-format. Du kan definere udskriftsområde, vælge papirstørrelse, tilføje titel og kommentar, samt inkludere signaturforklaring.
+
+## Aktiver print-værktøjet
+
+1. Klik på **print-ikonet** i Vidi-menuen
+2. En **rød kasse** vises på kortet - dette er udskriftsområdet
+3. Print-indstillinger vises i menuen
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-aktiveret.png`
+*Print-værktøjet aktiveret med rød kasse*
+
+:::tip[Godt at vide]
+Den røde kasse repræsenterer nøjagtigt det område der vil blive printet.
+:::
+
+## Juster udskriftsområde
+
+Du kan tilpasse udskriftsområdet direkte på kortet:
+
+### Flyt udskriftsområde
+
+1. **Klik og hold** på **punktet i midten** af den røde kasse
+2. **Træk** kassen til den ønskede position
+3. **Slip** for at placere
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-print-flyt.gif`
+*Animation af flytning af udskriftsområde*
+
+### Ændre målestoksforhold
+
+1. **Klik og træk** i de **yderste punkter** på kassen
+2. Målestoksforholdet ændres (zoom-niveau)
+3. Slip når du er tilfreds
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-print-zoom.gif`
+*Animation af ændring af zoom/målestok*
+
+:::note[Bemærk]
+Når du ændrer målestoksforholdet med hjørnepunkterne, forbliver print-størrelsen konstant (papirstørrelsen), men zoom-niveauet ændres.
+:::
+
+## Print-indstillinger
+
+### Skabelon
+
+Hvis der er defineret flere print-skabeloner i konfigurationen, kan du vælge mellem dem:
+
+- **Standard** - Basis printlayout
+- **Teknisk** - Teknisk rapport med koordinatgitter
+- **Præsentation** - Præsentationslayout
+- *Eller andre brugerdefinerede skabeloner*
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-skabeloner.png`
+*Dropdown med forskellige print-skabeloner*
+
+:::note[Konfiguration]
+Print-skabeloner konfigureres af systemadministratoren i Vidi's kørselskonfiguration.
+:::
+
+### Papirstørrelse
+
+Vælg papirstørrelse fra dropdown:
+
+- **A4** (210 × 297 mm)
+- **A3** (297 × 420 mm)
+- **A2** (420 × 594 mm)
+- **A1** (594 × 841 mm)
+- **A0** (841 × 1189 mm)
+- *Eller andre tilgængelige størrelser*
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-papirstoerrelse.png`
+*Dropdown med papirstørrelser*
+
+:::tip[Nyttigt]
+- **A4:** Til rapporter og dokumentation
+- **A3:** Til detaljerede kort
+- **A0:** Til storskala-print og plakater
+:::
+
+### Orientering
+
+Vælg mellem:
+
+- **Liggende** (landscape) - Bredden er større end højden
+- **Stående** (portrait) - Højden er større end bredden
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-orientering.png`
+*Liggende vs. Stående orientering*
+
+### Titel og kommentar
+
+Du kan tilføje tekst til printet:
+
+1. **Titel** - Overskrift på printet (f.eks. "Spildevandsledninger - Område 3")
+2. **Kommentar** - Yderligere beskrivelse eller noter
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-titel-kommentar.png`
+*Felter til titel og kommentar*
+
+:::note[Korthoved]
+Hvis titel eller kommentar udfyldes, genereres et **korthoved** øverst på printet med denne information.
+:::
+
+### Vis signatur
+
+Slå **signaturforklaring** til eller fra:
+
+- ✅ **Til:** Signaturforklaring inkluderes på printet
+- ❌ **Fra:** Kun kortet printes
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-signatur.png`
+*Print med og uden signaturforklaring*
+
+:::tip[Anbefaling]
+Inkluder altid signaturforklaring for at gøre printet selvforklarende.
+:::
+
+[Læs mere om signaturforklaring →](/vidi/vidi-menuen/signaturforklaring)
+
+## Lav print
+
+Når alle indstillinger er sat, kan du generere printet:
+
+### Print til PDF
+
+1. Tjek at alle indstillinger er korrekte
+2. Klik på **"Lav PDF"**
+3. Vidi genererer PDF'en (kan tage nogle sekunder)
+4. Når printet er færdigt, vises **download-muligheder**
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-print-lav-pdf.gif`
+*Animation af PDF-generering*
+
+### Print til PNG
+
+1. Klik på **dropdown** ved "Lav PDF"
+2. Vælg **"PNG"**
+3. PNG-billede genereres
+4. Download-muligheder vises
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-png.png`
+*Valg af PNG-format*
+
+:::note[Forskel på PDF og PNG]
+- **PDF:** Vektorformat, skalerbar, god til print
+- **PNG:** Rasterformat, fast opløsning, god til web og præsentationer
+:::
+
+## Download og visning
+
+Når printet er gennemført, har du følgende muligheder:
+
+### Åbn i browser
+
+Klik på **"Åbn"** for at se printet direkte i browseren.
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-aabn.png`
+*Print vist i browser*
+
+### Download
+
+Klik på **"Download"** (via dropdown) for at gemme filen lokalt.
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-download.png`
+*Download-knap*
+
+### HTML-version
+
+Klik på **"HTML"** (via dropdown) for at få en interaktiv HTML-version af kortet.
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-html.png`
+*HTML-version af kort*
+
+:::tip[HTML-version]
+HTML-versionen kan bruges til at:
+- Embedde kortet på websites
+- Dele et statisk "snapshot" af kortet
+- Vise kortet uden fuld Vidi-funktionalitet
+:::
+
+## Hvad inkluderes i printet?
+
+Printet inkluderer:
+
+- ✅ **Synlige kortlag** (de lag der er tændt)
+- ✅ **Baggrundskort** (det valgte baggrundskort)
+- ✅ **Tegninger** (fra tegneværktøjet)
+- ✅ **Målinger** (fra måleværktøjet)
+- ✅ **Signaturforklaring** (hvis aktiveret)
+- ✅ **Titel og kommentar** (hvis udfyldt)
+- ✅ **Målestoksforhold**
+- ✅ **Nordpil** (afhænger af skabelon)
+- ✅ **Koordinatgitter** (afhænger af skabelon)
+- ✅ **Dato** (afhænger af skabelon)
+
+**📸 BILLEDE MANGLER:** `vidi-menu-print-eksempel-komplet.png`
+*Eksempel på komplet print med alle elementer*
+
+## Tips og tricks
+
+### Opsæt før print
+
+1. **Sluk for unødvendige lag** - kun relevante lag skal vises
+2. **Juster gennemsigtighed** - sørg for god kontrast
+3. **Vælg passende baggrundskort** - nem at læse på print
+4. **Zoom til korrekt målestok** - hverken for tæt eller for langt væk
+
+### Optimal print-kvalitet
+
+- **PDF til print:** Brug PDF til fysisk udskrift (vektorformat)
+- **PNG til præsentationer:** Brug PNG til slides og webvisning
+- **Høj opløsning:** Vælg større papirstørrelser for mere detalje
+- **Kontrast:** Brug skærmkort som baggrund for bedst kontrast
+
+### Genbrugeligt print-setup
+
+1. Opsæt kortet som ønsket
+2. Gem som **projekt** (før du printer)
+3. Print til PDF
+4. Projektet kan genindlæses hvis printet skal laves igen
+
+[Læs mere om projekter →](/vidi/vidi-menuen/projekter)
+
+### Batch-print
+
+Hvis du skal lave mange ens print:
+1. Gem opsætning som projekt
+2. Brug print API'et til at automatisere (kræver teknisk viden)
+3. Kontakt systemadministrator for hjælp
+
+## Fejlfinding
+
+### Print tager lang tid?
+
+- Reducér antallet af aktive lag
+- Vælg mindre papirstørrelse
+- Skift til simplere baggrundskort
+- Tjek internetforbindelse
+
+### Print ser forkert ud?
+
+- Tjek at alle lag er synlige på kortet først
+- Verificér målestoksforhold
+- Kontrollér om signaturforklaring er aktiveret (hvis ønsket)
+- Genindlæs siden og prøv igen
+
+### Kan ikke downloade print?
+
+- Tjek browser's download-indstillinger
+- Prøv højreklik → "Gem som..."
+- Tjek om pop-up-blocker er aktiveret
+- Kontakt systemadministrator
+
+### Manglende elementer i print?
+
+- **Tegninger forsvundet:** Gem tegninger i projekt først
+- **Lag mangler:** Tjek at laget er tændt
+- **Signatur mangler:** Aktivér "Vis signatur"
+- **Titel/kommentar mangler:** Udfyld felterne før print
+
+### Dårlig kvalitet?
+
+- Brug PDF i stedet for PNG (vektorformat)
+- Vælg større papirstørrelse
+- Reducér zoom-niveau (mindre målestok)
+- Brug højopløseligt baggrundskort
+
+## Avanceret: Print API
+
+For avancerede brugere og automatisering er der et print-API tilgængeligt:
+
+**Format:**
+```
+http://[server]/api/static/[database]/[schema]/?[parameters]
+```
+
+**Parametre:**
+- `state=[state-id]` - Fra gemt projekt
+- `width=[pixels]` - Bredde
+- `height=[pixels]` - Højde
+- `format=[pdf|png]` - Outputformat
+
+**Eksempel:**
+```
+http://mapgoviditest.geopartner.dk/api/static/vandvaerker/public/?state=state_snapshot_123&width=1920&height=1080&format=pdf
+```
+
+:::note[Bemærk]
+Print-API'et kræver et gemt projekt (state-id).
+
+[Læs mere om projekter →](/vidi/vidi-menuen/projekter)
+:::

@@ -1,0 +1,5 @@
+[
+  {"field": "type","operator": "="},
+  {"field": "datoetableret","operator": ">="},
+  {"field": "datoetableret","operator": "<"}
+]

@@ -1,0 +1,260 @@
+---
+title: Editor
+description: Redigér features direkte i kortet
+sidebar:
+  order: 7
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er Editor-udvidelsen?
+
+Editor-udvidelsen gør det muligt at redigere geografiske features direkte i Vidi. Du kan oprette nye features, flytte eksisterende, ændre attributter og slette features - alt sammen uden at bruge desktop-GIS.
+
+:::caution[Vigtigt: Kræver konfiguration]
+Editor-udvidelsen kræver:
+- ✅ Udvidelsen skal være aktiveret i kørselskonfiguration
+- ✅ Laget skal være gjort editerbart i GC2
+- ✅ Du skal have de korrekte rettigheder i GC2
+- ✅ Du skal være logget ind
+
+Kontakt din systemadministrator for opsætning.
+:::
+
+## Hvad kan redigeres?
+
+Med Editor-udvidelsen kan du:
+
+- ✏️ **Oprette** nye features (punkter, linjer, polygoner)
+- 🔄 **Flytte** eksisterende features
+- ✂️ **Ændre geometri** (tilføj/fjern knudepunkter)
+- 📝 **Redigere attributter** (tekstfelter, numre, datoer)
+- 🗑️ **Slette** features
+
+## Adgang til editor
+
+Editor-funktionen integreres i **Infoværktøjet**:
+
+1. Klik på **info-ikonet** i Vidi-menuen
+2. **Klik på en feature** fra et editerbart lag
+3. Info-popup vises med **"Rediger"** eller **"Edit"**-knap
+4. Klik på **"Rediger"** for at starte redigering
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-editor-adgang.png`
+*Info-popup med Rediger-knap*
+
+[Læs mere om Infoværktøjet →](/vidi/vidi-menuen/infovaerktoj)
+
+## Redigér geometri
+
+### Flyt feature
+
+1. **Klik på featuren** med infoværktøj
+2. Klik **"Rediger"**
+3. **Træk featuren** til ny position
+4. Klik **"Gem"** for at gemme ændringen
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-editor-flyt.gif`
+
+### Ændre knudepunkter
+
+For linjer og polygoner:
+
+1. **Klik på featuren** med infoværktøj
+2. Klik **"Rediger"**
+3. **Knudepunkter** vises som hvide kasser
+4. **Træk knudepunkter** for at ændre form
+5. **Klik på linje** for at tilføje nyt knudepunkt
+6. **Klik på knudepunkt** og tryk Delete for at fjerne
+7. Klik **"Gem"** for at gemme
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-editor-knudepunkter.png`
+
+## Redigér attributter
+
+### Ændre felter
+
+1. **Klik på featuren** med infoværktøj
+2. Klik **"Rediger"**
+3. En **formular** vises med alle attributter
+4. **Ændre værdier** i felterne
+5. Klik **"Gem"** for at gemme ændringer
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-editor-attributter.png`
+
+### Felttyper
+
+Afhængigt af feltets type i databasen:
+
+- **Tekstfelter:** Fri tekst
+- **Tal-felter:** Kun numre
+- **Dato-felter:** Datovælger
+- **Dropdown:** Foruddefinerede værdier
+- **Checkbox:** Ja/Nej værdier
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-editor-felttyper.png`
+
+## Opret nye features
+
+### Tegn ny feature
+
+1. Klik på **"Opret ny feature"** (eller tilsvarende knap)
+2. **Vælg lag** (hvis flere er editerbare)
+3. **Vælg geometri-type** (punkt, linje, polygon)
+4. **Tegn på kortet**:
+   - **Punkt:** Klik for at placere
+   - **Linje:** Klik for hvert knudepunkt, dobbeltklik for at afslutte
+   - **Polygon:** Klik for hvert hjørne, klik på startpunkt for at lukke
+5. **Udfyld attributter** i formular
+6. Klik **"Gem"** for at oprette featuren
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-editor-opret.gif`
+
+## Slet features
+
+### Slet feature
+
+1. **Klik på featuren** med infoværktøj
+2. Klik **"Rediger"**
+3. Klik **"Slet"** eller **"Delete"**
+4. **Bekræft sletning**
+5. Featuren slettes fra databasen
+
+:::warning[Vigtigt]
+Når en feature slettes, kan den typisk ikke genskabes (medmindre database har version control).
+:::
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-editor-slet.png`
+
+## Rettigheder og sikkerhed
+
+### Hvem kan redigere?
+
+Adgang til redigering styres gennem GC2:
+
+- **Brugere:** Kun brugere med rettigheder kan redigere
+- **Lag:** Kun lag der er gjort editerbare kan redigeres
+- **Features:** Nogle systemer kan begrænse redigering til egne features
+
+:::note[GC2-konfiguration]
+Læs mere om opsætning af rettigheder og editerbare lag i GC2-dokumentationen (kommer snart).
+:::
+
+### Audit trail
+
+Afhængigt af GC2-opsætning kan der være:
+- Log over hvem der har redigeret
+- Tidsstempel for ændringer
+- Historik af tidligere værdier
+
+## Use cases
+
+### Feltarbejde
+
+**Scenarie:** Opdater data direkte fra felten
+
+1. Åbn Vidi på tablet/mobil
+2. Log ind
+3. Find feature der skal opdateres
+4. Redigér geometri eller attributter
+5. Gem - data opdateres øjeblikkeligt
+
+### Kvalitetssikring
+
+**Scenarie:** Ret fejl i kortdata
+
+1. Identificér fejl i feature
+2. Klik på featuren
+3. Redigér forkerte attributter
+4. Gem rettelse
+5. Fejl er rettet i realtid
+
+### Indberetning
+
+**Scenarie:** Borgere indberetter fejl/mangler
+
+1. Borger logger ind i Vidi
+2. Klikker hvor fejl er
+3. Opretter ny feature (f.eks. "Rapporteret fejl")
+4. Udfylder formular med beskrivelse
+5. Kommunen modtager indberetning
+
+### Dataindsamling
+
+**Scenarie:** Systematisk dataindsamling
+
+1. Definer lag for dataindsamling i GC2
+2. Åbn Vidi i felten
+3. Opret nye features for hver observation
+4. Udfyld attributter (type, tilstand, osv.)
+5. Data gemmes direkte i databasen
+
+## Tips og tricks
+
+### Gem ofte
+
+- Gem løbende mens du redigerer
+- Undgå at miste ændringer ved ustabil forbindelse
+- Test gem-funktionen før store redigeringer
+
+### Verificér før sletning
+
+- Dobbelttjek at du sletter den rigtige feature
+- Tag evt. screenshot før sletning
+- Kontakt administrator hvis du kommer til at slette forkert
+
+### Brug validering
+
+Hvis felter har validering:
+- Følg kravene (f.eks. email-format, tal-intervaller)
+- Fejlbeskeder vises hvis data er ugyldige
+- Ret fejl før du kan gemme
+
+### Kombiner med andre værktøjer
+
+1. **Søg** efter feature
+2. **Hent info** for at se detaljer
+3. **Redigér** hvis nødvendigt
+4. **Gem** ændringer
+5. **Verificér** med ny info-søgning
+
+## Fejlfinding
+
+### "Rediger"-knap vises ikke?
+
+- Tjek at du er logget ind
+- Verificér at laget er editerbart i GC2
+- Kontrollér at du har rettigheder
+- Kontakt systemadministrator
+
+### Kan ikke gemme ændringer?
+
+- Tjek internetforbindelse
+- Verificér at alle obligatoriske felter er udfyldt
+- Tjek at data opfylder validerings-regler
+- Se i browser-konsol for fejlbeskeder
+
+### Geometri kan ikke ændres?
+
+- Tjek at du har klikket "Rediger"
+- Verificér at det er den rigtige geometri-type
+- Zoom ind for bedre præcision
+- Genindlæs siden og prøv igen
+
+### Ændringer vises ikke?
+
+- Tænd/sluk laget for at opdatere
+- Genindlæs siden
+- Ryd browser-cache
+- Kontakt systemadministrator hvis problemet fortsætter
+
+## Alternativer til Editor
+
+Hvis Editor-udvidelsen ikke er tilgængelig:
+
+- **QGIS:** Desktop-GIS til avanceret redigering
+- **GC2:** Direkte redigering i GC2's interface
+- **PostGIS:** Direkte database-adgang (kun for tekniske brugere)
+- **Web Feature Service (WFS):** Integration med andre systemer
+
+[Læs mere om GC2 →](/gc2/)

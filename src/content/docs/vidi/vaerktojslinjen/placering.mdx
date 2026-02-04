@@ -1,0 +1,74 @@
+---
+title: Placering og rutevejledning
+description: Brug GPS-placering og få rutevejledning i kortet
+sidebar:
+  order: 3
+---
+import vaerktojslinjenPlaceringTilladelseImg from '../resources/vaerktojslinjen-vidi-placering-tilladelse.svg';
+import vaerktojslinjenFindMigImg from '../resources/vaerktojslinjen-vidi-find-mig.jpg';
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+Vidi har en række værktøjer, der gør det muligt at finde ens placering og få vejvisning via google maps.
+
+![Placeringsværktøjer i værktøjslinjen](../resources/vaerktojslinjen-vidi-placering.svg)
+*Placeringsværktøjerne i højre side af kortet*
+
+## Find mig – GPS-placering
+
+"Find mig"-funktionen bruger din enheds placeringstjeneste til at vise din aktuelle position på kortet.
+
+### Sådan bruger du Find mig
+
+1. **Klik på placerings-ikonet** i værktøjslinjen
+2. **Giv tilladelse** til at bruge din placering, hvis browseren spørger, se første figur herunder.
+3. **Kortet zoomer** automatisk til din position og viser den med et markør, se anden figur herunder.
+
+<figure class="centered-figure">
+  <img 
+    src={vaerktojslinjenPlaceringTilladelseImg.src} 
+    alt="Find mig-funktionen tilladelse" 
+    style={{ width: '300px', maxWidth: '100%' }} 
+  />
+  <figcaption>Find mig-funktionen tilladelse</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img 
+    src={vaerktojslinjenFindMigImg.src} 
+    alt="Find mig-funktionen viser din aktuelle position" 
+    style={{ width: '300px', maxWidth: '100%' }} 
+  />
+  <figcaption>Find mig-funktionen viser din aktuelle position og orientering</figcaption>
+</figure>
+
+:::tip[Godt at vide]
+Nøjagtigheden af placeringen afhænger af din enhed og om du bruger GPS, WiFi eller mobilnetværk til lokalisering. På en computer vil placeringen typisk være mindre præcis end på en smartphone med GPS.
+:::
+
+### Genaktivering af placering
+
+Hvis du flytter kortet væk fra din position, kan du:
+- Klikke på placerings-ikonet igen for at centrere kortet på din aktuelle position
+- Deaktivere funktionen ved at klikke på ikonet endnu en gang
+
+### Placering virker ikke?
+
+Hvis "Find mig" ikke virker, kan det skyldes:
+
+- **Manglende tilladelse** – Giv browseren tilladelse til at bruge din placering
+- **Enhedens indstillinger** – Tjek at GPS/placering er aktiveret på din enhed
+- **Browser-indstillinger** – Nogle browsere blokerer placeringstjenester som standard
+
+## Rutevejledning
+
+:::note[Extension påkrævet]
+Rutevejledning er en extension der ikke er aktiveret som standard. Kontakt din administrator, hvis du har brug for denne funktion. [Læs mere om direction extension →](/vidi/extensions/directions)
+:::
+
+### Sådan bruger du rutevejledning
+
+1. **Start først Find mig-funktionen** – aktiver din GPS-position
+2. **Klik på Rutevejlednings-ikonet** i værktøjslinjen
+3. **Vælg destination** – klik på det ønskede sted på kortet
+4. **Google Maps åbnes** i et nyt vindue med rutevejledning fra din position til destinationen
