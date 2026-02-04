@@ -1,0 +1,155 @@
+/* Dark mode colors. */
+:root[data-theme='dark'] {
+    --sl-color-accent: rgb(52, 152, 219);
+}
+
+/* Light mode colors. */
+:root[data-theme='light'] {
+    --sl-color-accent: rgb(41, 128, 185);
+}
+
+/* Reduce size of all h2 and h3 in docs content */
+.sl-markdown-content h2 {
+  font-size: 1.75rem;   /* default is ~2rem */
+}
+
+.sl-markdown-content h3 {
+  font-size: 1.25rem;  /* default is ~1.5rem */
+}
+
+/* --- IMAGE CENTERING --- */
+
+/* 1. Center images that are the only element in a paragraph */
+.sl-markdown-content p > img:only-child {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 2. Center an image when it is in the same paragraph as its caption */
+.sl-markdown-content p:has(> img:first-child + em:last-child) > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* --- CAPTION STYLING --- */
+
+/* 1. Style a caption when it is in a SEPARATE paragraph */
+p:has(> img:only-child) + p:has(> em:only-child) {
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 2em;
+  font-size: var(--sl-font-size-sm);
+  color: var(--sl-color-gray-3);
+  font-style: normal;
+}
+
+/* 2. Style a caption when it is in the SAME paragraph as the image */
+.sl-markdown-content p:has(> img:first-child + em:last-child) > em {
+  display: block;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 2em;
+  font-size: var(--sl-font-size-sm);
+  color: var(--sl-color-gray-3);
+}
+
+/*
+ * Styling for the custom HTML <figure> component.
+ * This handles centering for both the image and caption.
+ */
+.centered-figure {
+  /* Use flexbox to easily center the contents */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Add some vertical space around the figure */
+  margin-block: 2em;
+}
+
+/*
+ * Style the caption within the custom HTML <figure> component.
+ */
+.centered-figure figcaption {
+  text-align: center;
+  font-style: italic;
+  /* Add a little space between the image and the caption */
+  margin-top: 0.5em;
+  /* Use Starlight's theme variables for a consistent look */
+  font-size: var(--sl-font-size-sm);
+  color: var(--sl-color-gray-3);
+}
+
+/* --------------- MenuPath -------------------*/
+/* Pill */
+.sl-markdown-content .menupath{
+  display:inline-flex;
+  align-items:center;
+  gap:.30rem;
+  padding:.25rem .5rem;
+  border-radius:.5rem; /* less rounded */
+  line-height:1.2;
+  border:1px solid color-mix(in srgb, var(--sl-color-accent), transparent 65%);
+  background: color-mix(in srgb, var(--sl-color-accent), transparent 90%);
+}
+
+/* Menu items */
+.sl-markdown-content .menupath kbd.menu{
+  font: inherit;
+  font-weight: 600;              /* weight for ALL items */
+  color: color-mix(in srgb, var(--sl-color-accent), var(--sl-color-text) 20%);
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+/* Make the arrow a bit larger and heavier */
+.sl-markdown-content .menupath .sep{
+  font-size: 1.25em;      /* was default; bump size */
+  font-weight: 700;       /* thicker if the font supports it */
+  opacity: .75;           /* a touch more visible */
+  margin-inline: -0.1rem;  /* a little more breathing room */
+  line-height: 1;
+  transform: translateY(-0.02em); /* nudge to align baseline */
+}
+
+/* --- IMPORTANT: make last item NOT bold (same as others) --- */
+/* If you previously had a rule that bolded the last item, delete it.
+   If you can't delete it, override it like this: */
+.sl-markdown-content .menupath kbd.menu:last-of-type{
+  font-weight: 600; /* same as others */
+}
+
+
+
+/* --------------- Key -------------------*/
+
+.key-combo {
+  /* Ensures keys and plus signs are nicely aligned */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em; /* Adds space between keys and plus signs */
+  white-space: nowrap; /* Prevents the combo from breaking across lines */
+}
+
+kbd.key {
+  /* The box around the key itself */
+  border: 1px solid #b0b0b0; /* A slightly darker gray for the border */
+  border-bottom: 2px solid #888888; /* Darker bottom border for a 3D effect */
+  background-color: #f9f9f9; /* A very light gray background */
+  padding:.0rem .4rem;
+  border-radius: 2px;
+  
+  /* The text inside the box  */
+  color: rgb(193, 66, 43);
+  font-family: var(--sl-font-body);
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.key-combo .sep {
+    /* Styling for the '+' separator */
+    color: var(--sl-color-text);
+}

@@ -1,0 +1,232 @@
+---
+title: Avancerede udvidelser
+description: Embed, sprog og offline-funktioner
+sidebar:
+  order: 8
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er avancerede udvidelser?
+
+Denne artikel dækker tekniske udvidelser der ikke har direkte UI i Vidi-menuen, men fungerer "bag kulisserne" for at tilføje specialiseret funktionalitet.
+
+## Embed-udvidelsen
+
+### Hvad er embed?
+
+Embed-udvidelsen gør det muligt at indlejre (embedde) Vidi-kort i andre websites og applikationer.
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-embed-eksempel.png`
+*Eksempel på indlejret Vidi-kort*
+
+### Anvendelse
+
+- **Websites:** Vis interaktive kort på organisationens hjemmeside
+- **Portaler:** Integrér kort i borgerselvbetjeningsportaler
+- **Dashboards:** Indlejr kort i BI-dashboards
+- **Apps:** Embed i interne webapplikationer
+
+### Konfiguration
+
+Embed-funktionalitet konfigureres typisk gennem:
+- URL-parametre
+- IFrame-integration
+- API-kald
+
+:::note[For udviklere]
+Kontakt systemadministrator eller konsultér [Vidi's GitHub-dokumentation](https://github.com/mapcentia/vidi) for tekniske detaljer om embed-integration.
+:::
+
+### Eksempel på embed-kode
+
+```html
+<iframe 
+  src="https://your-vidi-instance.com/app/database/schema" 
+  width="100%" 
+  height="600px" 
+  frameborder="0">
+</iframe>
+```
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-embed-kode.png`
+*HTML-kode til embedding*
+
+### Avancerede muligheder
+
+Med embed kan du:
+- ✅ Kontrollere hvilke værktøjer der vises
+- ✅ Sætte start-position og zoom
+- ✅ Forvælge aktive lag
+- ✅ Tilpasse styling og farver
+- ✅ Kommunikere med parent-vindue via JavaScript
+
+## Languages-udvidelsen
+
+### Hvad er languages?
+
+Languages-udvidelsen gør det muligt at vise Vidi i flere sprog, så brugere kan vælge deres foretrukne sprog.
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-languages-vaelger.png`
+*Sprog-vælger i Vidi*
+
+### Understøttede sprog
+
+Typiske sprog-pakker inkluderer:
+- 🇩🇰 **Dansk** (da)
+- 🇬🇧 **Engelsk** (en)
+- 🇩🇪 **Tysk** (de)
+- 🇸🇪 **Svensk** (sv)
+- 🇳🇴 **Norsk** (no)
+- *Og andre efter behov*
+
+### Anvendelse
+
+- **Internationale organisationer:** Support for flere nationaliteter
+- **Turistinformation:** Vis kort på flere sprog
+- **Multikulturelle kommuner:** Tilgængelighed for alle borgere
+- **Eksport-virksomheder:** Præsentér kort til internationale partnere
+
+### Hvad oversættes?
+
+- ✅ Menu-punkter og knapper
+- ✅ Værktøjstekster og tooltips
+- ✅ Fejlbeskeder
+- ✅ Hjælpetekster
+- ⚠️ Lag-navne og beskrivelser (kræver oversættelse i GC2)
+
+:::note[GC2-integration]
+For at oversætte lag-navne og metadata, skal det opsættes i GC2. Kontakt systemadministrator.
+:::
+
+### Skift sprog
+
+Hvis aktiveret, kan brugere typisk skifte sprog via:
+- Dropdown i menu eller header
+- Browser-sprog (automatisk)
+- URL-parameter (f.eks. `?language=en`)
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-languages-skift.gif`
+*Animation af sprog-skift*
+
+## OfflineMap-udvidelsen
+
+### Hvad er offlineMap?
+
+OfflineMap-udvidelsen gør det muligt at bruge Vidi offline ved at downloade kort-data til lokal lagring.
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-offlinemap-download.png`
+*Download af offline-kort*
+
+### Anvendelse
+
+- **Feltarbejde uden netværk:** Arbejd i områder uden dækning
+- **Emergency response:** Fungerende kort ved netværksudfald
+- **Fartøjer:** Brug kort på skibe uden konstant forbindelse
+- **Performance:** Hurtigere indlæsning af ofte brugte områder
+
+### Sådan bruges offlineMap
+
+1. **Definér område** på kortet
+2. **Vælg zoom-niveauer** (højere zoom = mere data)
+3. **Download** kort-tiles til browser-lagring
+4. **Arbejd offline** - Vidi bruger lokale tiles
+5. **Synkronisér** når online igen
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-offlinemap-workflow.gif`
+
+### Begrænsninger
+
+⚠️ **Vær opmærksom på:**
+- Kræver browser med IndexedDB-support
+- Kan fylde meget i browser-lagring
+- Kun baggrundskort kan typisk gemmes offline (ikke dynamiske lag)
+- Data bliver forældet hvis ikke opdateret
+
+### Storage-krav
+
+Offline-kort kan fylde meget:
+- **Lille område, lavt zoom:** 10-50 MB
+- **Mellem område, mellem zoom:** 100-500 MB
+- **Stort område, højt zoom:** 1-5 GB+
+
+:::caution[Vigtigt]
+Tjek browser's lagringsgrænser og ryd op regelmæssigt.
+:::
+
+## Konfiguration
+
+Alle tre udvidelser kræver konfiguration i Vidi's kørselskonfiguration:
+
+### Aktivering
+
+```json
+{
+  "extensions": [
+    "embed",
+    "languages",
+    "offlineMap"
+  ]
+}
+```
+
+### Detaljeret konfiguration
+
+Hver udvidelse har egne konfigurations-parametre. Kontakt systemadministrator eller konsultér Vidi's tekniske dokumentation.
+
+## For administratorer og udviklere
+
+### Ressourcer
+
+- **GitHub:** [https://github.com/mapcentia/vidi/tree/master/extensions](https://github.com/mapcentia/vidi/tree/master/extensions)
+- **Dokumentation:** Se README i hver extension-mappe
+- **Community:** Vidi's GitHub Issues og Discussions
+
+### Custom extensions
+
+Du kan udvikle egne udvidelser til Vidi:
+1. Følg extension-API'et
+2. Opret ny extension-mappe
+3. Implementér functionality
+4. Aktivér i kørselskonfiguration
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-custom-struktur.png`
+*Mappestruktur for custom extension*
+
+## Fejlfinding
+
+### Embed virker ikke?
+
+- Tjek IFrame-permissions (CSP-headers)
+- Verificér URL er korrekt
+- Tjek CORS-indstillinger
+- Konsultér browser-konsol for fejl
+
+### Sprog skifter ikke?
+
+- Verificér at languages-extension er aktiveret
+- Tjek at sprog-pakke findes
+- Genindlæs siden
+- Ryd browser-cache
+
+### OfflineMap downloader ikke?
+
+- Tjek browser-support (IndexedDB)
+- Verificér lagringsplads
+- Reducér område eller zoom-niveau
+- Tjek netværksforbindelse under download
+
+## Support
+
+For hjælp med avancerede udvidelser:
+
+1. **Konsultér dokumentation:** README-filer i extension-mapper
+2. **Kontakt systemadministrator:** Intern support
+3. **GitHub Issues:** Rapportér bugs eller spørg community
+4. **Professionel support:** Kontakt MapCentia for kommerciel support
+
+---
+
+:::note[Note til dokumentation]
+Denne artikel er et foreløbigt overblik. Når mere detaljeret information bliver tilgængelig fra udviklere (Rene/Martin), vil artiklen blive opdateret med præcise instruktioner og screenshots.
+:::

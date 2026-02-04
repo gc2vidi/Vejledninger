@@ -1,0 +1,6 @@
+{
+      "Ventil - Kontraventil": "type='Kontraventil'",
+      "Afspærringsventil, anden ejer": "funktion = 'Afspærring' AND (ejer = 'Privat' OR ejer = 'Andet forsyningsselskab')'",
+      "Åben": "aabningsgrad='100'",
+      "Lukket": "aabningsgrad='0'"
+}

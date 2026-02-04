@@ -1,0 +1,183 @@
+---
+title: Baggrundskort
+description: Vælg og administrer baggrundskort i Vidi
+sidebar:
+  order: 5
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er baggrundskort?
+
+Baggrundskort er basiskortene der vises under dine data-lag. De giver kontekst og orientering, og kan vise forskellige typer af information som luftfotos, topografiske kort, eller simple basistkort.
+
+## Valg af baggrundskort
+
+### Skift baggrundskort
+
+1. Klik på **baggrundskort-ikonet** i Vidi-menuen
+2. **Vælg et baggrundskort** fra listen
+3. Kortet skifter til det valgte baggrundskort
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-vaelg.png`
+*Screenshot af baggrundskort-vælger*
+
+### Tilgængelige baggrundskort
+
+Hvilke baggrundskort der er tilgængelige, afhænger af din Vidi-konfiguration. Typiske eksempler:
+
+- **Topografisk kort** - Traditionelt kort med veje, bygninger, terræn
+- **Luftfoto** - Satellitbilleder eller flyfoto
+- **Skærmkort** - Simpelt, kontrasterende kort
+- **Historiske kort** - Ældre kort til sammenligning
+- **OpenStreetMap** - Åbent fællesskabskort
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-typer.png`
+*Eksempler på forskellige typer baggrundskort*
+
+:::note[Konfiguration]
+Baggrundskort konfigureres i GC2's kørselskonfiguration under `baseLayers`.
+
+[Læs mere om opsætning af baggrundskort →](/gc2/) (kommer snart)
+:::
+
+## Info om baggrundskort
+
+### Se baggrundskort-info
+
+1. Klik på **info-ikonet (i)** ved bagrundskortet
+2. En boks vises med information:
+   - **Beskrivelse** af bagrundskortet
+   - **Kilde** og **copyright**
+   - **Opdateringsdato**
+   - **Links** til mere information
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-info.png`
+*Screenshot af baggrundskort-info*
+
+## Gennemsigtighed
+
+Du kan justere gennemsigtigheden for hvert baggrundskort individuelt.
+
+### Juster gennemsigtighed
+
+1. Find bagrundskortet i listen
+2. Træk i **gennemsigtighedsskyderen**
+3. Bagrundskortet bliver mere eller mindre gennemsigtigt
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-gennemsigtighed.png`
+*Screenshot af gennemsigtighedsslider*
+
+:::tip[Nyttigt]
+Sæt gennemsigtighed til 50-70% for at se både baggrundskort og dine data-lag tydeligt.
+:::
+
+## Sammenligning af baggrundskort
+
+Vidi har to måder at sammenligne baggrundskort på: **vertikal slider** og **horisontal slider (overlay)**.
+
+### Vertikal slider (split-screen)
+
+Vis to baggrundskort side om side med en vertikal opdeling:
+
+1. **Vælg to baggrundskort**
+2. Klik på **vertikal slider-ikonet**
+3. En **slider** vises i midten af kortet
+4. **Træk slideren** for at se mere af det ene eller andet kort
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-baggrundskort-vertikal-slider.gif`
+*Animation af vertikal slider i brug*
+
+**Anvendelse:**
+- Sammenlign historiske kort med moderne
+- Se forskel mellem luftfoto og topografisk kort
+- Kvalitetstjek mellem forskellige datakilder
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-vertikal-slider-eksempel.png`
+*Eksempel: Historisk kort til venstre, moderne til højre*
+
+### Horisontal slider (overlay/blend)
+
+Overlæg to baggrundskort med justerbar gennemsigtighed:
+
+1. **Vælg to baggrundskort**
+2. Klik på **horisontal slider-ikonet** (overlay)
+3. En **slider** vises
+4. **Træk slideren:**
+   - **Midten:** ca. 50% transparens for begge lag
+   - **Venstre:** mere af venstre kort
+   - **Højre:** mere af højre kort
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-baggrundskort-horisontal-slider.gif`
+*Animation af horisontal slider/overlay i brug*
+
+**Anvendelse:**
+- Blande luftfoto med navne fra topografisk kort
+- Se gradvis overgang mellem to tidsperioder
+- Sammenligne forskellige tolkninger af samme område
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-overlay-eksempel.png`
+*Eksempel: Luftfoto blandet med topografisk kort*
+
+## Tips og tricks
+
+### Valg af baggrundskort til forskellige formål
+
+| Formål | Anbefalet baggrundskort |
+|--------|-------------------------|
+| Præsentation | Luftfoto eller topografisk kort |
+| Analyse | Simpelt skærmkort (god kontrast) |
+| Print | Topografisk kort eller skærmkort |
+| Felt-arbejde | Luftfoto |
+| Historisk sammenligning | Historiske kort + moderne |
+
+### Gennemsigtighed til bedre visning
+
+- **Luftfoto:** Sæt til 80-90% for at se data-lag tydeligt
+- **Topografisk kort:** Sæt til 60-70% for at blande med data
+- **Skærmkort:** Hold på 100% for bedst kontrast
+
+### Kombiner med data-lag
+
+1. Vælg et neutralt baggrundskort
+2. Juster gennemsigtighed
+3. Tænd for dine data-lag
+4. Eksperimentér med forskellige kombinationer
+
+### Sammenligning af historiske ændringer
+
+Brug vertikal slider til at sammenligne:
+1. Historisk luftfoto (venstre)
+2. Moderne luftfoto (højre)
+3. Træk slider for at se ændringer over tid
+
+**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-historisk-sammenligning.png`
+*Eksempel på historisk sammenligning*
+
+### Performance-tip
+
+Hvis Vidi er langsom:
+- Skift til et simplere baggrundskort
+- Deaktivér overlay/slider-funktioner
+- Brug kun ét baggrundskort ad gangen
+
+## Fejlfinding
+
+### Baggrundskort vises ikke?
+
+- Tjek internetforbindelse
+- Prøv at zoome ind/ud
+- Skift til et andet baggrundskort
+- Kontakt systemadministrator
+
+### Slider virker ikke?
+
+- Sørg for at to baggrundskort er valgt
+- Genindlæs siden
+- Prøv den anden slider-type
+
+### Dårlig ydeevne?
+
+- Deaktivér overlay/slider
+- Skift til simplere baggrundskort
+- Reducér antal aktive data-lag

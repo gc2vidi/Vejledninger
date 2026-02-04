@@ -1,0 +1,248 @@
+---
+title: Konfliksøgning
+description: Find overlappende features og generer konflikt-rapporter
+sidebar:
+  order: 10
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er konfliksøgning?
+
+Konfliksøgning (conflictSearch) er en udvidelse der gør det muligt at finde overlappende features mellem forskellige lag. Dette er nyttigt når du skal identificere spatiale konflikter, f.eks. om en ny ledning krydser eksisterende installationer.
+
+## Hvornår bruges konfliksøgning?
+
+**Typiske scenarier:**
+- **Byggesager:** Tjek om ny bygning overlapper med beskyttede områder
+- **Ledningsføring:** Find krydsende ledninger og installationer
+- **Planlægning:** Identificer konflikter mellem forskellige zoner
+- **Miljøanalyse:** Find områder med multiple restriktioner
+
+## Aktiver konfliksøgning
+
+1. Klik på **konfliksøgnings-ikonet** i Vidi-menuen
+2. Udvidelsen aktiveres
+3. **Tegneværktøjer** vises til venstre
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-aktiveret.png`
+*Screenshot af aktiveret konfliksøgning*
+
+:::note[Kræver aktivering]
+Denne udvidelse skal være aktiveret i GC2's kørselskonfiguration.
+
+Kontakt din systemadministrator hvis udvidelsen ikke er tilgængelig.
+:::
+
+## Tegneværktøjer
+
+Når konfliksøgning er aktiveret, får du adgang til følgende tegneværktøjer:
+
+- **Linje** - Tegn en linje
+- **Polygon** - Tegn en polygon
+- **Rektangel** - Tegn et rektangel
+- **Cirkel** - Tegn en cirkel
+- **Markør/Punkt** - Placer et punkt
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-tegnevaerktoejer.png`
+*Tegneværktøjer i konfliksøgning*
+
+## Buffer
+
+Du kan tilføje en buffer omkring den tegnede geometri:
+
+1. **Tegn en geometri** (f.eks. en linje for en planlagt ledning)
+2. **Indtast buffer-afstand** (f.eks. 50 meter)
+3. Bufferen vises på kortet
+4. **Klik "Søg"** for at starte konfliksøgning
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-konfliksoegning-buffer.gif`
+*Animation af tegning med buffer*
+
+:::tip[Nyttigt]
+Brug buffer til at finde features i nærheden af din planlagte geometri, ikke kun dem der direkte overlapper.
+:::
+
+## Udfør konfliksøgning
+
+### Grundlæggende arbejdsgang
+
+1. **Tænd for relevante lag** (de lag du vil søge konflikter i)
+2. **Aktiver konfliksøgning**
+3. **Vælg tegneværktøj**
+4. **Tegn geometri** på kortet
+5. **Tilføj buffer** (valgfrit)
+6. **Klik "Søg"**
+7. **Se resultater**
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-konfliksoegning-workflow.gif`
+*Komplet workflow for konfliksøgning*
+
+## Resultat-kategorier
+
+Når konfliksøgningen er færdig, grupperes resultaterne i følgende kategorier:
+
+### Med konflikt ⚠️
+
+Features der **overlapper** med den tegnede geometri (eller buffer).
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-med-konflikt.png`
+*Liste over features med konflikt*
+
+### Data fra konflikter 📊
+
+Detaljeret data og attributter fra de features der har konflikt.
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-data.png`
+*Detaljeret data fra konflikter*
+
+### Uden konflikter ✅
+
+Features der **ikke overlapper** med geometrien.
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-uden-konflikt.png`
+*Liste over features uden konflikt*
+
+### Fejl ❌
+
+Features eller lag hvor fejl opstod under søgningen.
+
+### Analyse 📈
+
+Statistik og opsummering af konfliksøgningen:
+- Antal konflikter
+- Fordeling per lag
+- Samlede resultater
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-analyse.png`
+*Analyse-oversigt*
+
+## Rapporter
+
+Du kan eksportere konfliksøgnings-resultater til forskellige formater:
+
+### PDF-rapport
+
+1. Klik på **"Lav PDF-rapport"**
+2. En PDF genereres med:
+   - Kort med konflikt-områder
+   - Liste over konflikter
+   - Attribut-data
+   - Statistik
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliks øgning-pdf-rapport.png`
+*Eksempel på PDF-rapport*
+
+### Excel-rapport
+
+1. Klik på **"Lav Excel-rapport"**
+2. En Excel-fil genereres med:
+   - Separat ark for hver kategori
+   - Alle attributter
+   - Filtrérbare data
+   - Statistik
+
+**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-excel-rapport.png`
+*Eksempel på Excel-rapport*
+
+:::tip[Professionel tip]
+Brug Excel-rapport til videre analyse og arkivering. PDF-rapport til præsentationer og godkendelser.
+:::
+
+## Use cases
+
+### Byggesagsbehandling
+
+**Scenarie:** Tjek om ny bygning overlapper beskyttede områder
+
+1. Tegn bygningens placering som polygon
+2. Tilføj 10m buffer (sikkerhedszone)
+3. Tænd for lag: Fredet bebyggelse, beskyttede dyr, natur områder
+4. Kør konfliksøgning
+5. Generer PDF-rapport til byggesagsbehandler
+
+### Ledningsføring
+
+**Scenarie:** Find krydsende ledninger for ny spildevandsledning
+
+1. Tegn planlagt ledningsføring som linje
+2. Tilføj 5m buffer (gravezone)
+3. Tænd for lag: Eksisterende ledninger (vand, el, gas, tele)
+4. Kør konfliksøgning
+5. Generer Excel-rapport med alle krydsende ledninger
+6. Planlæg underboring ved konflikter
+
+### Arealplanlægning
+
+**Scenarie:** Identificer konflikter i ny lokalplan
+
+1. Tegn lokalplan-område som polygon
+2. Tænd for lag: Eksisterende lokalplaner, fredninger, naturbeskyttelse
+3. Kør konfliksøgning
+4. Analyser konflikter
+5. Justér lokalplan-grænser
+
+## Tips og tricks
+
+### Effektiv konfliksøgning
+
+- **Tænd kun for relevante lag** - reducerer søgetid
+- **Brug buffer strategisk** - find også features i nærheden
+- **Gem resultater** i projekt for senere reference
+- **Eksportér til Excel** for videre analyse
+
+### Præcise søgninger
+
+- **Zoom ind** før du tegner geometri
+- **Brug mange punkter** når du tegner langs kurver
+- **Juster buffer** efter behov (start med lille buffer)
+
+### Kombiner med andre værktøjer
+
+1. **Konfliksøgning** for at finde overlappende features
+2. **Infoværktøj** for detaljeret info på konflikter
+3. **Tegneværktøj** for at markere løsninger
+4. **Print** for at dokumentere
+
+## Sammenligning med andre værktøjer
+
+### Konfliksøgning vs. Avanceret søgning (Infoværktøj)
+
+| Feature | Konfliks øgning | Avanceret søgning |
+|---------|-----------------|-------------------|
+| Formål | Find overlappende features | Hent info inden for område |
+| Konflikt-analyse | ✅ Ja (med kategorier) | ❌ Nej |
+| Rapport-eksport | ✅ PDF og Excel | ❌ Nej |
+| Buffer | ✅ Ja | ✅ Ja |
+| Statistik | ✅ Ja | ❌ Nej |
+
+[Læs mere om avanceret søgning →](/vidi/vidi-menuen/infovaerktoj#avanceret-søgning)
+
+## Fejlfinding
+
+### Ingen resultater?
+
+- Tjek at relevante lag er tændt
+- Verificér at geometrien overlapper med data
+- Prøv at øge buffer-afstanden
+- Tjek om lagene indeholder data i området
+
+### Søgningen tager lang tid?
+
+- Reducér antal aktive lag
+- Formindsk søgeområdet
+- Fjern tunge lag (mange features)
+- Kontakt systemadministrator
+
+### Rapport genereres ikke?
+
+- Tjek browser's pop-up-blocker
+- Vent til søgning er helt færdig
+- Prøv at genindlæse siden
+- Kontakt systemadministrator
+
+### Fejl i resultater?
+
+- Tjek "Fejl"-kategorien for detaljer
+- Verificér at lag er korrekt konfigureret i GC2
+- Kontakt systemadministrator med fejlbesked

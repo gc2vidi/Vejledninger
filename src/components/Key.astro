@@ -1,0 +1,22 @@
+---
+// props: { items?: string[] | string }
+const { items = [] } = Astro.props;
+
+// Process the 'items' prop. It can handle both an array of strings 
+// (e.g., ['Ctrl', 'S']) or a single string (e.g., "Ctrl + S").
+// Special handling for single characters like '+' or '-' that are also separators
+const itemString = String(items);
+const keys = Array.isArray(items)
+  ? items.filter(Boolean)
+  : itemString.includes('+') && itemString.trim() !== '+' && itemString.trim() !== '-'
+    ? itemString.split('+').map((p) => p.trim()).filter(Boolean)
+    : [itemString.trim()].filter(Boolean);
+---
+<span class="key-combo">
+  {keys.map((label, i) => (
+    <>
+      <kbd class="key">{label}</kbd>
+      {i < keys.length - 1 && <span class="sep" aria-hidden="true">+</span>}
+    </>
+  ))}
+</span>

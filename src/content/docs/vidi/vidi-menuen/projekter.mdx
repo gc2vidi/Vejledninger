@@ -1,0 +1,302 @@
+---
+title: Projekter
+description: Gem og del kortopsætninger med projekter
+sidebar:
+  order: 8
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er projekter?
+
+Projekt-værktøjet gør det muligt at gemme og dele øjebliksbilleder af kortets tilstand. Du kan gemme aktive lag, kortudstrækning, tegninger, og meget mere - og bruge det som en direkte genvej tilbage til hvor du arbejdede tidligere.
+
+## Hvad gemmes i et projekt?
+
+Når du gemmer et projekt, gemmes følgende:
+
+- ✅ **Kort-udstrækning** (zoom-niveau og position)
+- ✅ **Aktive lag** (hvilke lag er tændt/slukket)
+- ✅ **Baggrundskort** (valgte baggrundskort)
+- ✅ **Tegninger** (fra tegneværktøjet)
+- ✅ **Målinger** (fra måleværktøjet, hvis supporteret)
+- ✅ **Gennemsigtigheds-indstillinger**
+- ✅ **Filtre** på lag
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-oversigt.png`
+*Screenshot af projekt-værktøjet*
+
+## Åbn projekt-værktøjet
+
+1. Klik på **projekt-ikonet** i Vidi-menuen
+2. En liste med eksisterende projekter vises
+3. Du kan nu gemme, indlæse eller administrere projekter
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-liste.png`
+*Liste over gemte projekter*
+
+## Gem et projekt
+
+### Opret nyt projekt
+
+1. Opsæt kortet som du vil have det:
+   - Tænd for relevante lag
+   - Vælg baggrundskort
+   - Zoom til ønsket udstrækning
+   - Tegn evt. markeringer
+2. Klik på **projekt-ikonet** i menuen
+3. **Indtast et projekt-navn**
+4. Klik på **"Gem"** (diskette-ikonet)
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-projekter-gem.gif`
+*Animation af gemning af projekt*
+
+:::tip[Nyttigt]
+Giv projekter beskrivende navne som:
+- "Byggesag 2024-01-15"
+- "Spildevand - Nørrebro"
+- "Fejlsøgning område 3"
+:::
+
+## Gemmetyper
+
+Der er to måder at gemme projekter på:
+
+### Lokalt gemte projekter
+
+Projektet gemmes på serveren, men **referencen** til det er knyttet til din browser-session.
+
+**Fordele:**
+- ✅ Hurtig adgang
+- ✅ Ingen login påkrævet
+
+**Ulemper:**
+- ⚠️ Forsvinder hvis browser-cache ryddes
+- ⚠️ Kun tilgængeligt i samme browser
+- ⚠️ Kan ikke slettes hvis referencen mistes
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-lokalt.png`
+*Lokalt gemt projekt i listen*
+
+### Bruger-gemte projekter
+
+Hvis du er **logget ind** i Vidi, gemmes projektet under din brugerprofil.
+
+**Fordele:**
+- ✅ Tilgængeligt fra alle browsere
+- ✅ Kan altid ændres og slettes
+- ✅ Persistent lagring
+- ✅ Kan deles med andre brugere
+
+**Ulemper:**
+- ⚠️ Kræver login
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-bruger.png`
+*Bruger-gemt projekt med brugernavn*
+
+:::note[Bemærk]
+Projekter der gemmes uden login kan stadig tilgås via direkte link, men kan ikke ændres eller slettes hvis browser-sessionen mistes.
+:::
+
+## Indlæs et projekt
+
+### Genindlæs fra liste
+
+1. Åbn **projekt-værktøjet**
+2. Find projektet i listen
+3. Klik på **"Play"-ikonet** ved projektet
+4. Den gemte opsætning genskabes
+
+**📸 BILLEDE/GIF MANGLER:** `vidi-menu-projekter-indlaes.gif`
+*Animation af indlæsning af projekt*
+
+### Tilgå via direkte link
+
+Du kan også tilgå et projekt via et direkte link:
+
+**Eksempel:**
+```
+http://mapgoviditest.geopartner.dk/app/vandvaerker/public/?state=state_snapshot_35f2ea90-5975-11eb-8a1b-e3cc28c27983
+```
+
+:::tip[Del projekter]
+Kopier projekt-linket og send det til kolleger for at dele en specifik kortopsætning.
+:::
+
+## Rediger et projekt
+
+Du kan opdatere et eksisterende projekt:
+
+1. **Indlæs projektet** (klik på "Play"-ikonet)
+2. **Lav ændringer** (aktiver andre lag, zoom, tegn osv.)
+3. **Gem projektet igen** med samme navn
+4. Projektet **opdateres** med de nye indstillinger
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-rediger.png`
+*Redigering af projekt*
+
+### Omdøb projekt
+
+1. Find projektet i listen
+2. Klik på **"Rediger"-ikonet**
+3. **Indtast nyt navn**
+4. **Gem**
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-omdob.png`
+*Omdøbning af projekt*
+
+## Slet et projekt
+
+:::warning[Vigtigt]
+Når et projekt slettes, kan det **ikke** genskabes!
+:::
+
+### Slet projekt
+
+1. Find projektet i listen
+2. Klik på **"Skraldespands"-ikonet**
+3. **Bekræft sletning** i pop-up
+4. Projektet slettes permanent
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-slet.png`
+*Bekræftelse af sletning*
+
+:::caution[Bemærk]
+Lokalt gemte projekter hvor referencen er mistet (f.eks. efter rydning af cache) kan **ikke** slettes.
+:::
+
+## Avancerede funktioner
+
+### Print-link til projekt
+
+Du kan få et statisk billede (PNG) af et projekt:
+
+**Format:**
+```
+http://[server]/api/static/[database]/[schema]/?state=[state-id]&width=1920&height=1080
+```
+
+**Eksempel:**
+```
+http://mapgoviditest.geopartner.dk/api/static/vandvaerker/public/?state=state_snapshot_35f2ea90-5975-11eb-8a1b-e3cc28c27983&width=1920&height=1080
+```
+
+**Parametre:**
+- `width` - Bredde i pixels
+- `height` - Højde i pixels
+
+**📸 BILLEDE MANGLER:** `vidi-menu-projekter-png-link.png`
+*Statisk PNG genereret fra projekt*
+
+:::tip[Anvendelse]
+Brug print-links til:
+- Automatiserede rapporter
+- Embedde kort i websites
+- Batch-generering af kort-billeder
+:::
+
+### Del projekter med eksterne
+
+1. **Gem projekt** (helst som bruger-gemt)
+2. **Kopier projekt-linket** fra URL'en når projektet er indlæst
+3. **Send linket** til eksterne modtagere
+4. Modtagere kan se projektet (kræver evt. adgang til Vidi-installation)
+
+## Tips og tricks
+
+### Organisering af projekter
+
+- **Brug datoer** i projektnavne (f.eks. "2024-01-15 - Byggesag")
+- **Gruppér** projekter efter emne eller område
+- **Slet gamle projekter** for at holde orden
+- **Dokumentér** formålet i projektnavnet
+
+### Arbejd effektivt med projekter
+
+1. **Gem regelmæssigt** når du arbejder
+2. **Opret "kladde"-projekter** for midlertidigt arbejde
+3. **Omdøb til endelige navne** når projektet er færdigt
+4. **Del projekter** i stedet for at beskrive kortopsætninger
+
+### Kombiner med andre værktøjer
+
+**Projekter + Tegneværktøj:**
+1. Tegn markeringer på kortet
+2. Gem som projekt
+3. Del med kolleger
+4. Kolleger ser både kort og tegninger
+
+**Projekter + Print:**
+1. Opsæt kort som ønsket
+2. Gem som projekt (for at kunne genskabe senere)
+3. Print til PDF
+4. Projektet kan genindlæses hvis print skal laves igen
+
+[Læs mere om print →](/vidi/vidi-menuen/print)
+
+## Sammenligning med bogmærker
+
+| Feature | Vidi-projekter | Browser-bogmærker |
+|---------|----------------|-------------------|
+| Gemmer lag | ✅ Ja | ❌ Nej (kun URL) |
+| Gemmer tegninger | ✅ Ja | ❌ Nej |
+| Kan deles | ✅ Ja (via link) | ❌ Nej (uden sync) |
+| Persistent | ✅ Ja (hvis bruger-gemt) | ✅ Ja |
+| Kræver login | ⚠️ Valgfrit | ❌ Nej |
+
+## Use cases
+
+### Byggesagshåndtering
+
+1. Opret projekt for hver byggesag
+2. Gem relevante lag og tegninger
+3. Del med bygherrer og rådgivere
+4. Opdater projektet løbende
+
+### Feltarbejde
+
+1. Opsæt kort med relevante lag
+2. Gem som projekt
+3. Åbn projekt på tablet/mobil i felten
+4. Updater med nye tegninger
+5. Gem opdateret projekt
+
+### Dokumentation
+
+1. Opsæt kort til dokumentation
+2. Gem som projekt
+3. Generer statisk PNG til rapport
+4. Projektet kan genskabes hvis opdatering er nødvendig
+
+### Undervisning
+
+1. Opret projekt for hver lektion
+2. Del link med elever
+3. Elever kan følge med i samme kortopsætning
+4. Opret nye projekter for hver øvelse
+
+## Fejlfinding
+
+### Projekt forsvandt fra listen?
+
+- Tjek om browser-cache er ryddet
+- Log ind hvis det var et bruger-gemt projekt
+- Prøv direkte link hvis du har gemt det
+
+### Projekt indlæses ikke korrekt?
+
+- Tjek om alle lag stadig eksisterer
+- Kontakt administrator hvis lag er fjernet
+- Genindlæs siden
+
+### Kan ikke slette projekt?
+
+- Log ind hvis det er et bruger-gemt projekt
+- Lokale projekter uden reference kan ikke slettes
+- Kontakt systemadministrator
+
+### Projekt-link virker ikke?
+
+- Tjek om URL'en er komplet
+- Kontakt administrator hvis serveren er flyttet
+- Verificer at state-ID er korrekt

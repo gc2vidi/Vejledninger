@@ -1,0 +1,35 @@
+---
+title: Geocloud2/Vidi - Vejledninger
+template: splash
+hero:
+  tagline: Samlet platform til brug og udstilling af geodata
+  actions:
+    - text: Jeg er helt ny til webkort
+      link: /vidi
+      icon: right-caret
+      variant: primary
+    - text: Jeg skal opsætte vores løsning
+      link: /gc2
+      icon: right-caret
+      variant: primary
+next: false
+prev: false
+pagefind: false
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <LinkCard
+    title="Vidi"
+    icon="star"
+    href="/vidi/"
+    description="Vidi er det brugervendte webkort. Det er her man vil søge information og lave analyser."
+  />
+  <LinkCard
+    title="Geocloud2"
+    icon="star"
+    href="/gc2/"
+    description="GC2 er motoren der udstiller data. Det er her vi tematiserer og udstiller data."
+  />
+</CardGrid>
