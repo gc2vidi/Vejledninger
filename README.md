@@ -1,3 +1,5 @@
+[![Deploy](https://github.com/gc2vidi/Vejledninger/actions/workflows/deploy.yml/badge.svg)](https://github.com/gc2vidi/Vejledninger/actions/workflows/deploy.yml)
+
 # GC2/Vidi - Vejledninger
 
 Ved hver push til main, vil dokumentationen blive bygget og deployet til github pages.
