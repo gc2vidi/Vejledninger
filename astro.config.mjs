@@ -5,6 +5,8 @@ import AutoImport from 'astro-auto-import';
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://gc2vidi.github.io",
+  base: "/Vejledninger",
   integrations: [
     starlight({
       title: "GC2/Vidi",
