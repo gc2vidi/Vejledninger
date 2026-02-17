@@ -2,11 +2,18 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import AutoImport from 'astro-auto-import';
 
+const isProduction = process.env.NODE_ENV === "production";
+const basePath = isProduction ? "/Vejledninger" : "/";
+const withBase = (path) => {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return basePath === '/' ? normalizedPath : `${basePath}${normalizedPath}`;
+};
+
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://gc2vidi.github.io",
-  base: "/Vejledninger",
+  base: basePath,
   integrations: [
     starlight({
       title: "GC2/Vidi",
@@ -16,14 +23,14 @@ export default defineConfig({
           label: "Dansk",
           lang: "da",
         },      },
-      favicon: '/favicon.ico',
+      favicon: 'favicon.ico',
       head: [
         {
           tag: 'link',
           attrs: {
             rel: 'apple-touch-icon',
             sizes: '180x180',
-            href: '/apple-touch-icon.png',
+            href: withBase('apple-touch-icon.png'),
           },
         },
         {
@@ -32,7 +39,7 @@ export default defineConfig({
             rel: 'icon',
             type: 'image/png',
             sizes: '32x32',
-            href: '/favicon-32x32.png',
+            href: withBase('favicon-32x32.png'),
           },
         },
         {
@@ -40,14 +47,14 @@ export default defineConfig({
           attrs: {
             rel: 'icon',
             type: 'image/svg+xml',
-            href: '/icon.svg',
+            href: withBase('icon.svg'),
           },
         },
         {
           tag: 'link',
           attrs: {
             rel: 'manifest',
-            href: '/manifest.webmanifest',
+            href: withBase('manifest.webmanifest'),
           },
         },
       ],

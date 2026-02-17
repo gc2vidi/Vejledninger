@@ -7,6 +7,7 @@ sidebar:
 import infovaerktojGrundlaeggendeImg from '../resources/vidi-menu-infovaerktoj-grundlaeggende.gif';
 import infovaerktojAttributtabelImg from '../resources/vidi-menu-infovaerktoj-attributtabel.gif'; 
 import infovaerktojAvanceretImg from '../resources/vidi-menu-infovaerktoj-avanceret-soegning.gif';
+import infovaerktojRedigeringImg from '../resources/vidi-menu-vidi-infovaerktoejet-redigering.gif';
 import infovaerktojVirtuelLagImg from '../resources/vidi-menu-infovaerktoj-virtuellag.png';
 
 **Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
@@ -159,12 +160,18 @@ Hvis **Editor-udvidelsen** er aktiveret og laget er gjort editerbart, kan du red
 
 1. **Klik på featuren** med infoværktøjet
 2. Info-popup vises
-3. Klik på **Rediger** eller **Edit**-knappen
+3. Klik på **Rediger**-knappen
 4. **Redigér attributter** eller **flyt geometrien**
 5. Klik **Gem** for at gemme ændringerne
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-infovaerktoj-rediger.gif`
-*Animation af redigering af en feature*
+<figure class="centered-figure">
+  <img 
+    src={infovaerktojRedigeringImg.src} 
+    alt="Søge værktøj i Lag-menuen" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på redigering via infoværktøjet</figcaption>
+</figure>
 
 :::caution[Vigtigt: Kræver rettigheder]
 For at kunne redigere features skal følgende være opfyldt:
@@ -173,4 +180,6 @@ For at kunne redigere features skal følgende være opfyldt:
 - Du skal have de korrekte rettigheder i GC2
 
 [Læs mere om Editor-udvidelsen →](/vidi/extensions/editor)
+
+[Læs mere om redigeringsindstillinger i GC2 →](/gc2/)
 :::
