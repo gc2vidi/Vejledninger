@@ -4,12 +4,16 @@ description: Vælg og administrer baggrundskort i Vidi
 sidebar:
   order: 5
 ---
+import baggrundskortValgImg from '../resources/vidi-menu-baggrundskort-valg.gif';
+import baggrundskortTransparensImg from '../resources/vidi-menu-baggrundskort-transparens.gif';
+import baggrundskortSliderImg from '../resources/vidi-menu-baggrundskort-slider.gif';
+import baggrundskortOverlapImg from '../resources/vidi-menu-baggrundskort-overlap.gif';
 
 **Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
 
 ## Hvad er baggrundskort?
 
-Baggrundskort er basiskortene der vises under dine data-lag. De giver kontekst og orientering, og kan vise forskellige typer af information som luftfotos, topografiske kort, eller simple basistkort.
+Baggrundskort er de basiskort, der vises under dine datalag. De giver kontekst og orientering og kan vise forskellige typer information som luftfotos, topografiske kort eller simple basiskort.
 
 ## Valg af baggrundskort
 
@@ -19,8 +23,15 @@ Baggrundskort er basiskortene der vises under dine data-lag. De giver kontekst o
 2. **Vælg et baggrundskort** fra listen
 3. Kortet skifter til det valgte baggrundskort
 
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-vaelg.png`
-*Screenshot af baggrundskort-vælger*
+<figure class="centered-figure">
+  <img 
+    src={baggrundskortValgImg.src} 
+    alt="Eksempel på valg af baggrundskort" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på valg af baggrundskort</figcaption>
+</figure>
+
 
 ### Tilgængelige baggrundskort
 
@@ -32,9 +43,6 @@ Hvilke baggrundskort der er tilgængelige, afhænger af din Vidi-konfiguration. 
 - **Historiske kort** - Ældre kort til sammenligning
 - **OpenStreetMap** - Åbent fællesskabskort
 
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-typer.png`
-*Eksempler på forskellige typer baggrundskort*
-
 :::note[Konfiguration]
 Baggrundskort konfigureres i GC2's kørselskonfiguration under `baseLayers`.
 
@@ -45,15 +53,18 @@ Baggrundskort konfigureres i GC2's kørselskonfiguration under `baseLayers`.
 
 ### Se baggrundskort-info
 
-1. Klik på **info-ikonet (i)** ved bagrundskortet
-2. En boks vises med information:
-   - **Beskrivelse** af bagrundskortet
+1. Hold musen over <MenuPath items=" i " /> **info-ikonet** ved baggrundskortet for at se tooltip
+2. Klik på <MenuPath items=" i " /> **info-ikonet** ved baggrundskortet for at se en detaljeret beskrivelse, f.eks.:
+  - **Beskrivelse** af baggrundskortet
    - **Kilde** og **copyright**
    - **Opdateringsdato**
    - **Links** til mere information
 
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-info.png`
-*Screenshot af baggrundskort-info*
+![Vidi-menuen - info om baggrundskort](../resources/vidi-menu-baggrundskort-info.png)
+*Vidi-menuen - info om baggrundskort*
+
+![Vidi-menuen - detaljeret info om baggrundskort](../resources/vidi-menu-baggrundskort-info-detaljeret.png)
+*Vidi-menuen - info om baggrundskort - detaljeret visning*
 
 ## Gennemsigtighed
 
@@ -61,123 +72,75 @@ Du kan justere gennemsigtigheden for hvert baggrundskort individuelt.
 
 ### Juster gennemsigtighed
 
-1. Find bagrundskortet i listen
-2. Træk i **gennemsigtighedsskyderen**
-3. Bagrundskortet bliver mere eller mindre gennemsigtigt
+1. Find baggrundskortet i listen
+2. Tryk på **dråbe**-ikonet
+3. Træk i **gennemsigtighedsskyderen**
+4. Baggrundskortet bliver mere eller mindre gennemsigtigt
 
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-gennemsigtighed.png`
-*Screenshot af gennemsigtighedsslider*
+<figure class="centered-figure">
+  <img 
+    src={baggrundskortTransparensImg.src} 
+    alt="Eksempel på valg af baggrundskort" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på tilføjelse af transparens til baggrundskort</figcaption>
+</figure>
 
 :::tip[Nyttigt]
-Sæt gennemsigtighed til 50-70% for at se både baggrundskort og dine data-lag tydeligt.
+Sæt gennemsigtighed til 50–70 % for at få dine lag til at fremstå tydeligere i kortet.
 :::
 
 ## Sammenligning af baggrundskort
 
 Vidi har to måder at sammenligne baggrundskort på: **vertikal slider** og **horisontal slider (overlay)**.
 
-### Vertikal slider (split-screen)
+For at åbne funktionen skal du trykke på <MenuPath items="Vis to baggrundskort på en gang" />.
+
+### Slider
 
 Vis to baggrundskort side om side med en vertikal opdeling:
 
-1. **Vælg to baggrundskort**
-2. Klik på **vertikal slider-ikonet**
-3. En **slider** vises i midten af kortet
+1. Tryk på <MenuPath items="Slider" />
+2. Der vises to kolonner med radioknapper. Vælg ét baggrundskort i venstre kolonne og ét i højre kolonne
+3. En vertikal **slider** vises i midten af kortet
 4. **Træk slideren** for at se mere af det ene eller andet kort
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-baggrundskort-vertikal-slider.gif`
-*Animation af vertikal slider i brug*
+<figure class="centered-figure">
+  <img 
+    src={baggrundskortSliderImg.src} 
+    alt="Eksempel på vertikal slider" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på slider</figcaption>
+</figure>
 
 **Anvendelse:**
 - Sammenlign historiske kort med moderne
 - Se forskel mellem luftfoto og topografisk kort
 - Kvalitetstjek mellem forskellige datakilder
 
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-vertikal-slider-eksempel.png`
-*Eksempel: Historisk kort til venstre, moderne til højre*
-
-### Horisontal slider (overlay/blend)
+### Overlap
 
 Overlæg to baggrundskort med justerbar gennemsigtighed:
 
-1. **Vælg to baggrundskort**
-2. Klik på **horisontal slider-ikonet** (overlay)
-3. En **slider** vises
+1. Tryk på <MenuPath items="Overlap" />
+2. En horisontal **slider** vises
+3. Der vises to kolonner med radioknapper. Vælg ét baggrundskort i venstre kolonne og ét i højre kolonne
 4. **Træk slideren:**
    - **Midten:** ca. 50% transparens for begge lag
    - **Venstre:** mere af venstre kort
    - **Højre:** mere af højre kort
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-baggrundskort-horisontal-slider.gif`
-*Animation af horisontal slider/overlay i brug*
+<figure class="centered-figure">
+  <img 
+    src={baggrundskortOverlapImg.src} 
+    alt="Eksempel på overlap" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på overlap</figcaption>
+</figure>
 
 **Anvendelse:**
-- Blande luftfoto med navne fra topografisk kort
+- Blande topografisk kort med matrikelkort
 - Se gradvis overgang mellem to tidsperioder
 - Sammenligne forskellige tolkninger af samme område
-
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-overlay-eksempel.png`
-*Eksempel: Luftfoto blandet med topografisk kort*
-
-## Tips og tricks
-
-### Valg af baggrundskort til forskellige formål
-
-| Formål | Anbefalet baggrundskort |
-|--------|-------------------------|
-| Præsentation | Luftfoto eller topografisk kort |
-| Analyse | Simpelt skærmkort (god kontrast) |
-| Print | Topografisk kort eller skærmkort |
-| Felt-arbejde | Luftfoto |
-| Historisk sammenligning | Historiske kort + moderne |
-
-### Gennemsigtighed til bedre visning
-
-- **Luftfoto:** Sæt til 80-90% for at se data-lag tydeligt
-- **Topografisk kort:** Sæt til 60-70% for at blande med data
-- **Skærmkort:** Hold på 100% for bedst kontrast
-
-### Kombiner med data-lag
-
-1. Vælg et neutralt baggrundskort
-2. Juster gennemsigtighed
-3. Tænd for dine data-lag
-4. Eksperimentér med forskellige kombinationer
-
-### Sammenligning af historiske ændringer
-
-Brug vertikal slider til at sammenligne:
-1. Historisk luftfoto (venstre)
-2. Moderne luftfoto (højre)
-3. Træk slider for at se ændringer over tid
-
-**📸 BILLEDE MANGLER:** `vidi-menu-baggrundskort-historisk-sammenligning.png`
-*Eksempel på historisk sammenligning*
-
-### Performance-tip
-
-Hvis Vidi er langsom:
-- Skift til et simplere baggrundskort
-- Deaktivér overlay/slider-funktioner
-- Brug kun ét baggrundskort ad gangen
-
-## Fejlfinding
-
-### Baggrundskort vises ikke?
-
-- Tjek internetforbindelse
-- Prøv at zoome ind/ud
-- Skift til et andet baggrundskort
-- Kontakt systemadministrator
-
-### Slider virker ikke?
-
-- Sørg for at to baggrundskort er valgt
-- Genindlæs siden
-- Prøv den anden slider-type
-
-### Dårlig ydeevne?
-
-- Deaktivér overlay/slider
-- Skift til simplere baggrundskort
-- Reducér antal aktive data-lag
