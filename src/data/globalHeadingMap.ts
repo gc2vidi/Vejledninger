@@ -56,7 +56,6 @@ export const headingMap = {
   "vidi-extensions-editor-redigr-geometri": { url: "/vidi/extensions/editor#redigr-geometri", text: "Redigér geometri" },
   "vidi-extensions-editor-flyt-punkter": { url: "/vidi/extensions/editor#flyt-punkter", text: "Flyt punkter" },
   "vidi-extensions-editor-aendre-knudepunkter": { url: "/vidi/extensions/editor#aendre-knudepunkter", text: "Ændre knudepunkter" },
-  "vidi-extensions-editor-rettigheder-og-sikkerhed": { url: "/vidi/extensions/editor#rettigheder-og-sikkerhed", text: "Rettigheder og sikkerhed" },
   "vidi-extensions-oversigt-hvad-er-vidi-udvidelser": { url: "/vidi/extensions/oversigt#hvad-er-vidi-udvidelser", text: "Hvad er Vidi-udvidelser?" },
   "vidi-extensions-oversigt-tilgaengelige-udvidelser": { url: "/vidi/extensions/oversigt#tilgaengelige-udvidelser", text: "Tilgængelige udvidelser" },
   "vidi-extensions-oversigt-med-ui-i-vidi-menuen": { url: "/vidi/extensions/oversigt#med-ui-i-vidi-menuen", text: "Med UI i Vidi-menuen" },

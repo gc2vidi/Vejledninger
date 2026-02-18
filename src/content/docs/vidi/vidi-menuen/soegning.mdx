@@ -4,24 +4,33 @@ description: Søg efter adresser, matrikler, ejendomme og brugerdefinerede data
 sidebar:
   order: 4
 ---
+import soegningAdresseSoegningImg from '../resources/vidi-menu-infovaerktoj-grundlaeggende.gif';
+import soegningCustomSoegningImg from '../resources/vidi-menu-soegning-custom.gif';
 
 **Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
 
 ## Hvad er søgefunktionen?
 
-Søgefunktionen i Vidi gør det muligt at søge efter forskellige typer af data og zoome direkte til resultatet på kortet. Standard-søgning omfatter adresser, matrikler og ejendomsnumre, men kan udvides med brugerdefinerede søgninger.
+Søgefunktionen i Vidi gør det muligt at søge efter forskellige typer data og zoome direkte til resultatet på kortet. Standardsøgning omfatter adresser, matrikler og ejendomsnumre, og kan udvides med brugerdefinerede søgninger.
 
 ## Grundlæggende søgning
 
 ### Sådan søger du
 
-1. Find **søgefeltet** i toppen af Vidi-menuen
-2. **Indtast søgeord** (f.eks. en adresse)
-3. **Resultater** vises automatisk
-4. **Klik på et resultat** for at zoome til placeringen
+1. Tryk på <MenuPath items="🔍" /> knappen
+2. Find **søgefeltet** i toppen af Vidi-menuen
+3. **Indtast søgeord** (f.eks. en adresse)
+4. **Forslag** vises automatisk
+5. **Klik på et forslag** for at zoome til placeringen
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-soegning-grundlaeggende.gif`
-*Animation af grundlæggende søgning*
+<figure class="centered-figure">
+  <img 
+    src={soegningAdresseSoegningImg.src} 
+    alt="Søgeværktøj i Vidi-menuen" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på søgning af adresse</figcaption>
+</figure>
 
 ## Søgetyper
 
@@ -29,35 +38,25 @@ Søgefunktionen i Vidi gør det muligt at søge efter forskellige typer af data 
 
 Søg efter adresser i Danmark:
 
-**Eksempler:**
+Eksempler:
 - `Rådhuspladsen 1, København`
 - `Vesterbrogade 120`
 - `8000 Aarhus C`
-
-**📸 BILLEDE MANGLER:** `vidi-menu-soegning-adresse.png`
-*Screenshot af adressesøgning*
 
 ### Matrikler
 
 Søg efter matrikelnumre:
 
 **Eksempler:**
-- `1a Søborg By, Gladsaxe`
-- `2a` (hvis området er kendt)
-
-**📸 BILLEDE MANGLER:** `vidi-menu-soegning-matrikel.png`
-*Screenshot af matrikelsøgning*
+- `195a Åløkkegård Hgd., Odense Jorder`
+- `195a` (hvis ejerlav er kendt)
 
 ### Ejendomsnumre
 
-Søg efter ejendomsnumre (ESR-numre):
+Søg efter ejendomsnumre (BFE-numre):
 
-**Eksempler:**
-- `1234567`
-- `ESR: 1234567`
-
-**📸 BILLEDE MANGLER:** `vidi-menu-soegning-ejendom.png`
-*Screenshot af ejendomssøgning*
+Eksempel:
+- `5476039`
 
 ## Brugerdefinerede søgninger
 
@@ -70,108 +69,19 @@ Hvis din organisation har et lag med spildevandssystemer, kan systemadministrato
 - Lednings-ID
 - Brønd-nummer
 
-**📸 BILLEDE MANGLER:** `vidi-menu-soegning-brugerdefineret.png`
-*Screenshot af brugerdefineret søgning (f.eks. spildevand)*
+<figure class="centered-figure">
+  <img 
+    src={soegningCustomSoegningImg.src} 
+    alt="Eksempel på brugerdefineret søgning" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Eksempel på brugerdefineret søgning</figcaption>
+</figure>
 
 :::note[Konfiguration af brugerdefinerede søgninger]
-Brugerdefinerede søgninger opsættes i GC2's kørselskonfiguration under `searchConfig`.
+Brugerdefinerede søgninger opsættes i GC2's kørselskonfiguration.
 
 Dette er forskelligt fra søgning i lagstyring, som konfigureres direkte på laget.
 
 [Læs mere om searchConfig i GC2 →](/gc2/) (kommer snart)
 :::
-
-## Forskel på søgninger i Vidi
-
-Der er **tre forskellige søgefunktioner** i Vidi:
-
-| Søgefunktion | Placering | Formål | Scope |
-|--------------|-----------|--------|-------|
-| **Generel søgning** | Søgefelt i menuen | Find adresser, matrikler, osv. | Alle konfigurerede søgekilder |
-| **Lagsøgning** | Lagstyring → ... → Søgning | Søg i et specifikt lags data | Ét lag ad gangen |
-| **Avanceret søgning** | Infoværktøj → Avanceret søgning | Spatial søgning med geometri | Alle synlige lag |
-
-### Hvornår bruges hvilken?
-
-**Generel søgning:**
-- Når du kender en adresse eller matrikel
-- Når du skal finde specifikke objekter (f.eks. et knudenavn)
-
-**Lagsøgning:**
-- Når du vil søge i et specifikt lag
-- Når du vil filtrere data
-
-[Læs mere om lagsøgning →](/vidi/vidi-menuen/lagstyring#søgning-i-lag)
-
-**Avanceret søgning:**
-- Når du skal finde features inden for en bestemt afstand
-- Når du skal lave spatial analyse
-
-[Læs mere om avanceret søgning →](/vidi/vidi-menuen/infovaerktoj#avanceret-søgning)
-
-## Søgeresultater
-
-### Visning af resultater
-
-Når du søger, vises resultater i en **dropdown-liste** under søgefeltet:
-
-- **Kategori** (f.eks. "Adresse", "Matrikel", "Spildevand")
-- **Resultatnavn** (f.eks. "Vesterbrogade 120, 1620 København V")
-- **Eventuel ekstra info**
-
-**📸 BILLEDE MANGLER:** `vidi-menu-soegning-resultater.png`
-*Screenshot af søgeresultater med forskellige kategorier*
-
-### Zoom til resultat
-
-Når du klikker på et resultat:
-1. Kortet **zoomer** til resultatet
-2. En **markør** placeres på placeringen
-3. **Info-popup** kan vises (afhænger af konfiguration)
-
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-soegning-zoom.gif`
-*Animation af zoom til søgeresultat*
-
-## Tips og tricks
-
-### Hurtig søgning
-
-- Brug **hurtigtaster** (hvis konfigureret) til at fokusere søgefeltet
-- **Tryk Enter** for at vælge første resultat
-- **Brug piletaster** til at navigere i resultater
-
-### Søgetips
-
-- **Skriv ikke fulde adresser** - autocomplete hjælper dig
-- **Brug postnummer** for at indsnævre søgningen
-- **Prøv forskellige variationer** hvis du ikke finder resultatet
-
-### Søg i flere lag samtidigt
-
-Generel søgning kan søge i **flere kilder** samtidigt. Resultater grupperes efter type.
-
-**📸 BILLEDE MANGLER:** `vidi-menu-soegning-flere-kilder.png`
-*Screenshot af søgeresultater fra flere kilder*
-
-### Kombiner med andre værktøjer
-
-Efter en søgning kan du:
-1. **Måle** afstand til resultatet
-2. **Hente info** på features i nærheden
-3. **Tegne** på kortet omkring resultatet
-4. **Printe** kort med resultatet
-
-## Fejlfinding
-
-### Ingen resultater?
-
-- Tjek stavning
-- Prøv at søge på postnummer i stedet
-- Tjek om det lag du søger i, er aktivt
-- Kontakt systemadministrator hvis brugerdefineret søgning ikke virker
-
-### Søgning langsom?
-
-- Vent på at indtastning er færdig før resultater hentes
-- Reducér antal aktive lag hvis muligt
-- Kontakt systemadministrator hvis problemet fortsætter
