@@ -9,11 +9,43 @@ const withBase = (path) => {
   return basePath === '/' ? normalizedPath : `${basePath}${normalizedPath}`;
 };
 
+const rewriteInternalRootLinks = (base) => () => {
+  const normalizedBase = base === "/" ? "" : base.replace(/\/$/, "");
+
+  return (tree) => {
+    const walk = (node) => {
+      if (!node || typeof node !== "object") return;
+
+      if (node.type === "element" && node.tagName === "a") {
+        const href = node.properties?.href;
+        if (
+          typeof href === "string" &&
+          href.startsWith("/") &&
+          !href.startsWith("//") &&
+          !href.startsWith(`${normalizedBase}/`) &&
+          normalizedBase
+        ) {
+          node.properties.href = `${normalizedBase}${href}`;
+        }
+      }
+
+      if (Array.isArray(node.children)) {
+        for (const child of node.children) walk(child);
+      }
+    };
+
+    walk(tree);
+  };
+};
+
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://gc2vidi.github.io",
   base: basePath,
+  markdown: {
+    rehypePlugins: [rewriteInternalRootLinks(basePath)],
+  },
   integrations: [
     starlight({
       title: "GC2/Vidi",
