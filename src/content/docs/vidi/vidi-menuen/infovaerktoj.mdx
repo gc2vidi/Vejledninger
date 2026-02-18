@@ -21,7 +21,7 @@ Infoværktøjet gør det muligt at klikke på features (objekter) på kortet og 
 
 ## Hent info på features
 
-Det er muligt at hente info på en eller flere features og få det vist i kortet via info-pop og en attributtabel.
+Det er muligt at hente info på en eller flere features og få det vist i kortet via info-popup og en attributtabel.
 
 ## Info-popup
 
@@ -48,15 +48,15 @@ Hvordan info-popup'en ser ud, kan konfigureres i GC2. Standard-visningen af attr
 **Info-popup indhold**
 
 Info-popup'en kan vise:
-- **Attributterfelter**
+- **Attributfelter**
 - **Billeder** og **links**
 - **Formateret tekst** (HTML)
 
 Info fra popup'en vises også i attributtabellen.
 
-## Attributtabellen ###
+## Attributtabellen
 
-Hvis flere features rammes ved info-klik, vises resultatet i en **Attributtabel** i menuen til venstre. Det er derefter muligt i attributtabellen at vælge den feature man ønsker at se info på.
+Hvis flere features rammes ved info-klik, vises resultatet i en **Attributtabel** i menuen til venstre. Det er derefter muligt i attributtabellen at vælge den feature, man ønsker at se info på.
 
 <figure class="centered-figure">
   <img 
@@ -76,7 +76,7 @@ Hvis flere features rammes ved info-klik, vises resultatet i en **Attributtabel*
 
 ## Avanceret forespørgsel
 
-Avanceret forespørgseler gør det muligt at søge efter features inden for en bestemt geometri (buffer, polygon, linje, osv.). 
+Avancerede forespørgsler gør det muligt at søge efter features inden for en bestemt geometri (buffer, polygon, linje osv.).
 
 <figure class="centered-figure">
   <img 
@@ -93,7 +93,7 @@ Avanceret forespørgseler gør det muligt at søge efter features inden for en b
 2. Klik på <MenuPath items="Aktivér avanceret forespørgsel" />
 3. Tegneværktøjer vises til højre
 
-### Tegneværktøjer ###
+### Tegneværktøjer
 
 Når avanceret søgning er aktiveret, får du adgang til følgende tegneværktøjer:
 
@@ -106,7 +106,7 @@ Når avanceret søgning er aktiveret, får du adgang til følgende tegneværktø
 ![Vidi-menuen - lagstyring](../resources/vidi-menu-infovaerktoj-tegnevaerktøjer.svg)
 *Tegneværktøjer ved avanceret forespørgsel*
 
-### Buffer ###
+### Buffer
 
 Du kan tilføje en buffer omkring den tegnede geometri:
 
@@ -114,11 +114,11 @@ Du kan tilføje en buffer omkring den tegnede geometri:
 2. **Tegn en geometri** (f.eks. en linje)
 3. Features inden for bufferen fremhæves
 
-### Resultat ved avanceret forespørgsel ###
-Efter udvælgelsen af features har man nogle forskellige muligheder. Hvis der er flere forskellige lag i forespørgslen, så vil der være lagfaner som man kan vælge.
+### Resultat ved avanceret forespørgsel
+Efter udvælgelsen af features har man nogle forskellige muligheder. Hvis der er flere forskellige lag i forespørgslen, vil der være lagfaner, som man kan vælge.
 
-1. Ved at trykke på <MenuPath items="GeoJSON" /> er det muligt at downloade features som GeoJSON (IETF GIS fil standard)
-2. Ved at trykke på <MenuPath items="+ Opret virtuelt lag" /> kan der oprettes et nyt virtuelt lag. Det virtuelle lag bliver oprettet i laggruppen "Virtuelle lag" som er nederst i laggruppestrukturen og eksistere kun hvis der er genereret virtuelle lag.
+1. Ved at trykke på <MenuPath items="GeoJSON" /> er det muligt at downloade features som GeoJSON (IETF GIS-filstandard)
+2. Ved at trykke på <MenuPath items="+ Opret virtuelt lag" /> kan der oprettes et nyt virtuelt lag. Det virtuelle lag bliver oprettet i laggruppen "Virtuelle lag", som er nederst i laggruppestrukturen, og eksisterer kun, hvis der er genereret virtuelle lag.
 
 <figure class="centered-figure">
   <img 
@@ -129,13 +129,13 @@ Efter udvælgelsen af features har man nogle forskellige muligheder. Hvis der er
   <figcaption>Virtuelt lag i laggruppen **Virtuelle lag**</figcaption>
 </figure>
 
-3. Anvende resultatmenuen
+3. Anvend resultatmenuen
 
 ![Vidi-menuen - lagstyring](../resources/vidi-menu-infovaerktoj-resultatmenu.svg)
 *Resultatmenuen*
 
  - **Show Card view** - Anden visningsmåde
- - **Kolonner** - Vælge hvilken kolonner som skal vises
+ - **Kolonner** - Vælg hvilke kolonner der skal vises
  - **Eksporter** - Download resultatet som en af følgende formater:
     - JSON
     - XML
@@ -150,7 +150,7 @@ Efter udvælgelsen af features har man nogle forskellige muligheder. Hvis der er
 Brug avanceret søgning til at:
 - Finde features inden for en specifik radius, f.eks. ved at anvende markør tegneværktøjet
 - Identificere features der krydser et område ved at bruge polygon/rektangel tegneværktøjet
-- Lave buffer analyser uden professionelt GIS-software
+- Lave bufferanalyser uden professionelt GIS-software
 :::
 
 
@@ -175,7 +175,7 @@ Hvis **Editor-udvidelsen** er aktiveret og laget er gjort editerbart, kan du red
 
 :::caution[Vigtigt: Kræver rettigheder]
 For at kunne redigere features skal følgende være opfyldt:
-- Editor-udvidelsen skal være aktiveret
+- Editor-udvidelsen skal være aktiveret via konfigurationen.
 - Laget skal være gjort editerbart i GC2
 - Du skal have de korrekte rettigheder i GC2
 
