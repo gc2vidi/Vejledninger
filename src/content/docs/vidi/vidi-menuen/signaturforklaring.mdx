@@ -4,12 +4,14 @@ description: Vis og administrer signaturforklaring for kortlag
 sidebar:
   order: 6
 ---
+import SignaturImg from '../resources/vidi-menu-signatur.gif';
+
 
 **Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
 
 ## Hvad er signaturforklaring?
 
-Signaturforklaringen (også kaldet "legend" eller "kortforklaring") viser symbolerne og farverne for de aktive kortlag. Den hjælper med at forstå hvad forskellige features på kortet repræsenterer.
+Signaturforklaringen viser symbolerne og farverne for de aktive kortlag. Den hjælper med at forstå, hvad forskellige features på kortet repræsenterer.
 
 ## Vis signaturforklaring
 
@@ -19,67 +21,34 @@ Signaturforklaringen (også kaldet "legend" eller "kortforklaring") viser symbol
 2. Signaturforklaringen åbnes i menuen
 3. Kun **aktive lag** vises i signaturforklaringen
 
-**📸 BILLEDE MANGLER:** `vidi-menu-signaturforklaring-grundlaeggende.png`
-*Screenshot af signaturforklaring i menuen*
-
-### Signaturforklaringens indhold
-
-For hvert aktivt lag vises:
-- **Lagnavn**
-- **Symboler** (punkter, linjer, polygoner)
-- **Farver** og **mønstre**
-- **Beskrivende tekst** for hver symboltype
-
-**📸 BILLEDE MANGLER:** `vidi-menu-signaturforklaring-indhold.png`
-*Eksempel på signaturforklaring med forskellige symboler*
+<figure class="centered-figure">
+  <img 
+    src={SignaturImg.src} 
+    alt="Vis signaturforklaring" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Signaturforklaringen</figcaption>
+</figure>
 
 ## Vis signaturforklaring på kortet
 
 Du kan vise signaturforklaringen direkte på kortvinduet i stedet for i menuen.
 
-### Aktivér signaturforklaring på kortet
-
 1. Åbn signaturforklaringen i menuen
-2. Klik på **"Vis signaturen ovenpå kortet"**
-3. Signaturforklaringen flyttes til **nederst til højre** på kortet (standard placering)
-
-**📸 BILLEDE MANGLER:** `vidi-menu-signaturforklaring-paa-kort.png`
-*Screenshot af signaturforklaring vist på kortet*
+2. Klik på <MenuPath items="Vis signaturen ovenpå kortet" />
+3. Signaturforklaringen flyttes til **nederst til højre** på kortet
 
 :::tip[Nyttigt]
-Vis signaturforklaring på kortet når du:
+Vis signaturforklaring på kortet, når du:
 - Skal præsentere kortet for andre
 - Laver screenshots
 - Printer kortet
 - Vil have mere plads i menuen
 :::
 
-### Flyt signaturforklaring
-
-Når signaturforklaringen er vist på kortet, kan du (afhængig af konfiguration):
-- **Trække** den til en anden placering
-- **Tilpasse størrelse** (i nogle konfigurationer)
-
-**📸 BILLEDE MANGLER:** `vidi-menu-signaturforklaring-flyt.png`
-*Signaturforklaring i forskellige positioner på kortet*
-
-## Administrer lag i signaturforklaringen
-
-### Deaktiver lag fra signaturforklaring
-
-Du kan skjule individuelle lag fra signaturforklaringen uden at slukke for laget på kortet:
-
-1. Find laget i signaturforklaringen
-2. Klik på **afkrydsningsfeltet** ved laget
-3. Laget **forsvinder fra signaturforklaringen**
-4. Laget **slukkes også på kortet**
-
 :::caution[Vigtigt]
 Når du deaktiverer et lag i signaturforklaringen, slukkes både signaturen OG laget på kortet.
 :::
-
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-signaturforklaring-deaktiver-lag.gif`
-*Animation af deaktivering af lag*
 
 ### Automatisk opdatering
 
@@ -88,19 +57,16 @@ Signaturforklaringen opdateres automatisk når du:
 - **Ændrer lagets styling** (i GC2)
 - **Skifter til et projekt** med andre aktive lag
 
-**📸 BILLEDE MANGLER:** `vidi-menu-signaturforklaring-opdatering.png`
-*Før/efter screenshot af signaturforklaring ved ændring af aktive lag*
-
 ## Signaturforklaring i print
 
 Når du printer kortet, kan du vælge om signaturforklaringen skal inkluderes:
 
 1. Gå til **Print-funktionen**
-2. Vælg **"Inkluder signaturforklaring"** (checkbox)
+2. Sæt flueben i afkrydsningsfeltet ved <MenuPath items="Vis signatur på print" />
 3. Signaturforklaringen inkluderes i PDF'en
 
-**📸 BILLEDE MANGLER:** `vidi-menu-signaturforklaring-print.png`
-*Eksempel på printet kort med signaturforklaring*
+![Signaturforklaring på print](../resources/vidi-menu-signatur-print.png)
+*Signaturforklaring på print*
 
 [Læs mere om print-funktionen →](/vidi/vidi-menuen/print)
 
@@ -115,75 +81,5 @@ Hvordan signaturer ser ud, konfigureres i GC2:
 - **Gruppering** af symboler
 
 :::note[GC2-konfiguration]
-[Læs mere om styling og signaturforklaring i GC2 →](/gc2/) (kommer snart)
+[Læs mere om styling i GC2 →](/gc2/) (kommer snart)
 :::
-
-## Tips og tricks
-
-### Placering af signaturforklaring
-
-**I menuen:**
-- God til arbejde og analyse
-- Nem at slå til/fra lag
-- Skjult når menuen er lukket
-
-**På kortet:**
-- God til præsentation
-- Synlig for alle
-- Vises i screenshots og print
-
-### Reducér størrelsenpå signaturforklaring
-
-Hvis signaturforklaringen er for stor:
-1. Sluk for lag du ikke bruger
-2. Konfigurér simplere signaturer i GC2
-3. Gruppér relaterede symboler
-
-### Kombiner med laggrupper
-
-Organisér lag i laggrupper for bedre overblik:
-- Hver laggruppe får sin egen sektion i signaturforklaringen
-- Sluk for hele grupper for at rydde op
-
-[Læs mere om laggrupper →](/vidi/vidi-menuen/lagstyring#laggrupper)
-
-### Signaturforklaring til præsentationer
-
-1. Tænd kun for relevante lag
-2. Vis signaturforklaring på kortet
-3. Placer den hvor den ikke skjuler vigtig data
-4. Tag screenshot eller print
-
-## Sammenligning med andre værktøjer
-
-### Signaturforklaring vs. Laginfo
-
-| Feature | Signaturforklaring | Laginfo (i-knap) |
-|---------|-------------------|------------------|
-| Viser symboler | ✅ Ja | ❌ Nej |
-| Viser metadata | ❌ Nej | ✅ Ja |
-| Viser alle aktive lag | ✅ Ja | ❌ Nej (kun ét lag) |
-| Kan vises på kortet | ✅ Ja | ❌ Nej |
-
-[Læs mere om laginfo →](/vidi/vidi-menuen/lagstyring#info-om-lag)
-
-## Fejlfinding
-
-### Signaturforklaring vises ikke?
-
-- Tjek om der er aktive lag
-- Tjek om signaturforklaringen er aktiveret i menuen
-- Genindlæs siden
-- Kontakt systemadministrator
-
-### Signaturer ser forkerte ud?
-
-- Tjek om laget er konfigureret korrekt i GC2
-- Genindlæs siden for at opdatere cache
-- Kontakt systemadministrator for rettelse i GC2
-
-### Signaturforklaring er for stor?
-
-- Sluk for unødvendige lag
-- Flyt den til en mindre position
-- Reducer zoom-niveau (i nogle konfigurationer)

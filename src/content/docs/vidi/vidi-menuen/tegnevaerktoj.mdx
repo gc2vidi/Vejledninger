@@ -4,12 +4,22 @@ description: Tegn linjer, arealer, punkter og annotationer på kortet
 sidebar:
   order: 7
 ---
+import tegnevaerktojImg from '../resources/vidi-menu-tegnevaerktoej.gif';
+import tegnevaerktojVaerktoejerImg from '../resources/vidi-menu-tegnevaerktoej-vaerktoejer.svg';
+import tegnevaerktojLinjeImg from '../resources/vidi-menu-tegnevaerktoej-linje.gif';
+import tegnevaerktojFladeImg from '../resources/vidi-menu-tegnevaerktoej-flade.gif';
+import tegnevaerktojRektangelImg from '../resources/vidi-menu-tegnevaerktoej-rektangel.gif';
+import tegnevaerktojCirkelImg from '../resources/vidi-menu-tegnevaerktoej-cirkel.gif';
+import tegnevaerktojMarkoerImg from '../resources/vidi-menu-tegnevaerktoej-markoer.gif';
+import tegnevaerktojKommentarImg from '../resources/vidi-menu-tegnevaerktoej-kommentar.gif';
+import tegnevaerktojRedigerImg from '../resources/vidi-menu-tegnevaerktoej-rediger.gif';
+import tegnevaerktojSletImg from '../resources/vidi-menu-tegnevaerktoej-slet.gif';
 
 **Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
 
 ## Hvad er tegneværktøjet?
 
-Tegneværktøjet gør det muligt at tegne forskellige former direkte på kortet. Du kan tegne linjer, arealer, rektangler, cirkler, punkter og tekst-annotationer. Tegninger vises på kortet og kan inkluderes i PDF-print.
+Tegneværktøjet gør det muligt at tegne forskellige features direkte på kortet. Du kan tegne linjer, arealer, rektangler, cirkler, punkter og tekst-annotationer.
 
 :::tip[Godt at vide]
 Tegninger vil også fremgå på PDF-print, så du kan dokumentere dine markeringer og noter.
@@ -31,8 +41,25 @@ Disse værktøjer er **ikke kompatible**. Du kan kun ændre eller slette objekte
 1. Klik på **tegneværktøj-ikonet** i Vidi-menuen
 2. Værktøjet aktiveres og tegneværktøjer vises
 
-**📸 BILLEDE MANGLER:** `vidi-menu-tegnevaerktoj-aktiveret.png`
-*Screenshot af aktiveret tegneværktøj*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojImg.src} 
+    alt="Tegneværktøjet" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Tegneværktøjet</figcaption>
+</figure>
+
+3. Vælg herefter det tegneværktøj du ønsker at bruge.
+
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojVaerktoejerImg.src} 
+    alt="De forskellige tegneværktøjer" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>De forskellige tegneværktøjer</figcaption>
+</figure>
 
 ## Tegn elementer
 
@@ -41,70 +68,106 @@ Disse værktøjer er **ikke kompatible**. Du kan kun ændre eller slette objekte
 Tegn linjer med flere melempunkter:
 
 1. Klik på **linje-ikonet**
-2. **Klik** for at starte linjen
-3. **Tilføj mellempunkter** ved at klikke
-4. (Brug **"Slet sidste punkt"** hvis du laver en fejl)
+2. **Klik** et sted i kortet for at starte linjen
+3. **Tilføj knudepunkt** ved at klikke på den afdæmpede hvide kasse mellem allrede eksisterende knudepunkter
+4. Brug <MenuPath items="Slet sidste punkt" /> hvis du laver en fejl
 5. **Klik på "Afslut"** eller **klik på det sidst tilføjede punkt** for at afslutte
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-tegnevaerktoj-linje.gif`
-*Animation af tegning af linje*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojLinjeImg.src} 
+    alt="Tegn linje" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Tegn linje</figcaption>
+</figure>
 
 ### Arealer/Flader (polygoner)
 
 Tegn lukkede polygoner:
 
 1. Klik på **polygon-ikonet**
-2. **Klik** for at starte fladen
-3. **Tilføj mellempunkter** ved at klikke
-4. (Brug **"Slet sidste punkt"** hvis du laver en fejl)
+2. **Klik** et stedet i kortet for at starte fladen
+3. **Tilføj knudepunkt** ved at klikke på den afdæmpede hvide kasse mellem allrede eksisterende knudepunkter
+4. Brug <MenuPath items="Slet sidste punkt" /> hvis du laver en fejl
 5. **Klik på det første punkt** for at afslutte og lukke polygonen
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-tegnevaerktoj-polygon.gif`
-*Animation af tegning af polygon*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojFladeImg.src} 
+    alt="Tegn flade" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Tegn flade</figcaption>
+</figure>
 
 ### Rektangel
 
-Tegn et rektangel hurtigt:
+Tegn et rektangel:
 
 1. Klik på **rektangel-ikonet**
-2. **Klik og træk** for at tegne rektanglet
+2. **Klik og træk** et sted i kortet for at tegne rektanglet
 3. **Slip** for at afslutte
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-tegnevaerktoj-rektangel.gif`
-*Animation af tegning af rektangel*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojRektangelImg.src} 
+    alt="Tegn flade" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Tegn rektangel</figcaption>
+</figure>
 
 ### Cirkel
 
 Tegn en cirkel:
 
 1. Klik på **cirkel-ikonet**
-2. **Klik og træk** for at slå cirklen
+2. **Klik og træk** et sted i kortet for at slå cirklen
 3. **Slip** for at afslutte
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-tegnevaerktoj-cirkel.gif`
-*Animation af tegning af cirkel*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojCirkelImg.src} 
+    alt="Tegn cirkel" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Tegn cirkel</figcaption>
+</figure>
 
 ### Punkt/Markør
 
-Placer et punkt på kortet:
+Placer en markør på kortet:
 
 1. Klik på **punkt-ikonet**
-2. **Klik** på kortet for at placere punktet
+2. **Klik**  et sted i kortet for at placere punktet
 
-**📸 BILLEDE MANGLER:** `vidi-menu-tegnevaerktoj-punkt.png`
-*Screenshot af placeret punkt*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojMarkoerImg.src} 
+    alt="Tegn markør" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Tegn markør</figcaption>
+</figure>
 
-### Annotation (tekst)
+### Kommentar
 
-Tilføj tekst-noter direkte på kortet:
+Tilføj Kommentarer direkte på kortet:
 
-1. Klik på **annotation-ikonet (tekstboks)**
-2. **Klik** på kortet hvor teksten skal placeres
+1. Klik på **talebobel-ikonet**
+2. **Klik** et sted i kortet hvor teksten skal placeres
 3. **Indtast tekst** i dialogboksen
 4. **Klik OK**
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-menu-tegnevaerktoj-annotation.gif`
-*Animation af tilføjelse af annotation*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojKommentarImg.src} 
+    alt="Indsæt kommentar" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Indsæt kommentar</figcaption>
+</figure>
 
 :::tip[Nyttigt]
 Brug annotationer til at:
@@ -113,34 +176,47 @@ Brug annotationer til at:
 - Dokumentere observationer i felten
 :::
 
-## Ændre elementer
+## Ændre features
 
 Du kan redigere eksisterende tegninger:
 
-1. Klik på **rediger-ikonet**
+1. Klik på **Ændrer tegning-ikonet**
 2. **Knudepunkter fremhæves** (hvide kasser)
 3. **Klik og træk** på knudepunkter for at flytte dem
 4. **Klik på "Gem"** for at gemme ændringer
 5. **Klik på "Fortryd"** for at annullere alle ændringer
 
-**📸 BILLEDE MANGLER:** `vidi-menu-tegnevaerktoj-rediger.png`
-*Screenshot af redigering med knudepunkter*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojRedigerImg.src} 
+    alt="Rediger feature" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Rediger feature</figcaption>
+</figure>
 
-## Slet elementer
+## Slet feature(s)
 
 Du kan slette tegninger individuelt eller alle på én gang:
 
-1. Klik på **slet-ikonet**
+1. Klik på **skraldespands-ikonet**
 2. **Vælg et element** der skal fjernes
 3. **Klik på "Gem"** for at bekræfte sletningen
+4. For at fjerne alle features trykkes der på <MenuPath items="Slet alle" />
 4. **Klik på "Fortryd"** for at annullere
 
 :::warning[Vigtigt]
 Hvis du klikker **"Slet alle"**, slettes alle tegninger øjeblikkeligt uden bekræftelse. Denne handling kan **ikke** fortrydes.
 :::
 
-**📸 BILLEDE MANGLER:** `vidi-menu-tegnevaerktoj-slet.png`
-*Screenshot af slet-funktionen*
+<figure class="centered-figure">
+  <img 
+    src={tegnevaerktojSletImg.src} 
+    alt="Rediger feature" 
+    style={{ width: '560', maxWidth: '100%' }} 
+  />
+  <figcaption>Rediger feature</figcaption>
+</figure>
 
 ## Stilarter
 
@@ -162,8 +238,19 @@ For linjer kan du definere:
 *Eksempler på forskellige linjestile (pilehoved, stop, firkant, punkt)*
 
 :::note[Bemærk]
-Indstillinger for stil sættes **før** du tegner din linje.
+Det er muligt at ændre stil for allerede tegnet features, det gøres ved at afbryde tegning, 
+herefter kan man trykke på featuren, og herefter vil der komme en dialog med følgende: <MenuPath items="Anvend standard stilindstillinger til denne tegning" />. Tryk ok for at ændre stilen for featuren.
 :::
+
+### Farver og fyld
+
+Du kan tilpasse:
+- **Linjefarve** (for alle geometrier)
+- **Fyldfarve** (for arealer, rektangler, cirkler)
+- **Gennemsigtighed**
+
+**📸 BILLEDE MANGLER:** `vidi-menu-tegnevaerktoj-farver.png`
+*Forskellige farver og fyld-muligheder*
 
 ### Vis mål på linjer
 
@@ -177,16 +264,6 @@ Du kan få vist afstande på dine linjer:
 :::tip[Professionel tip]
 Hvis du primært skal måle afstande, brug [Måleværktøjet →](/vidi/vaerktojslinjen/maalevaerktoj) i stedet.
 :::
-
-### Farver og fyld
-
-Du kan tilpasse:
-- **Linjefarve** (for alle geometrier)
-- **Fyldfarve** (for arealer, rektangler, cirkler)
-- **Gennemsigtighed**
-
-**📸 BILLEDE MANGLER:** `vidi-menu-tegnevaerktoj-farver.png`
-*Forskellige farver og fyld-muligheder*
 
 ## Oversigt over tegninger
 
@@ -226,67 +303,11 @@ Tegninger inkluderes automatisk når du printer kortet:
 
 [Læs mere om print →](/vidi/vidi-menuen/print)
 
-## Tips og tricks
+## Snap
 
-### Præcise tegninger
+:::note[Konfiguration]
 
-- **Zoom ind** for at placere punkter præcist
-- **Brug mange mellempunkter** for at følge kurver
-- **Brug rektangel** i stedet for polygon for firkantede former
+Det er muligt at tilføje en mulighed for at der kan snappes til andre lag, f.eks. lag med jordstykker eller ledninger.
 
-### Farve-kodning
+[Læs mere om konfiguration af snap i GC2 (kommer snart) →](/gc2/)
 
-Brug forskellige farver til forskellige formål:
-- **Rød:** Problemområder
-- **Grøn:** Godkendte områder
-- **Gul:** Områder der skal undersøges
-- **Blå:** Vandrelaterede elementer
-
-### Kombiner med andre værktøjer
-
-1. **Tegn** et område
-2. **Mål** afstande med måleværktøjet
-3. **Hent info** på features i området
-4. **Gem** alt i et projekt
-
-### Strukturér dine tegninger
-
-- **Brug annotationer** til at navngive områder
-- **Brug konsekvent farvekodning**
-- **Gem relaterede tegninger** i separate projekter
-- **Dokumentér** med screenshots eller print
-
-## Sammenligning med andre værktøjer
-
-### Tegneværktøj vs. Måleværktøj
-
-| Feature | Tegneværktøj | Måleværktøj |
-|---------|--------------|-------------|
-| Placering | Vidi-menu (venstre) | Værktøjslinje (højre) |
-| Formål | Tegning og annotation | Måling af afstand/areal |
-| Automatiske beregninger | ❌ Nej (valgfrit) | ✅ Ja |
-| Stilarter | ✅ Mange muligheder | ❌ Standard |
-| Annotation | ✅ Ja | ❌ Nej |
-| Print | ✅ Ja | ✅ Ja |
-
-[Læs mere om måleværktøjet →](/vidi/vaerktojslinjen/maalevaerktoj)
-
-## Fejlfinding
-
-### Kan ikke tegne?
-
-- Tjek om tegneværktøjet er aktiveret
-- Prøv at genindlæse siden
-- Tjek om der er JavaScript-fejl i konsollen
-
-### Tegninger forsvinder?
-
-- Tegninger gemmes ikke automatisk
-- Gem dem i et projekt for at beholde dem
-- Undgå at genindlæse siden før du har gemt
-
-### Kan ikke redigere tegning?
-
-- Tjek om tegningen er lavet med tegneværktøjet (og ikke måleværktøjet)
-- Aktiver rediger-funktionen
-- Genindlæs siden hvis problemet fortsætter
