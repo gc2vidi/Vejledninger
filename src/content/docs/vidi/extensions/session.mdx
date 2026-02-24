@@ -1,6 +1,41 @@
 ---
 title: Login (session)
-description: Oversigt over udvidelser (extensions) i Vidi
+description: Login i Vidi med session-udvidelsen
 sidebar:
   order: 7
 ---
+import sessionImg from '../resources/extensions-session.gif';
+
+## Hvad er Session-udvidelsen?
+
+Session-udvidelsen håndterer login i Vidi, så brugeren kan arbejde med funktioner og data, der kræver adgang.
+
+Denne side beskriver kun den korte brugeroplevelse i Vidi. Brugerstyring, roller og rettigheder beskrives i GC2-dokumentationen.
+
+## Sådan logger brugeren ind
+
+1. Klik på <MenuPath items="Log ind" /> i Vidi
+2. Indtast brugernavn og adgangskode
+3. Godkend ved at trykke på  <MenuPath items="Log ind" />
+4. Vidi opdateres med brugerens adgang
+
+<figure class="centered-figure">
+  <img 
+    src={sessionImg.src} 
+    alt="Genskab projekt" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Login</figcaption>
+</figure>
+
+## Aktivering
+
+Session-udvidelsen aktiveres i GC2 via kørselskonfigurationen.
+
+[Læs mere om kørselskonfiguration i GC2 →](/gc2/)
+
+## Brugeradministration
+
+Oprettelse af brugere, grupper, roller og adgangsstyring håndteres i GC2 og vedligeholdes uden for Vidi.
+
+[Læs mere om brugerstyring i GC2 →](/gc2/)

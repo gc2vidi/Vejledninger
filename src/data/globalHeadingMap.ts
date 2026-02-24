@@ -385,18 +385,18 @@ export const headingMap = {
   "vidi-vidi-menuen-tegnevaerktoj-cirkel": { url: "/vidi/vidi-menuen/tegnevaerktoj#cirkel", text: "Cirkel" },
   "vidi-vidi-menuen-tegnevaerktoj-punktmarkoer": { url: "/vidi/vidi-menuen/tegnevaerktoj#punktmarkoer", text: "Punkt/Markør" },
   "vidi-vidi-menuen-tegnevaerktoj-kommentar": { url: "/vidi/vidi-menuen/tegnevaerktoj#kommentar", text: "Kommentar" },
-  "vidi-vidi-menuen-tegnevaerktoj-aendre-elementer": { url: "/vidi/vidi-menuen/tegnevaerktoj#aendre-elementer", text: "Ændre elementer" },
+  "vidi-vidi-menuen-tegnevaerktoj-aendre-features": { url: "/vidi/vidi-menuen/tegnevaerktoj#aendre-features", text: "Ændre features" },
   "vidi-vidi-menuen-tegnevaerktoj-slet-features": { url: "/vidi/vidi-menuen/tegnevaerktoj#slet-features", text: "Slet feature(s)" },
   "vidi-vidi-menuen-tegnevaerktoj-stilarter": { url: "/vidi/vidi-menuen/tegnevaerktoj#stilarter", text: "Stilarter" },
-  "vidi-vidi-menuen-tegnevaerktoj-linjestil": { url: "/vidi/vidi-menuen/tegnevaerktoj#linjestil", text: "Linjestil" },
-  "vidi-vidi-menuen-tegnevaerktoj-farver-og-fyld": { url: "/vidi/vidi-menuen/tegnevaerktoj#farver-og-fyld", text: "Farver og fyld" },
-  "vidi-vidi-menuen-tegnevaerktoj-vis-maal-paa-linjer": { url: "/vidi/vidi-menuen/tegnevaerktoj#vis-maal-paa-linjer", text: "Vis mål på linjer" },
+  "vidi-vidi-menuen-tegnevaerktoj-vis-maal": { url: "/vidi/vidi-menuen/tegnevaerktoj#vis-maal", text: "Vis mål" },
   "vidi-vidi-menuen-tegnevaerktoj-oversigt-over-tegninger": { url: "/vidi/vidi-menuen/tegnevaerktoj#oversigt-over-tegninger", text: "Oversigt over tegninger" },
   "vidi-vidi-menuen-tegnevaerktoj-funktioner-i-oversigten": { url: "/vidi/vidi-menuen/tegnevaerktoj#funktioner-i-oversigten", text: "Funktioner i oversigten" },
   "vidi-vidi-menuen-tegnevaerktoj-gem-tegninger-i-projekter": { url: "/vidi/vidi-menuen/tegnevaerktoj#gem-tegninger-i-projekter", text: "Gem tegninger i projekter" },
   "vidi-vidi-menuen-tegnevaerktoj-gem-tegninger": { url: "/vidi/vidi-menuen/tegnevaerktoj#gem-tegninger", text: "Gem tegninger" },
   "vidi-vidi-menuen-tegnevaerktoj-print-tegninger": { url: "/vidi/vidi-menuen/tegnevaerktoj#print-tegninger", text: "Print tegninger" },
-  "vidi-vidi-menuen-tegnevaerktoj-snap": { url: "/vidi/vidi-menuen/tegnevaerktoj#snap", text: "Snap" }
+  "vidi-vidi-menuen-tegnevaerktoj-snap": { url: "/vidi/vidi-menuen/tegnevaerktoj#snap", text: "Snap" },
+  "vidi-vidi-menuen-tegnevaerktoj-eksport": { url: "/vidi/vidi-menuen/tegnevaerktoj#eksport", text: "Eksport" },
+  "vidi-vidi-menuen-tegnevaerktoj-konflikt-soegning": { url: "/vidi/vidi-menuen/tegnevaerktoj#konflikt-soegning", text: "Konflikt søgning" }
 } as const;
 
 // Type for all available heading keys

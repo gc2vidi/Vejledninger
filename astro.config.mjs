@@ -129,20 +129,6 @@ export default defineConfig({
                 directory: "vidi/extensions",
               },
             },
-            {
-              label: "Avanceret",
-              collapsed: true,
-              autogenerate: {
-                directory: "vidi/avanceret",
-              },
-            },
-            {
-              label: "Tips & Tricks",
-              collapsed: true,
-              autogenerate: {
-                directory: "vidi/tips-tricks",
-              },
-            },
           ],
         },
         {

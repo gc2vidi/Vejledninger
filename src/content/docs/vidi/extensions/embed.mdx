@@ -1,0 +1,174 @@
+---
+title: Indlejring (embed)
+description: Indlejring af Vidi på andre hjemmesider
+sidebar:
+  order: 9
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
+## Hvad er indlejring?
+
+Med embed kan du vise et Vidi-kort direkte på en anden hjemmeside. 
+Det gøres med et JavaScript (`embed.js`) og et `div`-element med data-attributter.
+
+## 1) Indlæs embed.js
+
+Først skal `embed.js` indlæses på den side, hvor kortet skal vises:
+
+```html
+<script src="https://vidi.swarm.gc2.io/js/embed.js"></script>
+```
+
+Scriptet kan ligge både i `<head>` og i bunden af siden.
+
+## 2) Indsæt kortet med et div-element
+
+Selve indlejringen sker ved at indsætte et `div`-element med et token:
+
+```html
+<div
+  data-vidi-token="eyJ0aXRsZSI..."
+  data-vidi-width="800px"
+  data-vidi-height="600px"
+></div>
+```
+
+## Obligatorisk og valgfri data-attributter
+
+### Obligatorisk
+
+- `data-vidi-token`  
+  Projektets token med oplysninger om fx state-id, host og database.
+
+### Ofte brugte valgfri attributter
+
+- `data-vidi-width` – bredde på kortet (standard: `100%`)
+- `data-vidi-height` – højde på kortet (standard: `100%`)
+- `data-vidi-tmpl` – template (standard: `embed.tmpl`)
+- `data-vidi-title` – sætter `title` på den genererede iframe
+- `data-vidi-frame-name` – navn på kortet (skal bruges, hvis du vil bruge Embed API)
+
+### Valgfri attributter til styring af token og konfiguration
+
+- `data-vidi-use-config="true"` – bruger config fra token (hvis den findes)
+- `data-vidi-use-schema="true"` – bruger schema fra token (hvis det findes)
+- `data-vidi-host="https://example.com"` – overskriver host fra token
+- `data-vidi-schemata="..."` – filtrerer hvilke lag (schemata) der hentes
+- `data-vidi-no-tracking="true"` – undgår tracking-cookie
+
+## Vis/skjul funktioner i indlejret kort
+
+Du kan styre, hvilke funktioner der er synlige i den indlejrede visning.
+
+### Som udgangspunkt synlige (kan skjules med `none`)
+
+- `data-vidi-brand`
+- `data-vidi-search`
+- `data-vidi-history`
+- `data-vidi-legend`
+- `data-vidi-layer`
+- `data-vidi-background`
+- `data-vidi-fullscreen`
+- `data-vidi-about`
+- `data-vidi-location`
+- `data-vidi-signin`
+- `data-vidi-toggler`
+
+Eksempel:
+
+```html
+<div
+  data-vidi-token="eyJ0aXRsZSI..."
+  data-vidi-search="none"
+  data-vidi-signin="none"
+  data-vidi-width="100%"
+  data-vidi-height="500px"
+></div>
+```
+
+### Som udgangspunkt skjulte (kan vises med `inline`)
+
+- `data-vidi-measurement`
+- `data-vidi-boxzoom`
+- `data-vidi-reset`
+- `data-vidi-clear`
+- `data-vidi-screenshot`
+
+Eksempel:
+
+```html
+<div
+  data-vidi-token="eyJ0aXRsZSI..."
+  data-vidi-measurement="inline"
+  data-vidi-screenshot="inline"
+  data-vidi-width="100%"
+  data-vidi-height="600px"
+></div>
+```
+
+## Komplet eksempel
+
+Her er et samlet eksempel med typiske indstillinger:
+
+```html
+<script src="https://vidi.swarm.gc2.io/js/embed.js"></script>
+
+<div
+  data-vidi-token="eyJ0aXRsZSI..."
+  data-vidi-frame-name="plankort"
+  data-vidi-width="100%"
+  data-vidi-height="650px"
+  data-vidi-title="Plankort"
+  data-vidi-search="none"
+  data-vidi-signin="none"
+  data-vidi-measurement="inline"
+></div>
+```
+
+## Embed API
+
+Embed-scriptet udstiller et API, så du kan styre kortet fra din egen side.
+
+De mest brugte funktioner er:
+
+- `embedApi.switchLayer(layername, on, frame)`  
+  Tænder/slukker et lag.
+- `embedApi.allOff(frame)`  
+  Slukker alle tændte lag.
+
+Eksempler:
+
+```javascript
+embedApi.switchLayer('planer.lokalplan', true, 'plankort')
+embedApi.allOff('plankort')
+```
+
+## Callbacks (når kortet er klar)
+
+Du kan sætte callbacks til:
+
+1. Når Vidi er loaded og klar
+2. Når projektets aktive lag er loaded
+
+Hvis kortet er indlejret med `data-vidi-frame-name="kort1"`, kan du gøre sådan:
+
+```javascript
+embedApi.vidiReady['kort1'] = () => {
+  console.log('Vidi er klar')
+}
+```
+
+```javascript
+embedApi.activeLayersReady['kort1'] = () => {
+  console.log('Aktive lag er klar')
+}
+```
+
+:::note[Godt at vide]
+Aktive lag fra projektet loades først efter at Vidi har meldt sig klar.
+:::
+
+:::note[For udviklere]
+Tekniske detaljer og seneste implementation findes i Vidi-repositoriet: [https://github.com/mapcentia/vidi](https://github.com/mapcentia/vidi)
+:::
