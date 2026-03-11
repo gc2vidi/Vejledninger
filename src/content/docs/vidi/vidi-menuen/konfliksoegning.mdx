@@ -4,245 +4,233 @@ description: Find overlappende features og generer konflikt-rapporter
 sidebar:
   order: 10
 ---
+import konfliktsoegningMenufunktionImg from '../resources/vidi-menu-konfliktsoegning-menufunktion.png';
+import konfliktsoegningSkaermbilledeImg from '../resources/vidi-menu-konfliktsoegning-skaermbillede.png';
+import konfliktsoegningProgressImg from '../resources/vidi-menu-konfliktsoegning-progressindicator.png';
+import konfliktsoegningResultatImg from '../resources/vidi-menu-konfliktsoegning-resultat.png';
+import konfliktsoegningResultatEksporterImg from '../resources/vidi-menu-konfliktsoegning-resultat-eksporter.png';
+import konfliktsoegningResultatAfgraensImg from '../resources/vidi-menu-konfliktsoegning-resultat-afgraens.png';
+import konfliktsoegningResultatMedKonflikterImg from '../resources/vidi-menu-konfliktsoegning-resultat-med-konflikter.png';
+import konfliktsoegningResultatMedDataImg from '../resources/vidi-menu-konfliktsoegning-resultat-data-fra-konflikter.png';
+import konfliktsoegningResultatUdenKonflikterImg from '../resources/vidi-menu-konfliktsoegning-resultat-uden-konflikter.png';
+import konfliktsoegningMedIndtegnetImg from '../resources/vidi-menu-konfliktsoegning-med-indtegnet.png';
+import konfliktsoegningMedUdpegetImg from '../resources/vidi-menu-konfliktsoegning-med-udpeget.png';
 
-**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+**Forfatter:** [Lars Klindt](mailto:lkm@geopartner.dk)
 
 ## Hvad er konfliksøgning?
+Konfliktsøgning i kommunal kontekst dækker over en teknisk, geografisk screening af potentielle problemer ved fysisk planlægning.
+Denne type konfliktsøgning er et værktøj, som kommuner og rådgivere bruger i byggesager og lokalplanlægning til at identificere mulige hindringer, før et projekt går i gang.
+Formålet er at identificere konflikter med lokalplaner, jordforurening, beskyttelseslinjer (natur/kyst), fredninger eller forsyningsledninger.
 
-Konfliksøgning (conflictSearch) er en udvidelse der gør det muligt at finde overlappende features mellem forskellige lag. Dette er nyttigt når du skal identificere spatiale konflikter, f.eks. om en ny ledning krydser eksisterende installationer.
+Ved hjælp af digitale kortløsninger gennemløbes datakilder (egne eller offentlige) for at se, hvilke temaer der berører et givet areal. Ofte opsættes en "buffer" (f.eks. 50 meter) omkring et projektområde for at se, om nabogrunde er berørt.
 
-## Hvornår bruges konfliksøgning?
+Resultat er en rapport med kort og lister over potentielle konflikter, som kan bruges til at forberede sagsbehandlingen. 
+
+I andre sammenhænge kan konfliktsøgningsværktøjet give god mening til brug og anvendelse ved f.eks. ejendomsmæglere, screening af arealer for vedvarende energi oma.
+
+:::tip[Konfliksøgning]
+Konfliktsøgning en slags makro der henter informationer fra forudbestemte lag, så det er hurtigt og nemt for dig at afsøge oplysninger inden for en nærmere bestemt geografi.:::
+:::
+
+### Konfliksøgning (conflictSearch) i Vidi...
+er en udvidelse der gør det muligt at finde overlappende geografiske objekter mellem forskellige lag, foruddefineret til brug for konfliksøgning.
+
+Konfliksøgning startes fra Vidi-menuen med klik på følgende ikon:
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningMenufunktionImg.src} 
+    alt="Konfliktsøgningsværktøjet i værktøjslinjen " 
+    style={{ width: '54px', maxWidth: '100%' }} 
+  />
+  <figcaption>Konfliktsøgningsværktøjet i Vidi-menuen</figcaption>
+</figure>
+:::note[Kræver aktivering]
+Denne udvidelse skal være aktiveret i GC2's kørselskonfiguration. 
+
+Mangler ikonet, Kontakt din systemadministrator hvis udvidelsen ikke er tilgængelig.
+:::
+
+## Hvordan bruges konfliksøgning?
 
 **Typiske scenarier:**
-- **Byggesager:** Tjek om ny bygning overlapper med beskyttede områder
-- **Ledningsføring:** Find krydsende ledninger og installationer
-- **Planlægning:** Identificer konflikter mellem forskellige zoner
-- **Miljøanalyse:** Find områder med multiple restriktioner
+- **Byggesager:** Tjek om ny bygning overlapper med eksisterende bindingerog  find hurtigt adgang til mere information om bindingers type og detailoplysninger.
+- **Planlægning:** Identificer konflikter mellem zoner eller hvilke servitutter og ejendomme der er berørt af et loaklplansforslag.
+- **Miljøanalyse:** Find miljørestriktioner til brug for forskellige sagsarbejdsgange (VVM analyse, råstofsager eller andet)
 
-## Aktiver konfliksøgning
+En typisk konfliktsøgning tager udgangspunkt i en gegrafisk udpegning med en af følgende muligheder:
+   1. [Konfliksøgning med adresse- eller matrikel →](#konfliksøgning-med-adresse--eller-matrikel)
+   2. [Konfliksøgning med indtegnet objekt →](#konfliksøgning-med-indtegnet-objekt)
+   3. [Konfliksøgning med udpeget objekt →](#konfliksøgning-med-udpeget-objekt)
 
-1. Klik på **konfliksøgnings-ikonet** i Vidi-menuen
-2. Udvidelsen aktiveres
-3. **Tegneværktøjer** vises til venstre
+:::tip
+Der er mange muligheder for opsætning og datapræsentation med modulet til konfliktsøgning. Der findes i dag mange fællesoffentlige datakilder der kan tilsluttes kortet til brug for konfliktsøgning.
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-aktiveret.png`
-*Screenshot af aktiveret konfliksøgning*
-
-:::note[Kræver aktivering]
-Denne udvidelse skal være aktiveret i GC2's kørselskonfiguration.
-
-Kontakt din systemadministrator hvis udvidelsen ikke er tilgængelig.
+Denne vejledning gennemgår funktioner og muligheder med konfliktsøgningen og tager ikke udgangspunkt i data. 
+:::
+:::caution[Savner du datakilder?]
+Kontakt din systemadministrator hvis der er datalag der savnes ved sagsbehandlingen. 
 :::
 
-## Tegneværktøjer
+### Konfliksøgning med adresse- eller matrikel
+1. Klik på **konfliksøgnings-ikonet** i Vidi-menuen.
+2. Udvidelsen aktiveres.
+3. Følgende skærmbillede vises.
 
-Når konfliksøgning er aktiveret, får du adgang til følgende tegneværktøjer:
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningSkaermbilledeImg.src} 
+    alt="Konfliktsøgning skærmbilledet" 
+    style={{ width: '481px', maxWidth: '100%' }} 
+  />
+  <figcaption>Konfliktsøgning skærmbilledet</figcaption>
+</figure>
 
-- **Linje** - Tegn en linje
-- **Polygon** - Tegn en polygon
-- **Rektangel** - Tegn et rektangel
-- **Cirkel** - Tegn en cirkel
-- **Markør/Punkt** - Placer et punkt
+4. Vælg søgning på adresse eller matrikel.
+5. Konfliktsøgningen starter automatisk. Hold øje med fremdriften i det nederste højre hjørne af Vidi, hvor processen kan overvåges.
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-tegnevaerktoejer.png`
-*Tegneværktøjer i konfliksøgning*
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningProgressImg.src} 
+    alt="Status på konfliktsøgning" 
+    style={{ width: '358px', maxWidth: '100%' }} 
+  />
+  <figcaption>Status på konfliktsøgning</figcaption>
+</figure>
+6. Efter alle lag er gennemsøgt for konflikter, vises resultatet af konfliktsøgningen automatisk i skærmbilledet.
 
-## Buffer
+:::tip
+Så snart der er foretaget en søgning på adresse eller matrikel, starter konfliktsøgningen automatisk med den angivne buffer (standard er 40m). Standardbuffer kan justeres under kørselskonfigurationen. Ønsker du at justere buffer inden konfliktsøgningen, skal det gøres før adresse- eller matrikelsøgning foretages.
 
-Du kan tilføje en buffer omkring den tegnede geometri:
-
-1. **Tegn en geometri** (f.eks. en linje for en planlagt ledning)
-2. **Indtast buffer-afstand** (f.eks. 50 meter)
-3. Bufferen vises på kortet
-4. **Klik "Søg"** for at starte konfliksøgning
-
-**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-konfliksoegning-buffer.gif`
-*Animation af tegning med buffer*
-
-:::tip[Nyttigt]
-Brug buffer til at finde features i nærheden af din planlagte geometri, ikke kun dem der direkte overlapper.
+Det er muligt at aktivere andre søgninger end adresse- og matrikelsøgning. Øvrige søgninger kan styres af en administrator af løsningen.
 :::
 
-## Udfør konfliksøgning
+### Konfliksøgning med indtegnet objekt
+Ved brug af [Tegneværktøjet →](/vidi/vidi-menuen/tegnevaerktoj/) er der ved aktivering af konfliktsøgningsværktøjet, to ekstra funktionsknapper til brug for konfliktsøgning. Det giver mulighed for at indtegne geografiske afgrænsninger til brug for konfliktsøgningen.
+Illustrationen herunder viser de ekstra knapper der kommer til syne i tegneværktøjet, knapperne <MenuPath items="Konflikt med valgte" /> og <MenuPath items="Konflikt med alle" />. Det giver mulighed for at man kan foretage konfliktsæøgning med et enkelt og i tegneværktøjet markeret objekt, eller alle de tegnede objekter. Der er mulgihed for konfliktsøgning med tegneobjekterne linje, flade, rektangel, cirkel og markør.
 
-### Grundlæggende arbejdsgang
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningMedIndtegnetImg.src} 
+    alt="Konfliktsøgning med et eller flere indtegnede objekter" 
+    style={{ width: '750px', maxWidth: '100%' }} 
+  />
+  <figcaption>Konfliktsøgning med et eller flere indtegnede objekter</figcaption>
+</figure>
 
-1. **Tænd for relevante lag** (de lag du vil søge konflikter i)
-2. **Aktiver konfliksøgning**
-3. **Vælg tegneværktøj**
-4. **Tegn geometri** på kortet
-5. **Tilføj buffer** (valgfrit)
-6. **Klik "Søg"**
-7. **Se resultater**
-
-**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-konfliksoegning-workflow.gif`
-*Komplet workflow for konfliksøgning*
-
-## Resultat-kategorier
-
-Når konfliksøgningen er færdig, grupperes resultaterne i følgende kategorier:
-
-### Med konflikt ⚠️
-
-Features der **overlapper** med den tegnede geometri (eller buffer).
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-med-konflikt.png`
-*Liste over features med konflikt*
-
-### Data fra konflikter 📊
-
-Detaljeret data og attributter fra de features der har konflikt.
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-data.png`
-*Detaljeret data fra konflikter*
-
-### Uden konflikter ✅
-
-Features der **ikke overlapper** med geometrien.
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-uden-konflikt.png`
-*Liste over features uden konflikt*
-
-### Fejl ❌
-
-Features eller lag hvor fejl opstod under søgningen.
-
-### Analyse 📈
-
-Statistik og opsummering af konfliksøgningen:
-- Antal konflikter
-- Fordeling per lag
-- Samlede resultater
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-analyse.png`
-*Analyse-oversigt*
-
-## Rapporter
-
-Du kan eksportere konfliksøgnings-resultater til forskellige formater:
-
-### PDF-rapport
-
-1. Klik på **"Lav PDF-rapport"**
-2. En PDF genereres med:
-   - Kort med konflikt-områder
-   - Liste over konflikter
-   - Attribut-data
-   - Statistik
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliks øgning-pdf-rapport.png`
-*Eksempel på PDF-rapport*
-
-### Excel-rapport
-
-1. Klik på **"Lav Excel-rapport"**
-2. En Excel-fil genereres med:
-   - Separat ark for hver kategori
-   - Alle attributter
-   - Filtrérbare data
-   - Statistik
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-konfliksoegning-excel-rapport.png`
-*Eksempel på Excel-rapport*
-
-:::tip[Professionel tip]
-Brug Excel-rapport til videre analyse og arkivering. PDF-rapport til præsentationer og godkendelser.
+:::tip
+Den angivne buffer ved konfliktsøgningen anvendes også som buffer omkring de tegnede objekter.
 :::
 
-## Use cases
+### Konfliksøgning med udpeget objekt
+I konfliktsøgninsmodulet er der inder fanen <MenuPath items="Info" /> mulighed for at udpege objekter i aktivere lag. I eksemplet heruinder er §3 områder tændt og der er udpeget et objekt (en sø) som skal tage udgangpukt i den videre konfliktsøgning. Efter markering af objektet trykkes på knappen <MenuPath items="Søg med valgte" />
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningMedUdpegetImg.src} 
+    alt="Konfliktsøgning med udpeget objekt" 
+    style={{ width: '750px', maxWidth: '100%' }} 
+  />
+  <figcaption>Konfliktsøgning med udpeget objekt</figcaption>
+</figure>
+:::tip
+Der kan kun udpeges ét objekt ad gangen. Vær derfor opmærksom på at det er det rette objekt der er udpeget ved overlappende objekter.
 
-### Byggesagsbehandling
+Den angivne buffer ved konfliktsøgningen anvendes også som buffer omkring det udpegede objekt.
+:::
 
-**Scenarie:** Tjek om ny bygning overlapper beskyttede områder
+## Konfliksøgning, resultatvisning
+Skærmbilledet herunder viser en typisk resultatvisning efter gennemført konfliktsøgning. Skærmbilledet viser følgende:
+- Markeret med <span style="color: red;">rødt</span>: angiver hvordangeografisk afgrænsning for konfliktanalysen er afgrænset, med enten adresse- matrikelsøgning, indtegnet- eller udpeget objekt.
+- Markeret med <span style="color: blue;">blåt</span>: Eksport af rapport til pdf plot: (kompakt, Lang, kun hits, Lang, alle)
+- Markeret med <span style="color: orange;">orange</span>: Faneblade til gennemsyn resultat i kortet.
 
-1. Tegn bygningens placering som polygon
-2. Tilføj 10m buffer (sikkerhedszone)
-3. Tænd for lag: Fredet bebyggelse, beskyttede dyr, natur områder
-4. Kør konfliksøgning
-5. Generer PDF-rapport til byggesagsbehandler
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningResultatImg.src} 
+    alt="Resultat af konfliktsøgning" 
+    style={{ width: '358px', maxWidth: '100%' }} 
+  />
+  <figcaption>Resultat af konfliktsøgning</figcaption>
+</figure>
 
-### Ledningsføring
+### Eksport af resultat
+Forud for at resultatet eksporteres er der mulighed for at afgrænse kortvisningen og vælge rapporttype af indhold og eksportformat.
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningResultatEksporterImg.src} 
+    alt="Resultat af konfliktsøgning" 
+    style={{ width: '458px', maxWidth: '100%' }} 
+  />
+  <figcaption>Resultat af konfliktsøgning</figcaption>
+</figure>
 
-**Scenarie:** Find krydsende ledninger for ny spildevandsledning
+Printafgrænsning for kortets i rapporter - klik på ikonet og tilpas kortvisningen.
 
-1. Tegn planlagt ledningsføring som linje
-2. Tilføj 5m buffer (gravezone)
-3. Tænd for lag: Eksisterende ledninger (vand, el, gas, tele)
-4. Kør konfliksøgning
-5. Generer Excel-rapport med alle krydsende ledninger
-6. Planlæg underboring ved konflikter
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningResultatAfgraensImg.src} 
+    alt="Afgræns kort i rapport" 
+    style={{ width: '39px', maxWidth: '100%' }} 
+  />
+  <figcaption>Afgræns kort i rapport</figcaption>
+</figure>
 
-### Arealplanlægning
+Det er muligt at eksportere til 'Excel': Der oprettes ét faneblad pr. lag fra konfliktsøgningen. Regnearket udfyldes med feltnavne og data fra konfliktsøgningen. Der inkluderes ikke kortudsnkrifter i Excel.
 
-**Scenarie:** Identificer konflikter i ny lokalplan
+- Vælg mellem flere rapporttyper: 
+   1. (Standard) *'Kompakt'* - Viser ét kortbillede på side 1 og herefter vises alle konflikter i en samlet tablevisning grupperet pr. lag. På sidste side fremgår de lag der er undersøgt uden konflikter.
+   2. *'Lang, kun hits'* - Viser ét kortbillede for hver lag hvor der er konflikter, sammen med en tabelvisning af konflikterne. Det giver den fordel at man kan se konfliktens placering i frohold til det fremsøgte objekt.
+   3. *'Lang, alle'* - Viser ét kortbillede pr. lag der er analyseret. Det er en længere rapport der giver den fordel at man vil kunne se konflikter der vil være i umiddelbar nærhed af det fremsøgte objekt, uden det har været med et overlap.
 
-1. Tegn lokalplan-område som polygon
-2. Tænd for lag: Eksisterende lokalplaner, fredninger, naturbeskyttelse
-3. Kør konfliksøgning
-4. Analyser konflikter
-5. Justér lokalplan-grænser
+Efter justering af printafgrænsning og valg af rapport, klik på knappen <MenuPath items="Print rapport" />.    
 
-## Tips og tricks
+:::tip
+Det er værd at eksperimentere med de forskellige rapporttyper så man er klar over hvilke fordele der er med hver type.
 
-### Effektiv konfliksøgning
+Nogle rapporter tager længere tid at danne. Ved dannelse af rapporterne *'Lang, kun hits'* *'Lang, alle'* vil der vises en indikation af fremdriften på rapportgenereringen i nederste højre hjørne.
+:::
 
-- **Tænd kun for relevante lag** - reducerer søgetid
-- **Brug buffer strategisk** - find også features i nærheden
-- **Gem resultater** i projekt for senere reference
-- **Eksportér til Excel** for videre analyse
+:::caution[Opsætning...]
+af lag og egenskaber på lag er administreret af GC2 administratoren. Det er i Vidi ikke muligt selv at styre hvilke lag og felter der medtages i en konfliktsøgning. 
+:::
 
-### Præcise søgninger
+### Gennemsyn af resultat
+Der findes følgende faner til visning af data og information til brugeren:
+- *'Med konflikter'* - Angiver en liste af lag, hvor der er fundet konfliktende objekter i forhold til den geografisk afgrænsning af konfliktsøgningen. Det er en simpel oversigt, hvor der er mulighed for at tænde og slukke for hvert lag.
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningResultatMedKonflikterImg.src} 
+    alt="Lag med konflikter" 
+    style={{ width: '523px', maxWidth: '100%' }} 
+  />
+  <figcaption>Lag med konflikter</figcaption>
+</figure>
 
-- **Zoom ind** før du tegner geometri
-- **Brug mange punkter** når du tegner langs kurver
-- **Juster buffer** efter behov (start med lille buffer)
+- *'Data fra konflikter'* - Angiver en liste af felter der er inkluderet til visning for hvert af de forekommende konflikter. Herfra kan man vælge at se konflikten eller gennemse de oplysninger der fremgår af analysen.
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningResultatMedDataImg.src} 
+    alt="Data fra konflikter" 
+    style={{ width: '484px', maxWidth: '100%' }} 
+  />
+  <figcaption>Data fra konflikter</figcaption>
+</figure>
 
-### Kombiner med andre værktøjer
+- *'Uden konflikter'* - Angiver en liste af lag, hvor der ikke er fundet konfliktende objekter i forhold til den geografisk afgrænsning af konfliktsøgningen.
+<figure class="centered-figure">
+  <img 
+    src={konfliktsoegningResultatUdenKonflikterImg.src} 
+    alt="Lag uden konflikter" 
+    style={{ width: '504px', maxWidth: '100%' }} 
+  />
+  <figcaption>Lag uden konflikter</figcaption>
+</figure>
 
-1. **Konfliksøgning** for at finde overlappende features
-2. **Infoværktøj** for detaljeret info på konflikter
-3. **Tegneværktøj** for at markere løsninger
-4. **Print** for at dokumentere
+- *'Fejl' - Her vises fejlbeskeder, hvis der været forespørgselsfejl i udvalgte analyselag. Dette er vigtigt for analysens resultat at brugeren ved om konfliktsøgningen er foretaget korrekt på baggrund af de forventede lag.
+- *'Analyse'* - *Hvad kan denne tab?*
 
-## Sammenligning med andre værktøjer
+:::tip
+Tjek altid “Fejl”-kategorien for detaljer
 
-### Konfliksøgning vs. Avanceret søgning (Infoværktøj)
-
-| Feature | Konfliks øgning | Avanceret søgning |
-|---------|-----------------|-------------------|
-| Formål | Find overlappende features | Hent info inden for område |
-| Konflikt-analyse | ✅ Ja (med kategorier) | ❌ Nej |
-| Rapport-eksport | ✅ PDF og Excel | ❌ Nej |
-| Buffer | ✅ Ja | ✅ Ja |
-| Statistik | ✅ Ja | ❌ Nej |
-
-[Læs mere om avanceret søgning →](/vidi/vidi-menuen/infovaerktoj#avanceret-søgning)
-
-## Fejlfinding
-
-### Ingen resultater?
-
-- Tjek at relevante lag er tændt
-- Verificér at geometrien overlapper med data
-- Prøv at øge buffer-afstanden
-- Tjek om lagene indeholder data i området
-
-### Søgningen tager lang tid?
-
-- Reducér antal aktive lag
-- Formindsk søgeområdet
-- Fjern tunge lag (mange features)
-- Kontakt systemadministrator
-
-### Rapport genereres ikke?
-
-- Tjek browser's pop-up-blocker
-- Vent til søgning er helt færdig
-- Prøv at genindlæse siden
-- Kontakt systemadministrator
-
-### Fejl i resultater?
-
-- Tjek "Fejl"-kategorien for detaljer
-- Verificér at lag er korrekt konfigureret i GC2
-- Kontakt systemadministrator med fejlbesked
+Kontakt systemadministrator i tilfælde af fejlbeskeder
+:::
