@@ -4,109 +4,72 @@ description: Placer og administrer SVG-symboler på kortet
 sidebar:
   order: 13
 ---
+import symbolerfotoImg from '../resources/vidi-menu-symboler.gif';
+import symbolerPlacerImg from '../resources/vidi-menu-symboler-placer.gif';
+import symbolerSkaleringImg from '../resources/vidi-menu-symboler-skalering.gif';
+import symbolerRotationImg from '../resources/vidi-menu-symboler-rotation.gif';
+import symbolerLaasImg from '../resources/vidi-menu-symboler-laas.gif';
+import symbolerAutoScaleImg from '../resources/vidi-menu-symboler-auto-scale.gif';
+import symbolerKopierImg from '../resources/vidi-menu-symboler-kopier.gif';
+import symbolerSletImg from '../resources/vidi-menu-symboler-slet.gif';
 
-**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk)
 
 ## Hvad er symbol-udvidelsen?
 
 Symbol-udvidelsen gør det muligt at placere SVG-symboler på kortet. Du kan skalere, rotere og låse symboler, samt gruppere dem i kategorier.
 
-## Aktiver symbol-udvidelsen
+:::note[Extension påkrævet]
+Symbol-udvidelsen er en extension der ikke er aktiveret som standard. Kontakt din administrator, hvis du har brug for denne funktion. [Læs mere om symbol-udvidelsen →](/vidi/extensions/symboler)
+:::
+
+## Åben symbol-funktionen
 
 1. Klik på **symbol-ikonet** i Vidi-menuen
 2. En liste med tilgængelige symboler vises
 3. Du kan nu placere symboler på kortet
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-symboler-aktiveret.png`
+<figure class="centered-figure">
+  <img 
+    src={symbolerfotoImg.src} 
+    alt="Symboler i Vidi-menuen" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Symboler i Vidi-menuen</figcaption>
+</figure>
 
 ## Tilgængelige symboler
 
 Hvilke symboler der er tilgængelige, afhænger af konfigurationen. Typiske kategorier:
 
-- **Trafikskilt e** - Vej- og trafikmarkeringer
+- **Trafikskilte** - Vej- og trafikmarkeringer
 - **Miljø** - Affaldsstativer, genbrugsstationer
 - **Forsyning** - El-master, vandforsyning, spildevand
 - **Planlægning** - Planlagte installationer, fremtidig udvikling
 - **Brugerdefinerede** - Organisationsspecifikke symboler
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-symboler-kategorier.png`
-
 :::note[Konfiguration]
-Symboler og kategorier konfigureres i Vidi's kørselskonfiguration af systemadministratoren.
+Symboler og kategorier konfigureres i Vidi's kørselskonfiguration. Kontakt din administrator for at få tilføjet eller ændret symboler.
 :::
 
-## Placer symboler
+## Anvendelse af symboler
 
-### Grundlæggende placering
+Når symbolet er placeret på kortet, vil symbolet have nogle ikonerne som kan anvendes til roterer, skalere, kopiere og slette symboler. Symbolerne vil altid blive vist for de enkelte symboler, medmindre de er låst. Når symboler er låst, vil ikonerne forsvinde og symbolerne kan ikke redigeres eller flyttes ved et uheld.
 
-1. **Vælg et symbol** fra listen
-2. **Klik på kortet** hvor symbolet skal placeres
+### Placering af symboler
+
+1. **Vælg et symbol** fra oversigten
+2. **Træk og slip** symbolet ind på kortet.
 3. Symbolet placeres på positionen
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-symboler-placer.gif`
-
-### Skalering
-
-Du kan ændre størrelsen på symboler:
-
-1. **Vælg symbol** før placering
-2. **Juster skalering** med slider eller indtast værdi
-3. **Placer symbol** med den valgte størrelse
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-symboler-skalering.png`
-
-:::tip[Nyttigt]
-Standard skalering er typisk 1.0 (100%). Øg til 2.0 for dobbelt størrelse, reducér til 0.5 for halv størrelse.
-:::
-
-### Rotation
-
-Du kan rotere symboler:
-
-1. **Vælg symbol** før placering
-2. **Indtast rotation** i grader (0-360°)
-3. **Placer symbol** med den valgte rotation
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-symboler-rotation.png`
-
-**Eksempler:**
-- `0°` - Peger nord
-- `90°` - Peger øst
-- `180°` - Peger syd
-- `270°` - Peger vest
-
-## Avancerede funktioner
-
-### Lås symboler
-
-Når symboler er låst, kan de ikke flyttes eller redigeres ved et uheld:
-
-1. Placer symboler som ønsket
-2. Klik på **"Lås symboler"**
-3. Symboler kan ikke længere flyttes
-4. Klik på **"Lås op"** for at redigere igen
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-symboler-laas.png`
-
-:::tip[Professionel tip]
-Lås symboler når du skal præsentere kortet, så de ikke flyttes ved uheld.
-:::
-
-### Auto scale
-
-Auto scale gør at symbolerne bevarer samme visuelle størrelse uanset zoom-niveau:
-
-1. Aktivér **"Auto scale"**
-2. Symboler skaleres automatisk med zoom
-3. Deaktivér for at symboler har fast størrelse på kortet
-
-**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-symboler-autoscale.gif`
-
-**Anvendelse:**
-- **Auto scale TIL:** Symbol skal være synligt ved alle zoom-niveauer
-- **Auto scale FRA:** Symbol repræsenterer faktisk størrelse på terræn
-
-## Administrer symboler
+<figure class="centered-figure">
+  <img 
+    src={symbolerPlacerImg.src} 
+    alt="Placering af symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Placering af symboler</figcaption>
+</figure>
 
 ### Flyt symboler
 
@@ -116,60 +79,119 @@ Hvis symboler ikke er låst:
 2. **Træk** til ny position
 3. **Slip** for at placere
 
+### Skalering af symboler
+
+Du kan ændre størrelsen på symboler:
+
+1. **Vælg symbol** før placering
+2. **Juster skalering** ved at trykke hive i skalering-ikonet.
+
+<figure class="centered-figure">
+  <img 
+    src={symbolerSkaleringImg.src} 
+    alt="Skalering af symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Skalering af symboler</figcaption>
+</figure>
+
+### Rotation af symboler
+
+Du kan rotere symboler:
+
+1. **Vælg symbol** før placering
+2. **Indtast rotation** i grader (0-360°)
+3. **Placer symbol** med den valgte rotation
+
+<figure class="centered-figure">
+  <img 
+    src={symbolerRotationImg.src} 
+    alt="Rotation af symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Rotation af symboler</figcaption>
+</figure>
+
+### Kopiér symboler
+
+1. **Vælg symbol** ved at klikke på det
+2. **Klik "Kopiere symbol"** for at kopiere
+3. **Kopi placeres ovenpå originalen**
+4. **Træk kopien** til ønsket position
+
+<figure class="centered-figure">
+  <img 
+    src={symbolerKopierImg.src} 
+    alt="Kopiér symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Kopiér symboler</figcaption>
+</figure>
+
 ### Slet symboler
 
 Du kan slette individuelle symboler eller alle symboler:
 
 1. **Klik på symbol** for at vælge
-2. **Klik "Slet"** for at fjerne
-3. Eller **"Slet alle"** for at fjerne alle symboler
+2. **Klik på skraldespand-ikonet** for at slette det valgte symbol
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-symboler-slet.png`
+<figure class="centered-figure">
+  <img 
+    src={symbolerSletImg.src} 
+    alt="Slet symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Slet symboler</figcaption>
+</figure>
 
-:::warning[Vigtigt]
-"Slet alle" sletter alle symboler øjeblikkeligt uden bekræftelse!
+:::tip[Slet alle symboler]
+For at slette alle symboler trykkes der på **Ryd kortet** i Værktøjslinjen. Når kortet ryddes sletter det alle symboler, tegninger og andre elementer. [Læs mere om ryd kortet →](/vidi/vaerktojslinjen/kortadministration#ryd-kortet)
 :::
 
-## Use cases
+## Avancerede funktioner
 
-### Planlægning
+### Lås symboler (Lock)
 
-**Scenarie:** Visualiser placering af fremtidige installationer
+Når symboler er låst, kan de ikke flyttes eller redigeres ved et uheld:
 
-1. Vælg symbol (f.eks. ladestation for el-biler)
-2. Placer på planlagte positioner
-3. Juster størrelse og rotation
-4. Gem i projekt
-5. Del med beslutningstagere
+1. Placer symboler som ønsket
+2. Klik på **"Lås symboler"**
+3. Symboler kan ikke længere flyttes
+4. Klik på **"Lås op"** for at redigere igen
 
-### Feltarbejde
+<figure class="centered-figure">
+  <img 
+    src={symbolerLaasImg.src} 
+    alt="Lås symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Lås symboler</figcaption>
+</figure>
 
-**Scenarie:** Markér observationer under inspektion
+:::tip[Professionel tip]
+Lås symboler når du skal præsentere kortet, så de ikke flyttes ved uheld.
+:::
 
-1. Åbn Vidi på tablet i felten
-2. Placer symboler ved observationer (f.eks. defekter)
-3. Gem i projekt
-4. Eksportér til rapport når tilbage på kontoret
+### Auto skalering (Auto scale)
 
-### Præsentation
+Auto skalering gør at symbolerne bevarer samme visuelle størrelse uanset zoom-niveau:
 
-**Scenarie:** Illustrér temaer på kort
+1. Aktivér **"Auto scale"**
+2. Symboler skaleres automatisk med zoom
+3. Deaktivér for at symboler har fast størrelse på kortet
 
-1. Placer relevante symboler
-2. Gruppér efter kategori eller farve
-3. Brug auto scale for konsistent visning
-4. Lås symboler
-5. Print eller præsentér
+<figure class="centered-figure">
+  <img 
+    src={symbolerAutoScaleImg.src} 
+    alt="Auto scale af symboler" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Auto scale af symboler</figcaption>
+</figure>
 
-### Tematiske kort
-
-**Scenarie:** Lav tematisk kort over faciliteter
-
-1. Definer kategorier (f.eks. parkering, toiletter, information)
-2. Placer symboler på alle faciliteter
-3. Brug forskellige symboler for hver kategori
-4. Gem som projekt
-5. Del med besøgende
+**Anvendelse:**
+- **Auto scale TIL:** Symbol skal være synligt ved alle zoom-niveauer
+- **Auto scale FRA:** Symbol repræsenterer faktisk størrelse på terræn
 
 ## Tips og tricks
 
@@ -192,7 +214,8 @@ Du kan slette individuelle symboler eller alle symboler:
 1. Tegn område med tegneværktøj
 2. Placer symboler inden for området
 3. Kombiner til komplet visualisering
-4. Gem i projekt
+
+[Læs mere om tegneværktøjet →](/vidi/vidi-menuen/tegnevaerktoj)
 
 ### Gem i projekt
 
@@ -203,30 +226,3 @@ Symboler forsvinder ved genindlæsning, medmindre du gemmer dem:
 3. Symboler genindlæses med projektet
 
 [Læs mere om projekter →](/vidi/vidi-menuen/projekter)
-
-## Fejlfinding
-
-### Symboler vises ikke?
-
-- Tjek zoom-niveau
-- Tjek om auto scale er aktiveret
-- Verificér at symboler er placeret
-- Genindlæs siden
-
-### Kan ikke flytte symboler?
-
-- Tjek om symboler er låst
-- Klik "Lås op" for at redigere
-- Verificér at udvidelsen er aktiv
-
-### Symboler forsvandt?
-
-- Symboler gemmes ikke automatisk
-- Gem i projekt for at beholde symboler
-- Genindlæs projekt for at genskabe
-
-### Forkert størrelse ved zoom?
-
-- Tjek auto scale-indstilling
-- Aktivér auto scale for konsistent visning
-- Eller juster skalering manuelt
