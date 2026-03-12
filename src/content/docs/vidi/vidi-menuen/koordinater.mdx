@@ -4,151 +4,113 @@ description: Arbejd med koordinater i forskellige koordinatsystemer
 sidebar:
   order: 11
 ---
+import koordinaterImg from '../resources/vidi-menu-koordinater.gif';
+import koordinaterPositionImg from '../resources/vidi-menu-koordinater-position.gif';
+import koordinaterUdstraekningImg from '../resources/vidi-menu-koordinater-udstraekning.gif';
+import koordinaterPanorerImg from '../resources/vidi-menu-koordinater-pan-to.gif';
 
-**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk)
 
 ## Hvad er koordinat-udvidelsen?
 
-Koordinat-udvidelsen gør det muligt at arbejde med koordinater i forskellige koordinatsystemer, se din aktuelle position, og navigere til specifikke koordinater.
+Koordinat-udvidelsen gør det muligt at arbejde med koordinater i forskellige koordinatsystemer. Du kan se din aktuelle position, skifte visning mellem formater og navigere til en bestemt koordinat.
 
 ![Vidi-menuen - koordinater](../resources/vidi-menu-koordinater.svg)
 *Vidi-menuen - koordinater*
 
-## Aktiver koordinat-udvidelsen
+:::note[Extension påkrævet]
+Koordinater er en extension der ikke er aktiveret som standard. Kontakt din administrator, hvis du har brug for denne funktion. 
+
+[Læs mere om koordinater extension →](/vidi/extensions/coordinates)
+:::
+
+
+## Åbn koordinat-funktionen
 
 1. Klik på **koordinat-ikonet** i Vidi-menuen
-2. Udvidelsen åbnes med koordinat-funktioner
+2. Koordinat-panelet åbnes med de tilgængelige funktioner
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-koordinater-aktiveret.png`
+<figure class="centered-figure">
+  <img 
+    src={koordinaterImg.src} 
+    alt="Koordinater i Vidi-menuen" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Koordinater i Vidi-menuen</figcaption>
+</figure>
 
 ## Koordinatsystemer
 
-Du kan vælge mellem følgende koordinatsystemer:
+Du kan vælge mellem følgende koordinatsystemer. Når du skifter koordinatsystem, opdateres de viste koordinater automatisk.
 
 ### WGS84 - Bredde/Længdegrader
 
-**Decimal grader:**
-- Format: `55.6761, 12.5683`
+**Bredde/længde i decimalgrader:**
+- Format: B: `57.04601`, L: `9.94400`
 - Bruges til: GPS, internationale systemer
 
-**Grader, minutter, sekunder (DMS):**
-- Format: `55°40'34"N, 12°34'06"E`
+**Bredde/længde i grader, minutter og sekunder (DMS):**
+- Format: B: `57°02'45.6" N`, L: `9°56'38.4" E`
 - Bruges til: Navigation, traditionel kortlæsning
 
-### ETRS89 / UTM32N
+### ETRS89 / UTM Zone 32N
+- Format: X: `557273`, Y: `6322912`
+- Bruges til: Danske geodata
 
-- Format: `691875, 6176625`
-- Bruges til: Danske geodata, professionel GIS
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-koordinater-systemer.png`
+![Vidi-menuen - valg af koordinatsystemer](../resources/vidi-menu-koordinater-systemer.svg)
+*Vidi-menuen - valg af koordinatsystemer*
 
 ## Se koordinater
 
 ### Markør-position
 
-Når du bevæger musen over kortet, vises koordinaterne for markørens aktuelle position i realtid.
-
-**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-koordinater-markør.gif`
+Når du bevæger musen over kortet, vises koordinaterne for markørens aktuelle position løbende.
+<figure class="centered-figure">
+  <img 
+    src={koordinaterPositionImg.src} 
+    alt="Koordinater for markør-position" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Koordinater for markør-position</figcaption>
+</figure>
 
 ### Kortets udstrækning
 
-Du kan se koordinater for kortets hjørner (bounding box):
-- **Nordvest-hjørne**
-- **Sydøst-hjørne**
-- **Centrum-koordinat**
+Du kan også se koordinaterne for kortets udstrækning (bounding box):
+- **Vestligste kant**
+- **Østligste kant**
+- **Nordligste kant**
+- **Sydligste kant**
 
-**📸 BILLEDE MANGLER:** `vidi-extensions-koordinater-udstraekning.png`
+<figure class="centered-figure">
+  <img 
+    src={koordinaterUdstraekningImg.src} 
+    alt="Koordinater for kortets udstrækning" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Koordinater for kortets udstrækning</figcaption>
+</figure>
 
 ## Gå til koordinater
 
 Du kan navigere til specifikke koordinater:
 
 1. **Indtast koordinater** i tekstfeltet
-2. Format: `X Y` eller `Længde Bredde` (mellemrum eller komma-separeret)
-3. **Klik "Gå til"**
-4. Kortet zoomer til positionen
+2. Brug formatet `X Y` eller `Længde Bredde` med mellemrum som separator
+3. Formatet skal matche det valgte koordinatsystem
+4. Tryk på <Key items="Enter" />, så panorerer kortet automatisk til positionen
 
-**📸 BILLEDE/GIF MANGLER:** `vidi-extensions-koordinater-gaa-til.gif`
+<figure class="centered-figure">
+  <img 
+    src={koordinaterPanorerImg.src} 
+    alt="Panorer til koordinater" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Panorer til koordinater</figcaption>
+</figure>
 
 :::tip[Formateksempler]
-- `691875 6176625` (UTM32N)
-- `12.5683, 55.6761` (WGS84 decimal)
-- `55.6761 12.5683` (omvendt rækkefølge virker også)
+- `55°40'34"N 12°34'06"E` (DMS)
+- `57.04601 9.94400` (decimalgrader)
+- `557169 6322888` (ETRS89 / UTM Zone 32N)
 :::
-
-## Kopier koordinater
-
-Du kan kopiere koordinater til udklipsholderen:
-
-1. **Klik på koordinaterne**
-2. Koordinaterne kopieres
-3. **Indsæt** i andet program (Excel, email, osv.)
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-koordinater-kopier.png`
-
-## Use cases
-
-### Feltarbejde
-
-1. Notér koordinater før afrejse
-2. Indtast koordinater i Vidi på tablet
-3. Navigér til positionen
-4. Dokumentér observationer
-
-### Deling af positioner
-
-1. Find position på kortet
-2. Kopier koordinater
-3. Del med kolleger via email/chat
-4. Kolleger kan navigere til samme position
-
-### Integration med andre systemer
-
-1. Eksportér koordinater fra GIS-system
-2. Indtast i Vidi's "Gå til"
-3. Verificér position visuelt
-4. Dokumentér i rapport
-
-## Tips og tricks
-
-### Præcision
-
-- **WGS84 decimal:** 6 decimaler giver ~10cm præcision
-- **UTM32N:** Hele meter-koordinater
-
-### Hurtigt koordinat-kopi
-
-1. Hold musen over position
-2. Koordinater vises automatisk
-3. Klik for at kopiere
-4. Indsæt i andet program
-
-### Konvertering mellem systemer
-
-1. Vælg først system (f.eks. WGS84)
-2. Kopier koordinater
-3. Skift system (f.eks. UTM32N)
-4. Se samme position i andet format
-
-**📸 BILLEDE MANGLER:** `vidi-extensions-koordinater-konvertering.png`
-
-## Fejlfinding
-
-### Koordinater vises ikke?
-
-- Tjek at udvidelsen er aktiveret
-- Genindlæs siden
-- Kontakt systemadministrator
-
-### "Gå til" virker ikke?
-
-- Tjek koordinat-format
-- Verificér at koordinater er gyldige for det valgte system
-- Prøv at bytte X og Y rundt
-- Brug komma eller mellemrum som separator
-
-### Forkerte koordinater?
-
-- Tjek at du har valgt korrekt koordinatsystem
-- Verificér at kortets projektion er korrekt
-- Kontakt systemadministrator
