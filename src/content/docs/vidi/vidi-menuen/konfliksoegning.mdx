@@ -4,8 +4,7 @@ description: Find overlappende features og generer konflikt-rapporter
 sidebar:
   order: 10
 ---
-import konfliktsoegningSkaermbilledeImg from '../resources/vidi-menu-konfliktsoegning-skaermbillede.png';
-import konfliktsoegningProgressImg from '../resources/vidi-menu-konfliktsoegning-progressindicator.png';
+import konfliktsoegningMedAdresseMatrikelImg from '../resources/vidi-menu-konfliktsoegning-med-adresse-matrikel.gif';
 import konfliktsoegningResultatImg from '../resources/vidi-menu-konfliktsoegning-resultat.png';
 import konfliktsoegningResultatEksporterImg from '../resources/vidi-menu-konfliktsoegning-resultat-eksporter.png';
 import konfliktsoegningResultatAfgraensImg from '../resources/vidi-menu-konfliktsoegning-resultat-afgraens.png';
@@ -60,29 +59,18 @@ Denne vejledning gennemgår funktioner og muligheder i konfliktsøgningen og tag
 ### Konfliksøgning med adresse- eller matrikel
 1. Klik på **konfliksøgnings-ikonet** i Vidi-menuen.
 2. Udvidelsen aktiveres.
-3. Følgende skærmbillede vises.
-
-<figure class="centered-figure">
-  <img 
-    src={konfliktsoegningSkaermbilledeImg.src} 
-    alt="Konfliktsøgning skærmbilledet" 
-    style={{ width: '481px', maxWidth: '100%' }} 
-  />
-  <figcaption>Konfliktsøgning skærmbilledet</figcaption>
-</figure>
-
-4. Vælg søgning på adresse eller matrikel.
+4. Indtast en adresse eller en matrikel i søgefeltet, og vælg det rette resultat i dropdown-listen.
 5. Konfliktsøgningen starter automatisk. Hold øje med fremdriften i det nederste højre hjørne af Vidi, hvor processen kan overvåges.
+6. Efter alle lag er gennemsøgt for konflikter, vises resultatet automatisk i skærmbilledet.
 
 <figure class="centered-figure">
   <img 
-    src={konfliktsoegningProgressImg.src} 
-    alt="Status på konfliktsøgning" 
-    style={{ width: '358px', maxWidth: '100%' }} 
+    src={konfliktsoegningMedAdresseMatrikelImg.src} 
+    alt="Konfliksøgning med adresse eller matrikel" 
+    style={{ width: '750px', maxWidth: '100%' }} 
   />
-  <figcaption>Status på konfliktsøgning</figcaption>
+  <figcaption>Konfliksøgning med adresse eller matrikel</figcaption>
 </figure>
-6. Efter alle lag er gennemsøgt for konflikter, vises resultatet automatisk i skærmbilledet.
 
 :::tip[Buffer]
 Så snart der er foretaget en søgning på adresse eller matrikel, starter konfliktsøgningen automatisk med den angivne buffer. Standard er ofte 40 m, men afhænger af opsætningen. Hvis du vil ændre buffer inden konfliktsøgningen, skal det gøres før adresse- eller matrikelsøgningen foretages.
@@ -91,7 +79,7 @@ Det er muligt at aktivere andre søgninger end adresse- og matrikelsøgning. Øv
 :::
 
 ### Konfliksøgning med indtegnet objekt
-Ved brug af [Tegneværktøjet →](/vidi/vidi-menuen/tegnevaerktoj/) vises der ved aktivering af konfliktsøgningsværktøjet to ekstra funktionsknapper til brug for konfliktsøgning. Det giver mulighed for at indtegne geografiske afgrænsninger til brug for analysen.
+Ved brug af [Tegneværktøjet](/vidi/vidi-menuen/tegnevaerktoj/) vises der ved aktivering af konfliktsøgningsværktøjet to ekstra funktionsknapper til brug for konfliktsøgning. Det giver mulighed for at indtegne geografiske afgrænsninger til brug for analysen.
 
 Illustrationen herunder viser de ekstra knapper, der kommer til syne i tegneværktøjet: <MenuPath items="Konflikt med valgte" /> og <MenuPath items="Konflikt med alle" />. Det gør det muligt at foretage konfliktsøgning med ét markeret objekt i tegneværktøjet eller med alle tegnede objekter. Der er mulighed for konfliktsøgning med tegneobjekterne linje, flade, rektangel, cirkel og markør.
 

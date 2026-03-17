@@ -5,51 +5,99 @@ sidebar:
   order: 9
 ---
 
-**Forfatter:** [Martin Høgh](mailto:mh@mapcentia.com)
+import embedTabelMetaImg from '../resources/extensions-embed-tabel-meta.svg';
+import embedTabelDisableFeatureInfoImg from '../resources/extensions-embed-tabel-disable feature-info.png';
+
+**Forfatter:** [Martin Høgh](mailto:mh@mapcentia.com), [Lars Lindenborg Jensen](mailto:llj@geopartner.dk), [Henrik Brændskov Larsen](mailto:hbl@geopartner.dk)
 
 ## Hvad er indlejring?
 
-Med embed kan du vise et Vidi-kort direkte på en anden hjemmeside. 
-Det gøres med et JavaScript (`embed.js`) og et `div`-element med data-attributter.
+Med embed kan du vise et Vidi-kort direkte på en anden hjemmeside. Det er nyttigt, når du vil vise et fokuseret kort uden hele den almindelige Vidi-brugerflade.
 
-## 1) Indlæs embed.js
+Et embed består typisk af tre dele: `embed.js`, et `div`-element med data-attributter og et token, som peger på et gemt projekt eller en bestemt opsætning.
 
-Først skal `embed.js` indlæses på den side, hvor kortet skal vises:
+I praksis bruges embed ofte sammen med en særlig konfiguration, så du kan styre hvilke funktioner, lag og brugergrænseflade-elementer der skal vises i det indlejrede kort.
+
+:::tip[Godt at vide]
+Et embed tager ofte udgangspunkt i et gemt projekt i Vidi. Hvis du ikke allerede har et projekt at bygge på, kan du læse mere om [projekter →](/vidi/vidi-menuen/projekter).
+:::
+
+## Kom hurtigt i gang
+
+Den hurtigste måde at komme i gang er:
+
+1. Indlæs `embed.js` fra den Vidi-installation, som kortet skal hentes fra
+2. Indsæt et `div`-element med et token
+3. Angiv bredde og højde på kortet, f.eks. i `%` eller `px`
+
+Et minimalt eksempel ser sådan ud:
 
 ```html
-<script src="https://vidi.swarm.gc2.io/js/embed.js"></script>
-```
+<script src="https://example.com/js/embed.js"></script>
 
-Scriptet kan ligge både i `<head>` og i bunden af siden.
-
-## 2) Indsæt kortet med et div-element
-
-Selve indlejringen sker ved at indsætte et `div`-element med et token:
-
-```html
 <div
   data-vidi-token="eyJ0aXRsZSI..."
-  data-vidi-width="800px"
+  data-vidi-width="100%"
   data-vidi-height="600px"
 ></div>
 ```
 
-## Obligatorisk og valgfri data-attributter
+Scriptet kan ligge både i `<head>` og i bunden af siden.
 
-### Obligatorisk
+:::note[Token]
+`data-vidi-token` er den vigtigste attribut. Tokenet indeholder bl.a. oplysninger om projekt, host og database.
+:::
+
+## Hvornår bruges embed?
+
+Embed bruges typisk, når kortet skal indgå som en del af en anden løsning, og hvor oplevelsen skal være enklere end den fulde Vidi-applikation.
+
+Det kan f.eks. være, når du vil:
+
+- vise et kort på en ekstern hjemmeside eller portal
+- starte kortet i en bestemt konfiguration eller visning
+- skjule dele af standard-menuen og kun vise det vigtigste
+- aktivere udvalgte funktioner som søgning, info eller koordinater
+- styre baggrundskort, tabeller og splash-skærme via en særskilt konfiguration
+
+## Sådan hænger det sammen
+
+Et embed består typisk af tre dele:
+
+1. `embed.js`, som indlæser det indlejrede kort
+2. et projekt-token, som peger på den gemte kortopsætning
+3. en konfigurationsfil, som styrer funktioner, lag og brugeroplevelse
+
+I praksis er arbejdsdelingen ofte sådan:
+
+- HTML bestemmer hvor og hvor stort kortet vises
+- tokenet peger på projektet og evt. den tilknyttede konfiguration
+- konfigurationsfilen styrer lag, søgning, baggrundskort, templates og øvrige funktioner
+
+Hvis du arbejder med projekter og tokens som grundlag for embed, er det relevant at kende [projekter i Vidi](/vidi/vidi-menuen/projekter).
+
+:::note[Konfiguration i GC2]
+Meget af embed-oplevelsen styres via konfiguration. Hvis du arbejder med kørselskonfigurationer, templates og datagrundlag, kan du bruge [GC2-dokumentationen →](/gc2/) som indgang til den tekniske opsætning.
+:::
+
+## Grundlæggende data-attributter
+
+Nedenfor er de vigtigste data-attributter til den grundlæggende embed-opsætning. Attributter til at vise og skjule funktioner er samlet i et særskilt afsnit længere nede.
+
+### Obligatoriske attributter
 
 - `data-vidi-token`  
   Projektets token med oplysninger om fx state-id, host og database.
 
-### Ofte brugte valgfri attributter
+### Størrelse og visning
 
-- `data-vidi-width` – bredde på kortet (standard: `100%`)
-- `data-vidi-height` – højde på kortet (standard: `100%`)
-- `data-vidi-tmpl` – template (standard: `embed.tmpl`)
+- `data-vidi-width` – bredde på kortet (standard: `100%`). Kan angives f.eks. som `100%` eller `800px`
+- `data-vidi-height` – højde på kortet (standard: `100%`). Kan angives f.eks. som `600px` eller `100%`
 - `data-vidi-title` – sætter `title` på den genererede iframe
 - `data-vidi-frame-name` – navn på kortet (skal bruges, hvis du vil bruge Embed API)
+- `data-vidi-tmpl` – vælger template (typisk `embed.tmpl`)
 
-### Valgfri attributter til styring af token og konfiguration
+### Konfiguration og overrides
 
 - `data-vidi-use-config="true"` – bruger config fra token (hvis den findes)
 - `data-vidi-use-schema="true"` – bruger schema fra token (hvis det findes)
@@ -57,11 +105,129 @@ Selve indlejringen sker ved at indsætte et `div`-element med et token:
 - `data-vidi-schemata="..."` – filtrerer hvilke lag (schemata) der hentes
 - `data-vidi-no-tracking="true"` – undgår tracking-cookie
 
-## Vis/skjul funktioner i indlejret kort
+:::tip[Hvornår bruges `use-config`?]
+Hvis embed skal bruge en særlig konfiguration, f.eks. med tilpasset brandnavn, skjulte funktioner, aktiverede extensions eller særlige baggrundskort, er `data-vidi-use-config="true"` ofte det rigtige valg.
+:::
 
-Du kan styre, hvilke funktioner der er synlige i den indlejrede visning.
+## Konfigurationsfilen i praksis
 
-### Som udgangspunkt synlige (kan skjules med `none`)
+Konfigurationsfilen er det sted, hvor du typisk tilpasser selve embed-oplevelsen. Det er her, du begrænser lag, styrer søgning, vælger baggrundskort og bestemmer hvilke funktioner der skal være aktive.
+
+Når embed'et indlæses med `data-vidi-use-config="true"`, bruges den tilknyttede konfiguration som grundlag for kortet.
+
+Et minimalt eksempel på en embed-konfiguration kan se sådan ud:
+
+```json
+{
+  "schemata": ["public", "tag:embedMap"],
+  "template": "default.tmpl",
+  "startupModalSupressionTemplates": ["embed.tmpl"],
+  "brandName": "Demo af et embed kort",
+  "enabledSearch": "danish",
+  "activateMainTab": "info",
+  "enabledExtensions": ["embed", "coordinates"],
+  "vectorTable": {
+    "position": "bottom",
+    "width": "100%",
+    "height": "250px"
+  },
+  "baselayerDrawer": true,
+  "baseLayers": [
+    {
+      "type": "wms",
+      "url": "/api/dataforsyningen/forvaltning2",
+      "layers": ["Basis_kort", "Stednavne_basiskort", "Vejnavne_basiskort", "Husnummer"],
+      "id": "ForvaltningskortDF",
+      "name": "Forvaltningskort",
+      "maxZoom": 22,
+      "maxNativeZoom": 20,
+      "inDrawer": true,
+      "thumbnail": "https://static.geopartner.dk/images/drawer_forvaltning_sag.png"
+    }
+  ]
+}
+```
+
+De vigtigste felter i eksemplet er typisk:
+
+- `schemata`: afgør hvilke lag der stilles til rådighed i løsningen
+- `template`: angiver udgangspunktet for visningen
+- `startupModalSupressionTemplates`: bruges til at undgå splash-skærme i embed-visningen
+- `enabledExtensions`: aktiverer de udvidelser embed'et skal bruge
+- `vectorTable`: styrer placering og størrelse på attributtabellen
+- `baseLayers`: angiver hvilke baggrundskort der skal være tilgængelige
+- `inDrawer: true`: viser baggrundskortet i listen over valgbare baggrundskort
+- `thumbnail`: angiver preview-billedet til baggrundskortet
+
+I praksis bruges `schemata` ofte til at begrænse embed-løsningen til få udvalgte lag. Et almindeligt mønster er at vise lag fra `public` samt lag, der er mærket med et særligt tag som f.eks. `embedMap`.
+
+`template` sættes ofte til `default.tmpl` i selve konfigurationsfilen, selv om HTML'en senere bruger `data-vidi-tmpl="embed.tmpl"`. Det gør det muligt at genbruge samme konfiguration som udgangspunkt og først skifte til egentlig embed-visning i HTML-koden.
+
+Hvis du vil se en mere komplet konfiguration med flere baggrundskort, søgeopsætning, splash-skærm og øvrige indstillinger, kan du bruge [config-filen på GitHub](https://github.com/gc2vidi/Vejledninger/blob/main/public/embed-demo-config.json).
+
+## Lag og opsætning i GC2
+
+Lagene til et embed sættes som udgangspunkt op i GC2 på samme måde som andre lag, men i praksis vil man ofte begrænse løsningen mere end i den normale Vidi-visning.
+
+Det gøres typisk ved at:
+
+- lade `schemata` i konfigurationen pege på få udvalgte schemaer eller tags
+- mærke relevante lag med et tag som f.eks. `embedMap`
+- sikre at lagenes authentication passer til en offentlig løsning, ofte `None` eller `Write`
+
+Hvis laget skal vises med attributter i en tabel, kræver det typisk både en indstilling i GC2 og en indstilling i konfigurationen.
+
+I GC2 skal du først aktivere tabelvisning for laget under `Meta`. Hvis oplysningerne primært skal vises i tabellen, er det ofte også en god idé at slå almindelig feature info fra for laget.
+
+<figure class="centered-figure">
+  <img
+    src={embedTabelMetaImg.src}
+    alt="Opsætning af tabelvisning under Meta for et lag i GC2"
+    style={{ width: '450px', maxWidth: '100%' }}
+  />
+  <figcaption>Aktivér tabelvisning for laget under Meta i GC2.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img
+    src={embedTabelDisableFeatureInfoImg.src}
+    alt="Opsætning af Disable feature info for et lag i GC2"
+    style={{ width: '270px', maxWidth: '100%' }}
+  />
+  <figcaption>Overvej at slå almindelig feature info fra, hvis oplysninger i stedet skal vises i tabellen.</figcaption>
+</figure>
+
+I konfigurationsfilen kan du derefter styre, hvordan tabellen vises i embed'et. Et typisk eksempel ser sådan ud:
+
+```json
+"vectorTable": {
+  "position": "bottom",
+  "width": "100%",
+  "height": "250px"
+}
+```
+
+Her betyder det, at attributtabellen placeres nederst i kortet, fylder hele bredden og får en fast højde på `250px`.
+
+Det er ofte en praktisk opsætning i embed-løsninger, fordi tabellen bliver let at læse uden at overtage hele visningen. Samtidig giver det en mere rolig brugeroplevelse, når information enten vises i tabellen eller direkte på kortet, men ikke begge steder på samme tid.
+
+## Opsætning af projekt i Vidi
+
+Den sidste del af opsætningen sker normalt i selve Vidi:
+
+1. Start kortet med den relevante konfiguration.
+2. Tænd de lag, der skal være synlige i embed'et.
+3. Sæt eventuelle filtre, vælg baggrundskort og zoom til det ønskede område.
+4. Gem opsætningen som et projekt under <MenuPath items="Bruger gemte projekter" />.
+5. Kopiér projektets token med knappen <MenuPath items="Token" /> og brug det i `data-vidi-token`.
+
+Det er denne arbejdsgang, der binder konfigurationen og den konkrete kortvisning sammen i et brugbart embed.
+
+## Vis/skjul-attributter for funktioner
+
+Ud over de grundlæggende data-attributter kan du styre, hvilke funktioner der er synlige i den indlejrede visning. Det bruges ofte til at gøre embed-løsningen mere enkel end den almindelige Vidi-visning.
+
+### Som udgangspunkt synlige (skjules med `="none"`)
 
 - `data-vidi-brand`
 - `data-vidi-search`
@@ -87,6 +253,10 @@ Eksempel:
 ></div>
 ```
 
+Her skjules funktionerne ved at sætte attributten til `"none"`. De slås altså ikke fra med `false`.
+
+Denne type opsætning er nyttig, når embed-kortet primært skal bruges til visning og ikke som fuldt arbejdsredskab.
+
 ### Som udgangspunkt skjulte (kan vises med `inline`)
 
 - `data-vidi-measurement`
@@ -107,24 +277,84 @@ Eksempel:
 ></div>
 ```
 
-## Komplet eksempel
+Denne type opsætning er nyttig, når embed-kortet stadig skal være enkelt, men hvor brugeren skal kunne måle, tage screenshots eller rydde kortet.
 
-Her er et samlet eksempel med typiske indstillinger:
+## Komplet HTML-eksempel
+
+Her er et enkelt HTML-eksempel på, hvordan et embed kan indsættes på en side:
 
 ```html
-<script src="https://vidi.swarm.gc2.io/js/embed.js"></script>
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eksempel på indlejret Vidi-kort</title>
+    <script src="https://mapgovidi.geopartner.dk/js/embed.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
 
-<div
-  data-vidi-token="eyJ0aXRsZSI..."
-  data-vidi-frame-name="plankort"
-  data-vidi-width="100%"
-  data-vidi-height="650px"
-  data-vidi-title="Plankort"
-  data-vidi-search="none"
-  data-vidi-signin="none"
-  data-vidi-measurement="inline"
-></div>
+      .embed-wrapper {
+        max-width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Eksempel på indlejret kort</h1>
+
+    <p>
+      Her vises et Vidi-projekt som embed på en almindelig HTML-side.
+      Kortet hentes via et token og bruger en tilknyttet konfigurationsfil.
+    </p>
+
+    <div class="embed-wrapper">
+      <div
+        data-vidi-token="eksempel-token-skal-erstattes"
+        data-vidi-width="1200px"
+        data-vidi-height="800px"
+        data-vidi-tmpl="embed.tmpl"
+        data-vidi-use-config="true"
+        data-vidi-legend="none"
+        data-vidi-layer="none"
+      ></div>
+    </div>
+  </body>
+</html>
 ```
+
+I dette eksempel:
+
+- hentes `embed.js` fra den konkrete Vidi-installation
+- bruges et projekt-token, som også indeholder reference til en konfigurationsfil
+- sættes størrelse direkte i HTML med `1200px` og `800px`
+- vælges `embed.tmpl`, så kortet bruger embed-layoutet
+- bruges `data-vidi-use-config="true"`, så den tilknyttede konfigurationsfil aktiveres
+- skjules signaturforklaring og lagliste direkte i embed-visningen
+
+Det komplette eksempel ligger også som separate filer på GitHub:
+
+- [Se HTML-filen på GitHub](https://github.com/gc2vidi/Vejledninger/blob/main/public/embed-demo.html)
+- [Se config-filen på GitHub](https://github.com/gc2vidi/Vejledninger/blob/main/public/embed-demo-config.json)
+
+## Live demo
+
+Nedenfor vises et rigtigt eksempel på et indlejret kort. Demoen henter en separat HTML-side fra dokumentationssitets `public`-mappe, som igen indlæser `embed.js`, projekt-token og konfiguration.
+
+<iframe
+  src="/embed-demo.html"
+  title="Live eksempel på indlejret Vidi-kort"
+  width="100%"
+  height="580px"
+  loading="lazy"
+  style="display: block; width: 100%; height: 580px; border: 1px solid #d6d3d1; border-radius: 12px; background: #fff; overflow: hidden;"
+></iframe>
+
+:::note[Godt at vide]
+GitHub-linket viser selve HTML-koden bag demoen. Hvis demoen ikke loader i `iframe`-visningen, er det typisk fordi den eksterne Vidi-installation, tokenet eller den tilknyttede konfiguration ikke er tilgængelig.
+:::
 
 ## Embed API
 
@@ -143,6 +373,8 @@ Eksempler:
 embedApi.switchLayer('planer.lokalplan', true, 'plankort')
 embedApi.allOff('plankort')
 ```
+
+Hvis du vil bruge Embed API, er det en god idé at sætte `data-vidi-frame-name`, så du entydigt kan referere til det indlejrede kort.
 
 ## Callbacks (når kortet er klar)
 
@@ -169,6 +401,11 @@ embedApi.activeLayersReady['kort1'] = () => {
 Aktive lag fra projektet loades først efter at Vidi har meldt sig klar.
 :::
 
-:::note[For udviklere]
-Tekniske detaljer og seneste implementation findes i Vidi-repositoriet: [https://github.com/mapcentia/vidi](https://github.com/mapcentia/vidi)
-:::
+## Fejlfinding og godt at vide
+
+- Embed virker kun, hvis tokenet er gyldigt og peger på et eksisterende projekt eller en gyldig opsætning.
+- Hvis du bruger `data-vidi-use-config="true"`, vil ændringer i konfigurationen slå igennem i embed-visningen.
+- Hvis `embed.js` hentes fra en anden host end den, tokenet forventer, kan embed'et fejle eller opføre sig uventet.
+- Hvis du vil styre kortet fra JavaScript, skal du huske at sætte `data-vidi-frame-name`.
+- Hvis indhold mangler i embed-visningen, skal du først kontrollere projekt, token og konfiguration, før du fejlsøger på selve HTML-koden.
+

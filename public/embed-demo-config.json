@@ -1,0 +1,107 @@
+{
+  "schemata": [
+    "public",
+    "tag:embedMap"
+  ],
+  "template": "default.tmpl",
+  "startupModalSupressionTemplates": [
+    "embed.tmpl"
+  ],
+  "aboutBox": "<h1>Demo - embed</h1><p>noget demo-tekst...</p>",
+  "startUpModal": "<h1>Demo - embed</h1><p>noget demo-tekst som splash-screen.</p>",
+  "brandName": "Demo af et embed kort",
+  "enabledSearch": "danish",
+  "searchConfig": {
+    "esrSearchActive": false,
+    "sfeSearchActive": true,
+    "advanced": false,
+    "placeholderText": "Søg adresse"
+  },
+  "extensionConfig": {
+    "editor": {
+      "alwaysActivate": false
+    }
+  },
+  "_featureInfoTableOnMap": true,
+  "_showOffcanvas": true,
+  "crossMultiSelect": true,
+  "activateMainTab": "info",
+  "enabledExtensions": [
+    "embed",
+    "coordinates"
+  ],
+  "vectorTable": {
+    "position": "bottom",
+    "width": "100%",
+    "height": "250px"
+  },
+  "baselayerDrawer": true,
+  "baseLayers": [
+    {
+      "type": "wms",
+      "url": "/api/dataforsyningen/forvaltning2",
+      "layers": [
+        "Basis_kort",
+        "Stednavne_basiskort",
+        "Vejnavne_basiskort",
+        "Husnummer"
+      ],
+      "id": "ForvaltningskortDF",
+      "name": "Forvaltningskort",
+      "description": "Forvaltningskort fra Dataforsyningen",
+      "attribution": "&copy; Klimadatastyrelsen, GeoDanmark og Danske kommuner.",
+      "abstract": "<p>Forvaltningskort.</p><p>&copy; Klimadatastyrelsen, GeoDanmark og Danske kommuner.</p><p>Forvaltningskortet viser følgende temaer:<br><ul><li>Basis_kort</li><li>Stednavne_basiskort</li><li>Vejnavne_basiskort</li><li>Husnummer</li></ul></p><br>",
+      "maxZoom": 22,
+      "maxNativeZoom": 20,
+      "inDrawer": true,
+      "thumbnail": "https://static.geopartner.dk/images/drawer_forvaltning_sag.png"
+    },
+    {
+      "type": "wms",
+      "url": "/api/datafordeler/MATRIKLEN2/MatGaeldendeOgForeloebigWMS/1.0.0/WMS",
+      "layers": [
+        "Centroide_Gaeldende",
+        "OptagetVej_Gaeldende",
+        "MatrikelSkel_Gaeldende",
+        "StrandbeskyttelseFlade_Gaeldende",
+        "KlitfredningFlade_Gaeldende",
+        "FredskovFlade_Gaeldende"
+      ],
+      "styles": [
+        "Roede_centroider",
+        "Sort_OptagetVej",
+        "Sorte_skel",
+        "default",
+        "default",
+        "default"
+      ],
+      "id": "Matriklen-DAF",
+      "name": "Matrikelkort",
+      "description": "Matriklen (Datafordeleren)",
+      "attribution": "&copy; Geodatastyrelsen, Datafordeleren",
+      "abstract": "<p>Dagligt ajourført matrikelkort.</p><p>Ophavsretten til Matrikelkortet tilhører Geodatastyrelsen</p><p>Data og kort fra Matrklen er stillet til rådighed efter vilkårene beskrevet på https://datafordeler.dk/vejledning/brugervilkaar/ejendomsoplysninger-ebr-og-mat/</p><br>",
+      "minZoom": 8,
+      "maxZoom": 22,
+      "maxNativeZoom": 22,
+      "transparent": true,
+      "inDrawer": true,
+      "thumbnail": "https://static.geopartner.dk/images/drawer_matrikel.png"
+    },
+    {
+      "type": "WMTS",
+      "url": "/api/dataforsyningen/orto_foraar_webm_DAF",
+      "tileMatrixSet": "DFD_GoogleMapsCompatible",
+      "layer": "orto_foraar_webm",
+      "id": "ortofoto_foraar_wmts0",
+      "name": "GeoDanmark ortofoto foraar (seneste, WMTS)",
+      "description": "Seneste ortofoto forår (WMTS) fra GeoDanmark",
+      "attribution": "&copy; Klimadatastyrelsen og Danske kommuner.",
+      "abstract": "<p>Ortofoto forår, nyeste WMTS udgave fra forvaltningstjenesten under GeoDanmark.</p><p>&copy; Klimadatastyrelsen og Danske kommuner.</p><p>Ortofotoet viser følgende temaer:<br><ul><li>Basis_ortofoto</li></ul></p><br>",
+      "minZoom": 8,
+      "maxZoom": 22,
+      "maxNativeZoom": 20,
+      "inDrawer": true,
+      "thumbnail": "https://static.geopartner.dk/images/drawer_orto.png"
+    }
+  ]
+}
