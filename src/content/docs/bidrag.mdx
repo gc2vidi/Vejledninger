@@ -1,0 +1,223 @@
+---
+title: Bidrag til dokumentationen
+description: Kom i gang med at skrive og forbedre brugerdokumentationen for Vidi og GC2
+---
+import bidragGitClone from './resources/bidrag-github-desktop-clone.svg';
+import bidragOpenVSCode from './resources/bidrag-open-vscode.svg';
+
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk)
+
+## Hvad er denne guide?
+
+Denne guide er til dig, der gerne vil bidrage til brugerdokumentationen for Vidi og GC2.
+
+Du behøver ikke være udvikler for at hjælpe. Hvis du kan forklare en arbejdsgang, forbedre en tekst, rette en fejl eller tilføje et godt eksempel med billeder, kan du allerede bidrage med noget værdifuldt.
+
+:::tip[Det vigtigste først]
+Hvis du gerne vil bidrage, så start med at skrive til [info@mapcentia.com](mailto:info@mapcentia.com). Så kan emne, adgang og arbejdsgang afklares, før du går i gang.
+:::
+
+## Før du går i gang
+
+Det er en god idé at have følgende på plads:
+
+1. En [GitHub-bruger](https://github.com/signup)
+2. [GitHub Desktop](https://desktop.github.com/)
+3. [Visual Studio Code](https://code.visualstudio.com/)
+4. [Node.js](https://nodejs.org/) — nødvendig for at køre projektet lokalt
+
+Vi anbefaler GitHub Desktop og Visual Studio Code, fordi de gør det lettere at arbejde med branches, commits og filer uden at skulle kunne alle Git-kommandoer på forhånd.
+
+## Hent projektet og kom i gang lokalt
+
+### Hent repository'et med GitHub Desktop
+
+1. Åbn GitHub Desktop
+2. Klik på **File → Clone repository**
+3. Vælg fanen **URL** og indsæt: `https://github.com/gc2vidi/Vejledninger`
+4. Vælg hvor på din computer projektet skal gemmes
+5. Klik **Clone**
+
+<figure class="centered-figure">
+  <img
+    src={bidragGitClone.src}
+    alt="GitHub Desktop klon repositorium"
+    style={{ width: '800px', maxWidth: '100%' }}
+  />
+  <figcaption>GitHub Desktop - Klon repositorium</figcaption>
+</figure>
+
+Projektmappen kan åbnes i Visual Studio via Github Dekstop, via følgende måder:
+1. Klik på **Projektmappen → Open in Visual Studio Code**
+2. Højreklik på projektmappen og vælg **Open in Visual Studio Code**
+3. Tryk på Anvend genvejstasten <Key items={['Ctrl', 'Shift', 'A']} />
+
+<figure class="centered-figure">
+  <img
+    src={bidragOpenVSCode.src}
+    alt="Åbn projekt i Visual Studio Code"
+    style={{ width: '600px', maxWidth: '100%' }}
+  />
+  <figcaption>Åbn projekt i Visual Studio Code</figcaption>
+</figure>
+
+### Start lokal udviklingsserver
+
+Åbn projektmappen i Visual Studio Code og åbn en terminal (Genvej: <Key items={['Ctrl', 'Shift', 'æ']} />). Kør derefter:
+
+```bash
+npm install
+npm run dev
+```
+
+Det installerer de nødvendige pakker og starter en lokal udviklingsserver, så du kan se dine ændringer i browseren.
+
+Hvis du vil kontrollere at indholdet er gyldigt, kan du køre:
+
+```bash
+npm run check
+```
+
+:::note[Hvis du er ny]
+Det er helt normalt, at første opstart tager lidt tid. Hvis du går i stå, så bed om hjælp tidligt i stedet for at kæmpe alene for længe.
+:::
+
+## Find den rigtige fil
+
+Vidi-artikler ligger under `src/content/docs/vidi/`, mens GC2-artikler ligger under `src/content/docs/gc2/`.
+
+Hvis du er i tvivl om hvilken fil du skal redigere, så find først siden i navigationen på websitet og slå derefter den tilsvarende MDX-fil op i projektet. Gode eksempler at kigge på er:
+
+- [Tegneværktøj →](/vidi/vidi-menuen/tegnevaerktoj)
+- [Søgning →](/vidi/vidi-menuen/soegning)
+- [Indlejring →](/vidi/extensions/embed)
+
+:::tip[GC2 er under opbygning]
+GC2-dokumentationen vil blive udbygget løbende. Indtil videre er Vidi-artiklerne den bedste skabelon for struktur, sprog og brug af billeder.
+:::
+
+## Sådan skriver du i dokumentationen
+
+### Artikelens opbygning
+
+De fleste artikler følger samme mønster:
+
+1. Frontmatter med titel og beskrivelse
+2. Forfatterlinje
+3. En indledende sektion der forklarer hvad siden handler om
+4. Konkrete trin eller eksempler
+5. Billeder eller GIF'er tæt på de handlinger der beskrives
+6. Callouts med tip, noter eller advarsler
+
+Et udgangspunkt kan se sådan ud:
+
+```mdx
+---
+title: Min artikel
+description: Kort beskrivelse af siden
+---
+import minGif from './resources/artikelnavn-afsnit-figur-beskrivelse.gif';
+
+**Forfatter:** [Dit navn](mailto:din@mail.dk)
+
+## Hvad er dette?
+
+Kort introduktion til emnet.
+
+## Sådan gør du
+
+1. Første trin
+2. Andet trin
+3. Tredje trin
+```
+
+### Forfatterlinje
+
+Når du opretter en ny artikel eller bidrager væsentligt til en eksisterende, skal du tilføje dig selv som forfatter tidligt i dokumentet:
+
+```mdx
+**Forfatter:** [Dit navn](mailto:din@mail.dk)
+```
+
+Hvis der allerede står forfattere på siden, tilføjer du dig selv til listen med et komma.
+
+### Billeder
+
+Almindelige billeder — screenshots og illustrationer — kan indsættes direkte med Markdown-syntaks. De behøver ikke at blive importeret først:
+
+```mdx
+![Beskrivelse af billedet](./resources/mit-billede.png)
+*Billedtekst her*
+```
+
+Billedet centreres automatisk, og billedteksten vises centreret nedenunder. Det er en tilpasning i dokumentationens CSS, der gør at den kursive tekst under billedet (`*...*`) bliver til en pæn, centreret billedtekst. Denne fremgangsmåde dækker langt de fleste tilfælde.
+
+Billeder lægges i en `resources`-mappe ved siden af MDX-filen. Navngiv dem med et genkendeligt mønster, for eksempel `vidi-menu-soegning-adresse.gif` eller `bidrag-vscode-explorer.png`.
+
+### GIF'er og figure-elementet
+
+GIF'er skal importeres øverst i filen, fordi de typisk bruges sammen med `<figure>` for at styre bredde og billedtekst:
+
+```mdx
+import minGif from './resources/artikelnavn-afsnit-figur-beskrivelse.gif';
+
+<figure class="centered-figure">
+  <img
+    src={minGif.src}
+    alt="Min gif figur beskrivelse"
+    style={{ width: '800px', maxWidth: '100%' }}
+  />
+  <figcaption>Min gif figur beskrivelse</figcaption>
+</figure>
+```
+
+Brug `<figure>` når du har brug for at styre bredde eller højde, eller du vil centrere en GIF med en tydelig billedtekst. Til almindelige screenshots er den simple Markdown-variant oftest nok.
+
+GIF'er er gode når bevægelse eller en sekvens er vigtig for forståelsen. Hvis et stillbillede forklarer det lige så godt, er det ofte bedre at bruge et screenshot. Til optagelse af GIF'er kan [ShareX](https://getsharex.com/) anbefales.
+
+## Regler og gode vaner
+
+1. Tilføj dig selv som forfatter
+2. Hold ændringerne små og fokuserede, især i starten
+3. Brug GIF'er når bevægelse gør noget tydeligere
+4. Genbrug struktur fra eksisterende artikler
+5. Test siden lokalt før du afleverer
+6. Lav altid dit arbejde i en branch, aldrig direkte i `main`
+
+## Sådan afleverer du dit bidrag
+
+### Opret en branch
+
+Åbn GitHub Desktop og opret en ny branch med et beskrivende navn, for eksempel `docs/ret-soegning-vejledning`.
+
+{/* 📸 bidrag-github-desktop-branch.gif — GIF der viser oprettelse af en ny branch i GitHub Desktop */}
+
+### Commit dine ændringer
+
+Når du har lavet dine ændringer og testet dem lokalt:
+
+1. Åbn GitHub Desktop — dine ændrede filer vises i panelet til venstre
+2. Skriv en kort og præcis commit-besked, for eksempel *"Tilføj GIF til tegneværktøj-artiklen"*
+3. Klik **Commit to [din branch]**
+
+{/* 📸 bidrag-github-desktop-commit.png — Screenshot af commit-dialogen i GitHub Desktop */}
+
+### Push og opret pull request
+
+1. Klik **Push origin** for at sende dine ændringer til GitHub
+2. Klik derefter **Create Pull Request** — det åbner GitHub i browseren
+3. Beskriv kort hvad du har ændret og hvorfor
+4. Klik **Create pull request**
+
+{/* 📸 bidrag-github-desktop-pull-request.png — Screenshot af pull request-siden på GitHub */}
+
+:::caution[Vigtigt]
+Push aldrig direkte til `main`. Lav altid dine ændringer i en separat branch og aflever dem via en pull request.
+:::
+
+Hvis du er ny i pull requests, kan du læse mere i [GitHub Docs om pull requests](https://docs.github.com/en/pull-requests).
+
+## Klar til at bidrage?
+
+Skriv til [info@mapcentia.com](mailto:info@mapcentia.com), opret din GitHub-bruger og start med en lille ændring. Små, præcise forbedringer er ofte den bedste måde at komme i gang på.

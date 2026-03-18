@@ -148,6 +148,10 @@ export default defineConfig({
             },
           ],
         },
+        {
+          label: "Bidrag til dokumentationen",
+          link: "/bidrag",
+        },
       ],
     }),
     AutoImport({
