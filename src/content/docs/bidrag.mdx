@@ -5,6 +5,8 @@ description: Kom i gang med at skrive og forbedre brugerdokumentationen for Vidi
 import bidragGitClone from './resources/bidrag-github-desktop-clone.svg';
 import bidragOpenVSCode from './resources/bidrag-open-vscode.svg';
 import bidragGitBranch from './resources/bidrag-git-branch.gif';
+import bidragGitCommit from './resources/bidrag-github-desktop-commit.gif';
+import bidragGitPullRequest from './resources/bidrag-github-desktop-pull-request.gif';
 
 
 **Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk)
@@ -209,7 +211,14 @@ Når du har lavet dine ændringer og testet dem lokalt:
 2. Skriv en kort og præcis commit-besked, for eksempel *"Tilføj GIF til tegneværktøj-artiklen"*
 3. Klik **Commit to [din branch]**
 
-{/* 📸 bidrag-github-desktop-commit.png — Screenshot af commit-dialogen i GitHub Desktop */}
+<figure class="centered-figure">
+  <img
+    src={bidragGitCommit.src}
+    alt="Commit ændringer i GitHub Desktop"
+    style={{ width: '800px', maxWidth: '100%' }}
+  />
+  <figcaption>Commit ændringer i GitHub Desktop</figcaption>
+</figure>
 
 ### Push og opret pull request
 
@@ -218,7 +227,14 @@ Når du har lavet dine ændringer og testet dem lokalt:
 3. Beskriv kort hvad du har ændret og hvorfor
 4. Klik **Create pull request**
 
-{/* 📸 bidrag-github-desktop-pull-request.png — Screenshot af pull request-siden på GitHub */}
+<figure class="centered-figure">
+  <img
+    src={bidragGitPullRequest.src}
+    alt="Opret pull request i GitHub Desktop"
+    style={{ width: '800px', maxWidth: '100%' }}
+  />
+  <figcaption>Opret pull request i GitHub Desktop</figcaption>
+</figure>
 
 :::caution[Vigtigt]
 Push aldrig direkte til `main`. Lav altid dine ændringer i en separat branch og aflever dem via en pull request.
