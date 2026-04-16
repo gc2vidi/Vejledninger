@@ -5,8 +5,9 @@ sidebar:
   order: 7
 ---
 import sessionImg from '../resources/extensions-session.gif';
+import sessionImgOauth from '../resources/extensions-session-oauth.gif';
 
-**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk)
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk) / [Rene Borella](mailto:rgb@geopartner.dk)
 
 ## Hvad er Session-udvidelsen?
 
@@ -15,6 +16,33 @@ Session-udvidelsen håndterer login i Vidi, så brugeren kan arbejde med funktio
 Denne side beskriver kun den korte brugeroplevelse i Vidi. Brugerstyring, roller og rettigheder beskrives i GC2-dokumentationen.
 
 ## Sådan logger brugeren ind
+
+:::note[Ændret i 2026.3.5]
+I Vidi version 2026.3.5 er der blevet indført en ny dialog til bruger-login. Ændringen er lavet for kunne understøtte flere metoder til brugerstyring.
+
+Den viste dialog er indbygget i GC2, men kan variere.
+:::
+
+1. Klik på <MenuPath items="Log ind" /> i Vidi - den nye dialog åbnes i et nyt vindue
+2. Indtast brugernavn
+3. Tryk på pilen for at kontrolere om brugeren eksisterer
+4. Hvis man er tildelt flere databaser, skal en af disse vælges.
+5. Indtast adgangskode
+6. Godkend ved at trykke på  <MenuPath items="Log ind" />
+7. Vidi opdateres med brugerens adgang
+
+<figure class="centered-figure">
+  <img 
+    src={sessionImgOauth.src} 
+    alt="Genskab projekt" 
+    style={{ width: '800px', maxWidth: '100%' }} 
+  />
+  <figcaption>Oauth Login</figcaption>
+</figure>
+
+Ved log ud, vil vinduet åbne igen.
+
+### Tidligere versioner
 
 1. Klik på <MenuPath items="Log ind" /> i Vidi
 2. Indtast brugernavn og adgangskode
