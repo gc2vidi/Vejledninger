@@ -1,4 +1,5 @@
 [![Deploy](https://github.com/gc2vidi/Vejledninger/actions/workflows/deploy.yml/badge.svg)](https://github.com/gc2vidi/Vejledninger/actions/workflows/deploy.yml)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 # GC2/Vidi - Vejledninger
 
@@ -105,3 +106,9 @@ Eksempel: **Ctrl** + **Shift** + **G**.
 ```mdx
 <Key items="Enter" />
 ```
+
+## Licens
+
+Dette projekt er licenseret under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+
+Du må frit dele og bearbejde materialet, så længe du giver passende kreditering til **GC2/Vidi User Group**.
