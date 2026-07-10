@@ -1,0 +1,89 @@
+---
+title: Opret, udgiv og test
+description: Før en Vidi-konfiguration fra første JSON-udkast til et sikkert testet link
+---
+
+:::note[Krævet adgang]
+Du skal kunne oprette og ændre konfigurationer i GC2-dashboardet. Publicér kun indhold, som må kunne hentes uden din aktive GC2-session.
+:::
+
+GC2 gemmer `name`, `description`, `published` og JSON-teksten `body`. Ved oprettelse tildeler GC2 posten et entydigt `key`, som bruges i adressen.
+
+## 1. Opret
+
+1. Åbn området med konfigurationer i dashboardet.
+2. Opret en konfiguration med et navn, der beskriver løsning og miljø.
+3. Beskriv formål, ejer og afhængigheder.
+4. Indsæt et lille gyldigt JSON-dokument.
+5. Gem som ikke-udgivet under arbejdet.
+
+```json
+{
+  "schemata": ["plan"],
+  "enabledSearch": "danish",
+  "title": "Plankort"
+}
+```
+
+<MediaPlaceholder title="Opret en konfiguration i GC2" file="gc2-konfiguration-opret.gif" format="GIF">
+  Vis dashboardets konfigurationsoversigt, oprettelse, navn, beskrivelse, JSON-editor og første gemning. Brug testdata uden credentials eller personoplysninger.
+</MediaPlaceholder>
+
+## 2. Validér JSON
+
+Kontrollér:
+
+- dobbelte anførselstegn omkring nøgler og tekst
+- komma mellem elementer, men ikke efter det sidste
+- korrekt datatype, fx `true` og ikke `"true"`
+- navn og type i [opslagsværket](/gc2/konfigurationer/alle-indstillinger)
+- at dokumentet ikke indeholder hemmeligheder
+
+## 3. Udgiv
+
+En ikke-udgivet konfiguration er kun tilgængelig for ejeren med en gyldig session. En udgivet konfiguration kan hentes offentligt.
+
+Den rå adresse følger mønstret:
+
+```text
+https://gc2.eksempel.dk/api/v2/configuration/<database>/<konfigurations-id>.json
+```
+
+Åbn den i et privat browservindue. `403` betyder typisk, at den ikke er udgivet; `404` peger typisk på forkert database eller id.
+
+<MediaPlaceholder title="Udgiv og kopiér konfigurationslink" file="gc2-konfiguration-udgiv-link.png" format="PNG">
+  Vis publiceringskontrol, gem, råt link, kopiér-knap og Vidi-knap fra den aktuelle installation. Markér forskellen mellem udgivet og ikke-udgivet.
+</MediaPlaceholder>
+
+## 4. Åbn i Vidi
+
+```text
+https://kort.eksempel.dk/app/<database>/?config=/api/v2/configuration/<database>/<konfigurations-id>.json
+```
+
+Den indledende `/` får Vidi til at hente dokumentet gennem sin GC2-proxy.
+
+## 5. Test
+
+| Test | Hvad den bekræfter |
+|---|---|
+| Rå JSON som ejer | Posten findes, og JSON kan læses |
+| Rå JSON privat | Publiceringsstatus er korrekt |
+| Ren Vidi-URL | Konfigurationen indlæses uden projekt/state |
+| Anonym bruger | Offentlige lag og funktioner virker |
+| Realistisk rolle | Beskyttede lag og redigering virker |
+| Mobil og desktop | Layoutet fungerer i målmiljøet |
+
+Beskriv det forventede resultat konkret, fx: “Gruppen Plan vises, `plan.lokalplan` er tændt, og kladdelaget er skjult for anonyme.”
+
+## 6. Ændr og rul tilbage
+
+Det samme id leverer det nye indhold efter opdatering. Før en større ændring:
+
+1. gem den fungerende JSON i versionsstyring eller en separat testkonfiguration
+2. foretag én logisk ændring
+3. gentag testmatricen
+4. publicér først efter godkendelse
+5. hav den forrige JSON klar til rollback
+
+Se [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning), hvis den rå JSON virker, men Vidi-proxyen eller serverfunktionen fejler.

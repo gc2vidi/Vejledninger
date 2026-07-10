@@ -1,0 +1,89 @@
+---
+title: Database
+description: Få overblik over lag, struktur, data og administrationsværktøjer i Database-fanen
+---
+
+Fanen `Database` er udgangspunktet for lagets datamodel og administrative egenskaber. Her vælger du lag i oversigten, retter felter i gridet og åbner værktøjer for adgang, tjenester, tags og Meta.
+
+:::note[Krævet adgang]
+Du skal have adgang til skemaet. Oprettelse, sletning og ændring af lagegenskaber kræver databaseejer eller en subuser med de nødvendige administrative privilegier.
+:::
+
+## Arbejdsfladen
+
+Database-fanen består af:
+
+- en lagoversigt øverst
+- en værktøjslinje for det valgte lag
+- et detaljepanel
+- underfanerne `Structure`, `Data` og `Elasticsearch`
+
+<MediaPlaceholder
+  title="Database-fanens lagoversigt og værktøjslinje"
+  file="gc2-database-layer-grid.png"
+  format="PNG"
+>
+  Vis hele Database-fanen med ét valgt testlag. Kolonner, værktøjslinje og underfanerne Structure, Data og Elasticsearch skal kunne læses. Brug syntetiske lag- og brugernavne.
+</MediaPlaceholder>
+
+## Kolonner i lagoversigten
+
+Den medfølgende GC2-kilde viser dem i denne rækkefølge:
+
+1. `Relation`
+2. `Type`
+3. `Name`
+4. `Title`
+5. `Description`
+6. `Note`
+7. `Group`
+8. `Extra`, på installationer hvor feltet er aktiveret
+9. `OWS`
+10. `Sort id`
+11. `Authentication`
+12. `Editable`
+13. `Skip conflict`, på installationer hvor feltet er aktiveret
+
+Læs [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger) for betydning, eksempler og konsekvenser i Vidi.
+
+## Værktøjslinjen
+
+Efter valg af lag vises værktøjerne i denne rækkefølge:
+
+| Værktøj | Brug |
+|---|---|
+| `Privilegier` | Tildel lagadgang til subusers |
+| `Workflow` | Start eller administrér workflow, hvis funktionen er aktiveret |
+| `Avanceret` | Tekniske kilder, SQL-filter, feature-id, QML og viewdefinition |
+| `Tjenester` | Servicepassword, API-nøgle og adresser til WMS, WFS, tiles og API |
+| `Tags` | Organisér og vælg lag på tværs af skemaer |
+| `Meta` | Styr lagtype, info, filtre, lagtræ, editor og Vidi-adfærd |
+| `Ryd tile cache` | Ryd hele skemaets cache efter bekræftelse |
+| `Nyt lag` | Importér data eller opret en ny relation |
+| `Flyt lag` | Flyt laget til et andet skema |
+| `Omdøb lag` | Skift relationens tekniske navn |
+| `Slet lag` | Slet relationen efter bekræftelse |
+| `Kopiér egenskaber` | Genbrug udvalgte egenskaber fra et andet lag |
+
+## Structure, Data og Elasticsearch
+
+### Structure
+
+Her konfigurerer du kolonner, datatyper, aliaser, synlighed, søgning, filtre, links, indhold og formularvalg. Du kan også tilføje og slette kolonner samt starte versionering.
+
+### Data
+
+Her kan du se og i nogle tilfælde redigere poster. Redigering kræver en brugbar primærnøgle og de nødvendige rettigheder. Datagridets sideinddeling viser som udgangspunkt 100 poster ad gangen.
+
+### Elasticsearch
+
+Denne fane bruges til søgeindeksets mapping, når Elasticsearch er en del af installationen. Behandl den som en teknisk funktion, og ændr den ikke uden et konkret søgebehov.
+
+## Anbefalet rækkefølge
+
+1. Opret eller importér laget.
+2. Ret grundindstillingerne i lagoversigten.
+3. Gennemgå Structure og kontrollér Data.
+4. Indstil adgang før offentlig test.
+5. Tilføj Tags og Meta.
+6. Gå til Kort og opbyg præsentationen.

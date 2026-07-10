@@ -1,0 +1,131 @@
+---
+title: Søgning, funktioner og udseende
+description: Konfigurer søgning, udvidelser, print og Vidi-brugerfladens standardadfærd
+---
+
+:::note[Krævet adgang]
+Du skal kunne ændre Vidi-konfigurationen. Udvidelser, søgemoduler, templates og printdefinitioner skal allerede være installeret på Vidi-serveren.
+:::
+
+## Søgning
+
+Vælg ét installeret søgemodul:
+
+```json
+{
+  "enabledSearch": "danish",
+  "searchConfig": {
+    "komkode": ["851", "461"],
+    "advanced": true,
+    "size": 10,
+    "esrSearchActive": true,
+    "sfeSearchActive": true,
+    "placeholderText": "Søg efter adresse, matrikel eller sted"
+  }
+}
+```
+
+Standard-Docker-opsætningen i det medfølgende repository kompilerer `google` og `danish`. Google kræver en API-nøgle i serveropsætningen eller `searchConfig.google.apiKey`; offentlig JSON er ikke egnet til hemmelige nøgler.
+
+## Udvidelser kræver to trin
+
+1. Serveroperatøren inkluderer modulet i `extensions.browser` og eventuelt `extensions.server`.
+2. GC2-administratoren aktiverer det i `enabledExtensions`.
+
+```json
+{
+  "enabledExtensions": ["session", "editor", "coordinates"],
+  "extensionConfig": {
+    "coordinates": {
+      "lockUtmZoneTo": 32,
+      "default": "utm"
+    },
+    "editor": {
+      "repeatMode": false,
+      "defaultValues": {
+        "status": "kladde"
+      }
+    }
+  }
+}
+```
+
+<MediaPlaceholder title="Udvidelse fra build til Vidi" file="gc2-konfiguration-udvidelse-flow.svg" format="SVG">
+  Vis tre trin: Vidi build indeholder modulet → Vidi-konfiguration aktiverer modulet → brugeren ser funktionen. Markér at GC2-JSON alene ikke kan installere et modul.
+</MediaPlaceholder>
+
+Kilde-repositoryet indeholder browsermoduler for `conflictSearch`, `coordinates`, `directions`, `editor`, `embed`, `languages`, `offlineMap`, `session`, `streetView` og `symbols`. Den konkrete installation kan have et andet udvalg.
+
+Se Vidi-siderne for [Extensions](/vidi/extensions/oversigt), [Editor](/vidi/extensions/editor) og [Embed](/vidi/extensions/embed).
+
+## Print
+
+`enabledPrints` vælger blandt definitioner, der allerede findes under Vidi-serverens `print.templates`:
+
+```json
+{
+  "enabledPrints": ["print", "print_sagsbehandler"]
+}
+```
+
+Navnet skal passe præcist. Definitioner, der begynder med `_`, er skjulte hjælpeprints og skal normalt ikke aktiveres direkte.
+
+<MediaPlaceholder title="Fra enabledPrints til Vidi-print" file="gc2-konfiguration-print-flow.svg" format="SVG">
+  Vis `print.templates` på serveren, `enabledPrints` i konfigurationen og valgene i Vidi-printdialogen med samme eksempelnavn.
+</MediaPlaceholder>
+
+PDF-fejl efter åbning af printdialogen er ofte et serverproblem med headless browser, timeout eller eksterne ressourcer. Se [Print i Vidi](/vidi/vidi-menuen/print) og [Admin-drift](/gc2/admin-drift-og-fejlsoegning).
+
+## Identitet og introduktion
+
+```json
+{
+  "title": "Plankort",
+  "brandName": "Eksempel Kommune",
+  "aboutBox": "<p>Om kortet</p>",
+  "startUpModal": "<p>Velkommen til kortet</p>",
+  "theme": "light"
+}
+```
+
+HTML-indhold skal være betroet. Brug ikke konfigurationen til at indsætte brugerleveret HTML.
+
+## Layout og templates
+
+```json
+{
+  "template": "default.tmpl",
+  "activateMainTab": "layer",
+  "showOffcanvas": false,
+  "openLayerTreeGroups": ["Plan"]
+}
+```
+
+Det overordnede Vidi-layout rendres med Mustache. Feature- og felttemplates bruger Handlebars og helpers som `formatDate`. Embed-attributter og callbacks hører til Vidi-frontendens dokumentation.
+
+## Feature-info, popup og tabel
+
+```json
+{
+  "featureInfoTableOnMap": true,
+  "popupDraggable": true,
+  "autoPanPopup": true,
+  "vectorTable": {
+    "position": "right",
+    "width": "30%",
+    "height": "250px"
+  }
+}
+```
+
+Test disse indstillinger sammen med Meta, skærmstørrelse og embed. En projekt/state kan ændre den tilstand, brugeren møder.
+
+## Administratorens test
+
+1. Test én funktion ad gangen på en ren Vidi-URL.
+2. Se browserkonsollen efter manglende kompilerede extensions.
+3. Test anonym og navngivet bruger.
+4. Test desktop, mobil og embed, hvis de understøttes.
+5. Kontrollér at print, søgning og eksterne tjenester virker fra produktionsmiljøet.
+
+Alle understøttede top-level-indstillinger findes i [opslagsværket](/gc2/konfigurationer/alle-indstillinger).

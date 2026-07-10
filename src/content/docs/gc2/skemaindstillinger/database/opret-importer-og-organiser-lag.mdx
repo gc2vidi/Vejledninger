@@ -1,0 +1,68 @@
+---
+title: Opret, importer og organiser lag
+description: Opret et skema, importer data og kontrollér resultatet før videre opsætning
+---
+
+import newLayerButtonImg from '../../resources/gc2-new-layer-button.png';
+import newLayerMenuImg from '../../resources/gc2-new-layer-menu.png';
+import uploadLayerImg from '../../resources/gc2-layer-upload.png';
+
+:::note[Krævet adgang]
+Databaseejeren kan oprette skemaer og lag bredt. En subuser kan normalt kun importere eller oprette lag, hvor rollen og skemaadgangen tillader det.
+:::
+
+## Planlæg før import
+
+Tag stilling til:
+
+- hvilket skema data tilhører
+- hvem der ejer og vedligeholder dem
+- om laget er internt, offentligt eller redigerbart
+- om opdateringer erstatter eller tilføjer data
+- hvilket koordinatsystem og hvilken geometri der forventes
+
+Brug et nyt skema til et selvstændigt fagområde eller ansvar. Brug dansk `skema` i dokumentation og dialog; tekniske adresser kan fortsat bruge `schema`.
+
+## Opret eller importér et lag
+
+GC2-kilden understøtter blandt andet vektor, raster, billeder, views, tomme tabeller og QGIS-relaterede lagtyper. Det præcise udvalg kan variere med installationen.
+
+<figure class="centered-figure">
+  <img src={newLayerButtonImg.src} alt="Knappen Nyt lag i Database-fanen" style={{ width: '420px', maxWidth: '100%' }} />
+  <figcaption>Det eksisterende billede viser placeringen, men bør erstattes med et bredere udsnit af den aktuelle Database-værktøjslinje.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={newLayerMenuImg.src} alt="Dialog med valg af lagtype" style={{ width: '520px', maxWidth: '100%' }} />
+  <figcaption>Vælg kildetype ud fra data og den fremtidige vedligeholdelse.</figcaption>
+</figure>
+
+## Importér vektordata
+
+Kontrollér især:
+
+- EPSG-kode
+- geometritype
+- encoding for danske tegn
+- destinationsnavn
+- om eksisterende data overskrives, tømmes eller udvides
+
+<figure class="centered-figure">
+  <img src={uploadLayerImg.src} alt="Import af vektorlag i GC2" style={{ width: '520px', maxWidth: '100%' }} />
+  <figcaption>Kontrollér importvalgene, før du starter upload.</figcaption>
+</figure>
+
+## Views og eksterne kilder
+
+Et view er nyttigt til et filtreret eller afledt datasæt uden datakopi. Et kortlag baseret på et view bør have en stabil unik nøgle og et brugbart geometrifelt. Ekstern WMS kan bruges som reference, men tilgængelighed og svartid ejes da af den eksterne tjeneste.
+
+## Kontrollér importen
+
+1. Find laget i Database-oversigten.
+2. Kontrollér relationstype, teknisk navn og geometri.
+3. Åbn `Data`, og kontrollér antal og repræsentative værdier.
+4. Kontrollér danske tegn og null-værdier.
+5. Åbn `Kort`, og kontrollér udbredelse og koordinatsystem.
+6. Se i `Log`, hvis importen afsluttes med fejl eller manglende data.
+
+Fortsæt med [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger).

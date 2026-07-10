@@ -1,0 +1,50 @@
+---
+title: Signaturforklaring
+description: Kontrollér den genererede signatur og dens læsbarhed i Vidi og print
+sidebar:
+  order: 6
+---
+
+`Legend` viser GC2s genererede signatur for det valgte lag. Den hentes fra lagets aktuelle publicerede kortdefinition og er derfor en vigtig kontrol efter klasseændringer.
+
+:::note[Krævet adgang]
+Læsning kræver adgang til laget. Ændring af klasser eller feltet `Image URL` kræver adgang til at ændre lagets egenskaber.
+:::
+
+## Genereret signatur
+
+Den genererede signatur bygger på klasserne:
+
+- `Name` bliver den læsbare klassetekst.
+- `Sort id` bestemmer klassernes rækkefølge.
+- Symbol- og farvevalg danner signaturprøven.
+- Klasse- og skalaopsætning kan påvirke, hvad der er relevant at vise.
+
+Hvis signaturen er teknisk eller uoverskuelig, skal du som udgangspunkt rette klassenavne, rækkefølge og klassifikation i `Classes` i stedet for at skjule problemet i Vidi.
+
+## Ekstern signaturgrafik
+
+`Legend` indeholder også feltet `Image URL`. Kilden gemmer URL'en som lagets `legend_url`. Brug kun en ekstern grafik, når den genererede signatur ikke kan beskrive symbologien tilstrækkeligt, og når I har aftalt ejerskab og drift af billedadressen.
+
+En ekstern URL skal være tilgængelig for både browser og printmiljø. Undgå personlige drev, kortlivede tokens og adresser, der kun kan nås fra administratorens pc.
+
+## Læsbar rækkefølge
+
+1. Brug faglige, korte klassenavne.
+2. Sortér efter brugerens logik, ikke efter tilfældig oprettelsesrækkefølge.
+3. Undgå mange næsten ens farver eller symboler.
+4. Sørg for at outline og transparens stadig kan aflæses i en lille signaturprøve.
+5. Del komplekse temaer i flere lag, hvis én signatur bliver urimeligt lang.
+
+## Test i Vidi og print
+
+1. Opdatér klasser og vent på succesbeskeden.
+2. Åbn `Legend` igen og kontrollér alle klasser i korrekt rækkefølge.
+3. Åbn Vidi uden en gammel apptilstand, og kontrollér lagets signaturforklaring.
+4. Test både normal og kompakt skærmbredde.
+5. Lav et repræsentativt print med laget slået til.
+6. Kontrollér at tekst, symboler og ekstern grafik kan hentes og ikke beskæres.
+
+:::caution[Signatur er ikke datavalidering]
+En korrekt signatur beviser ikke, at klasseudtrykkene rammer de rigtige features. Kontrollér også kortet og kendte objekter i hver klasse.
+:::

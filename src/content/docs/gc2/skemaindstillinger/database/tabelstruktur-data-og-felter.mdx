@@ -1,0 +1,82 @@
+---
+title: Tabelstruktur, data og felter
+description: Gør felter forståelige, søgbare, filtrerbare og egnede til visning og redigering
+---
+
+import tableStructureImg from '../../resources/gc2-table-structure.png';
+
+:::note[Krævet adgang]
+Visning kræver lagadgang. Ændring af struktur, kolonner og feltindstillinger kræver administrative privilegier. Ændring af poster kræver skriveadgang og en brugbar primærnøgle.
+:::
+
+## Structure og Data
+
+`Structure` styrer tabellens kolonner og den metadata, som GC2 og Vidi bruger om felterne. `Data` viser posterne og kan redigere dem, når relationen har en primærnøgle.
+
+<figure class="centered-figure">
+  <img src={tableStructureImg.src} alt="Tabelstruktur og feltegenskaber i GC2" style={{ width: '820px', maxWidth: '100%' }} />
+  <figcaption>Billedet er strukturelt genkendeligt, men bør erstattes med et aktuelt udsnit, hvor alle kolonneoverskrifter kan læses.</figcaption>
+</figure>
+
+## Feltindstillinger i UI-rækkefølge
+
+| Indstilling | Formål |
+|---|---|
+| `Sort id` | Rækkefølge i info, formularer og andre feltlister |
+| `Column` | Det tekniske feltnavn; ændres ikke som brugerlabel |
+| `Type` | Databasetype og dermed mulige editorer og operatorer |
+| `Allow null` | Om feltet må være tomt |
+| `Alias` | Brugervenlig titel, fx `Dato etableret` for `datoetableret` |
+| `Description` | Hjælp eller uddybning af feltets betydning |
+| `Show in click info` | Medtag feltet i almindelig feature-info |
+| `Show in mouse-over` | Medtag feltet ved mouse-over, når funktionen bruges |
+| `Searchable` | Gør feltet tilgængeligt for lagets søgning |
+| `Disable filtering` | UI-label i den medfølgende kilde. Kontrollér den konkrete installations effekt, før du dokumenterer eller ændrer mange felter |
+| `Autocomplete` | Tilbyd værdiforslag i relevante søge- eller filterfelter |
+| `Show in conflict` | Installationsafhængig visning i konfliktsøgning |
+| `Make link` | Rendér værdien som link |
+| `Ignore` | Udelad feltet fra relevante automatiske visninger |
+| `Content` | Fortolk indhold som `Plain`, `Image` eller `Video` |
+| `Link prefix` | Tekst foran værdien, fx `https://` |
+| `Link suffix` | Tekst efter værdien eller ekstra URL-del |
+| `Template` | Felt- eller visningstemplate, når funktionen understøtter den |
+| `Properties` | Valgmuligheder eller egenskaber til editoren; skal være gyldig JSON, når JSON forventes |
+
+<MediaPlaceholder
+  title="Aktuel Structure-fane"
+  file="gc2-database-structure-grid.png"
+  format="PNG"
+>
+  Vis den aktuelle Structure-fane med kolonner fra Sort id til Properties. Brug syntetiske felter, hvor Alias, click info, Searchable, Content og Properties har tydeligt forskellige værdier.
+</MediaPlaceholder>
+
+## En god minimumsopsætning
+
+1. Bevar stabile tekniske feltnavne.
+2. Giv brugerfelter forståelige aliaser.
+3. Vis kun relevante felter i click info.
+4. Markér få, præcise søgefelter.
+5. Brug autocomplete på kontrollerede værdimængder.
+6. Brug link og medieindhold kun til betroede adresser.
+7. Dokumentér `Properties`, templates og andre avancerede valg.
+
+## Data-fanen
+
+GC2 stopper redigering af relationer uden primærnøgle. Hvis data kan ses, men ikke opdateres:
+
+- kontrollér primærnøglen
+- kontrollér Authentication og privilegier
+- kontrollér datatype og null-krav
+- kontrollér Log og netværkssvar
+
+<MediaPlaceholder
+  title="Data-fanen med redigerbare poster"
+  file="gc2-database-data-grid.png"
+  format="PNG"
+>
+  Vis Data-fanen med en tydelig primærnøgle, nogle få syntetiske poster samt knapperne til at tilføje og slette poster. Ingen personoplysninger.
+</MediaPlaceholder>
+
+## Test i Vidi
+
+Kontrollér aliaser, click info, lagets søgning, filtre og eventuelle formularer. Et felt kan være teknisk korrekt uden at være relevant eller forståeligt for brugeren.

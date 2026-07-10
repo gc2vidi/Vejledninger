@@ -1,0 +1,89 @@
+---
+title: Privilegier og authentication
+description: Beskyt lag og tildel subusers præcis den læse- og skriveadgang de behøver
+---
+
+import subuserPrivilegesImg from '../../resources/gc2-subuser-privileges.png';
+import authLayerImg from '../../resources/add_read_write_on_layer.png';
+
+:::note[Krævet adgang]
+Du skal være databaseejer eller have rettigheder til at administrere lagets adgang. Opret først de relevante konti under [Brugere og adgang](/gc2/brugere-og-adgang).
+:::
+
+## To lag af adgangskontrol
+
+**Authentication** er en egenskab på laget. Den bestemmer, om læsning og/eller skrivning kræver en godkendt bruger.
+
+**Privilegier** tildeles den konkrete subuser. De bestemmer, om brugeren må læse, skrive eller administrere laget.
+
+Begge skal være korrekte. Et privilegium beskytter ikke et lag, som fortsat tillader anonym læsning.
+
+## Authentication
+
+Den medfølgende UI-kilde har disse værdier:
+
+| Værdi | Praktisk betydning |
+|---|---|
+| `None` | Læsning er offentlig; skrivning afhænger fortsat af øvrig adgangskontrol |
+| `Write` | Skrivning kræver authentication, mens læsning kan være offentlig |
+| `Read/write` | Både læsning og skrivning kræver authentication |
+
+Brug `Read/write` til data, som ikke må kunne læses anonymt. Brug `Write`, når offentlig visning skal kombineres med beskyttet redigering.
+
+<figure class="centered-figure">
+  <img src={authLayerImg.src} alt="Authentication på et lag i GC2" style={{ width: '760px', maxWidth: '100%' }} />
+  <figcaption>Det eksisterende billede kan bruges som midlertidig reference, men bør erstattes med et aktuelt og tættere udsnit.</figcaption>
+</figure>
+
+## Privilegier
+
+Åbn `Privilegier`, vælg et eller flere lag og tildel den relevante subuser mindst mulig nødvendig adgang. UI og API arbejder med læse-, skrive- og fuld administrationsadgang.
+
+<figure class="centered-figure">
+  <img src={subuserPrivilegesImg.src} alt="Lagprivilegier for subusers i GC2" style={{ width: '760px', maxWidth: '100%' }} />
+  <figcaption>Privilegier bør tildeles gennem få, forståelige adgangsprofiler, når mange brugere deler samme behov.</figcaption>
+</figure>
+
+<MediaPlaceholder
+  title="Aktuel authentication og privilegier"
+  file="gc2-database-layer-privileges.png"
+  format="PNG"
+>
+  Vis privilegiedialogen med syntetiske subusers og ét valgt testlag. Medtag ingen rigtige brugernavne. Supplér eventuelt med `gc2-database-layer-authentication.png`, som viser dropdown-værdierne None, Write og Read/write.
+</MediaPlaceholder>
+
+## Anbefalede mønstre
+
+### Offentligt læselag
+
+- Authentication: `None`
+- Ingen almindelige brugere får skriveadgang
+- Administrative brugere får kun den nødvendige vedligeholdelsesadgang
+
+### Offentligt lag med kontrolleret redigering
+
+- Authentication: `Write`
+- Redaktører får skriveprivilegium
+- Test både anonym visning og loginbaseret redigering
+
+### Internt lag
+
+- Authentication: `Read/write`
+- Læsere får læseprivilegium
+- Redaktører får læse- og skriveprivilegium
+- Få administratorer får fuld adgang
+
+## Testmatrix
+
+| Testbruger | Skal kunne læse | Skal kunne skrive | Skal kunne administrere |
+|---|---:|---:|---:|
+| Anonym | Efter løsningens krav | Nej | Nej |
+| Læser | Ja | Nej | Nej |
+| Redaktør | Ja | Ja | Nej |
+| Administrator | Ja | Efter behov | Ja |
+
+Test både Vidi og relevante WMS/WFS-kald. Servicepassword og API-nøgle forklares under [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api).
+
+:::caution[Test før publicering]
+En fejl i adgangsopsætningen kan enten eksponere data eller afskære alle brugere. Test med separate realistiske roller, ikke kun som databaseejer.
+:::

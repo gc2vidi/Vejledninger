@@ -1,0 +1,118 @@
+---
+title: Versionering, roller og opsætning
+description: Aktivér track changes og workflow i den rækkefølge GC2 kræver
+sidebar:
+  order: 2
+---
+
+import versioningStartImg from '../../resources/versioning-start-tracking-changes.png';
+import versioningFieldsImg from '../../resources/versioning-system-fields.png';
+import versioningTimeslicingImg from '../../resources/versioning-timeslicing.png';
+import workflowStartImg from '../../resources/workflow-start-workflow.png';
+import workflowRolesImg from '../../resources/workflow-add-roles.png';
+
+Workflow kan kun aktiveres på en versioneret tabel. Klargør derfor versionering, kontrollér systemfelterne og tildel først derefter roller.
+
+:::note[Krævet adgang]
+Du skal have adgang til at ændre tabelstrukturen og lagets workflowopsætning, normalt som databaseejer. Rollemodtagere skal være oprettet som subusers med relevante lagprivilegier.
+:::
+
+## 1. Start track changes
+
+Vælg tabellen under `Database`, åbn `Structure`, og brug `Start track changes`. GC2 advarer om, at hver redigering skaber en ny featureversion og tilføjer systemkolonner.
+
+<figure class="centered-figure">
+  <img
+    src={versioningStartImg.src}
+    alt="Knappen Start track changes i GC2s tabelstruktur"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Start versionering fra tabelstrukturen, før workflow opsættes.</figcaption>
+</figure>
+
+Den aktuelle serverkode tilføjer fem felter:
+
+| Felt | Formål |
+|---|---|
+| `gc2_version_gid` | Binder versioner af samme feature sammen |
+| `gc2_version_start_date` | Tidspunktet hvor versionen starter |
+| `gc2_version_end_date` | Tidspunktet hvor versionen afsluttes; den aktive version har normalt ingen slutdato |
+| `gc2_version_uuid` | Unik identifikation af versionen |
+| `gc2_version_user` | Brugeren knyttet til versionsændringen |
+
+<figure class="centered-figure">
+  <img
+    src={versioningFieldsImg.src}
+    alt="Systemfelter oprettet af GC2-versionering"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Kontrollér de faktiske systemfelter efter aktivering; dialogteksten kan være ældre end serverimplementeringen.</figcaption>
+</figure>
+
+:::caution[Stop track changes er destruktivt for sporingen]
+GC2s bekræftelse oplyser, at eksisterende versionrækker ikke slettes, men at trackinginformationen fjernes. Serverkoden fjerner de fem `gc2_version_*`-kolonner. Brug ikke handlingen som almindelig pauseknap.
+:::
+
+## 2. Kontrollér versioneringen
+
+Redigér et testobjekt og kontrollér, at der skabes en afsluttet historisk version og en aktiv version. Time slicing kan derefter vise tilstanden på et valgt tidspunkt.
+
+<figure class="centered-figure">
+  <img
+    src={versioningTimeslicingImg.src}
+    alt="Time slicing for et versioneret lag i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Time slicing er en versionsfunktion og kan anvendes uden den rollebaserede workflowkæde.</figcaption>
+</figure>
+
+Test også alle eksterne redigeringsklienter. Historikken ligger ved WFS- og datalaget, men klientens konkrete insert-, update- og delete-adfærd skal stadig valideres.
+
+## 3. Aktivér Workflow
+
+Vælg ét lag i `Database`, og brug handlingen `Workflow`. GC2 kontrollerer først, at `gc2_version_gid` findes. Hvis workflow ikke er aktiveret endnu, beder GC2 om bekræftelse og tilføjer:
+
+- `gc2_status` som heltal
+- `gc2_workflow` som `hstore`
+
+Eksisterende rækker sættes af serverkoden til status `3`, altså publiceret.
+
+<figure class="centered-figure">
+  <img
+    src={workflowStartImg.src}
+    alt="Aktivering af workflow på et versioneret lag i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>GC2 tilbyder først aktivering, når tabellen er versioneret.</figcaption>
+</figure>
+
+## 4. Tildel roller
+
+Rollepanelet viser lagets subusers og valgene `None`, `Author`, `Reviewer` og `Publisher`.
+
+- `Author` fører en feature til status 1 og kan ikke handle på en allerede reviewed eller published feature.
+- `Reviewer` fører en feature til status 2 og kan ikke handle på en allerede published feature.
+- `Publisher` fører en feature til status 3.
+- `None` giver ingen workflowrolle; lagprivilegier skal fortsat styres separat.
+
+<figure class="centered-figure">
+  <img
+    src={workflowRolesImg.src}
+    alt="Tildeling af Author, Reviewer og Publisher til subusers i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Tildel roller til navngivne subusers og test med separate login.</figcaption>
+</figure>
+
+## Caveats før drift
+
+- Systemfelter må ikke omdøbes, slettes eller redigeres manuelt.
+- En rolle uden lagadgang kan ikke udføre sit arbejde; skriveadgang uden rolle fuldfører ikke workflowet.
+- Rollebeskrivelserne i dialogens hjælpetekst kan afspejle lagprivilegier snarere end workflowstatus. Brug de faktiske rollevalg og test dem.
+- Eksisterende data starter som publiceret, men nye ændringer skal gennem den aftalte kæde.
+- Direkte SQL og tredjepartsklienter kan omgå forventet UI-adfærd og skal testes særskilt.
+- Fjern ikke versionering fra et lag med aktivt workflow uden en aftalt databaseprocedure.
+
+:::note[Lokalt testbevis]
+Gem skærmbilleder eller en testprotokol for én feature gennem alle tre roller. Den er mere værdifuld end at antage, at en rolle er korrekt, fordi radioknappen er valgt.
+:::

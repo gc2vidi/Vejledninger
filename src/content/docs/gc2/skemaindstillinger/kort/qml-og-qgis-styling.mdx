@@ -1,0 +1,44 @@
+---
+title: QML og QGIS-styling
+description: Aftal ejerskab og test interoperabilitet mellem GC2s QML-felt og QGIS
+sidebar:
+  order: 7
+---
+
+`QML`-fanen indeholder et tekstfelt og knappen `Update QML`. GC2 gemmer indholdet på laget og skriver kortdefinitionen igen. Fanen er et interoperabilitetspunkt, ikke en garanti for fuld visuel lighed med et QGIS-projekt.
+
+:::note[Krævet adgang]
+Du skal kunne ændre lagets egenskaber, normalt med `All`-privilegium eller som databaseejer. Du skal også have adgang til den QGIS-projekt- eller QML-kilde, som teamet har udpeget som autoritativ.
+:::
+
+## Vælg én ejer af styling
+
+Før I bruger QML, skal teamet vælge den styrende kilde:
+
+- **GC2 ejer stylingen:** Vedligehold `Classes`, symboler og labels i GC2. QML bruges kun efter en dokumenteret eksport- eller integrationsproces.
+- **QGIS ejer stylingen:** QGIS-projekt eller QML er master. Ændringer i GC2 må ikke foretages parallelt uden en aftalt synkronisering.
+
+Hvis begge værktøjer redigerer samme styling uafhængigt, er det uklart, hvilken version der skal bevares ved næste publicering.
+
+## Begrænsninger
+
+- QGIS- og MapServer-rendering har ikke nødvendigvis samme symboler, labelmotor eller expressionsyntaks.
+- Fonts, SVG-filer og andre ressourcer skal være installeret og tilgængelige på serveren.
+- QGIS-projektets lagrækkefølge og projektindstillinger ligger ikke nødvendigvis i ét lags QML-felt.
+- Skala, opacity, datadefinerede egenskaber, labels og blandingstilstande skal valideres enkeltvis.
+- En gemt QML-tekst er ikke dokumentation for, at webkortet faktisk bruger alle dele af den.
+
+## Kontrolleret arbejdsgang
+
+1. Gem den autoritative QML eller projektfil i teamets aftalte versionsstyring.
+2. Test på et ikke-kritisk lag eller i et testskema.
+3. Opdatér QML i GC2 og kontrollér succesbeskeden.
+4. Sammenlign kendte udsnit i QGIS, direkte WMS, tile cache og Vidi.
+5. Kontrollér labels, fonts, symbolressourcer og signatur.
+6. Dokumentér eventuelle bevidste forskelle mellem desktop og web.
+
+Se den planlagte samlede vejledning [QGIS og eksterne datakilder](/gc2/qgis-og-eksterne-datakilder) for forbindelser, publiceringsmodeller og eksterne kilder.
+
+:::caution[Indsæt ikke ukendt QML i produktion]
+QML kan referere til felter og ressourcer, der ikke findes på serveren. Gennemgå indholdet og test renderingen, før det publiceres på et driftslag.
+:::

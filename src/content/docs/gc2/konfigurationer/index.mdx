@@ -1,0 +1,65 @@
+---
+title: Konfigurationer
+description: Forstå hvordan GC2 gemmer en Vidi-konfiguration, og hvordan Vidi bruger den ved opstart
+---
+
+En **Vidi-konfiguration** er den JSON-opskrift, som samler færdige GC2-lag til en bestemt kortløsning. Den vælger blandt andet data, aktive lag, baggrundskort, søgning, funktioner og udseende.
+
+GC2 gemmer og udgiver konfigurationen. Vidi henter og fortolker JSON-indholdet.
+
+:::note[Krævet adgang]
+Du skal kunne administrere konfigurationer i GC2-dashboardet. En udgivet konfiguration kan hentes offentligt, så den må ikke indeholde passwords, tokens eller andre hemmeligheder.
+:::
+
+## Før du begynder
+
+Klargør først lagene under [Skemaindstillinger](/gc2/skemaindstillinger):
+
+- forståelige titler og grupper
+- korrekte felter og aliaser
+- authentication og privilegier
+- relevant Meta
+- testet styling og labels
+
+En konfiguration kan vælge og præsentere lag, men den retter ikke fejl i data, adgang eller styling.
+
+## Konfigurationen som GC2-post og JSON
+
+GC2-posten har navn, beskrivelse, publiceringsstatus, et genereret id og JSON-indholdet. Selve JSON-dokumentet kan begynde enkelt:
+
+```json
+{
+  "schemata": ["plan"],
+  "activeLayers": ["v:plan.lokalplan"],
+  "enabledSearch": "danish",
+  "title": "Plankort"
+}
+```
+
+I tekniske beskrivelser kaldes JSON-dokumentet også en **kørselskonfiguration**, fordi Vidi læser det ved opstart. I denne dokumentation bruger vi normalt det mere direkte ord Vidi-konfiguration.
+
+## Sådan finder Vidi konfigurationen
+
+En typisk adresse er:
+
+```text
+https://kort.eksempel.dk/app/min-database/?config=/api/v2/configuration/min-database/konfigurations-id.json
+```
+
+Vidi prioriterer:
+
+1. `config` i URL'en
+2. automatisk konfiguration, hvis installationen bruger `autoLoadingConfig`
+3. installationens `defaultConfig`
+4. indbyggede standardværdier
+
+Vidi kopierer kun kendte top-level-indstillinger fra det hentede dokument. Stavefejl og ukendte navne kan derfor blive ignoreret uden en synlig fejl.
+
+## Dokumentationens rækkefølge
+
+1. [Opret, udgiv og test](/gc2/konfigurationer/opret-udgiv-og-test)
+2. [Vælg data, lag og baggrundskort](/gc2/konfigurationer/data-lag-og-baggrundskort)
+3. [Konfigurer søgning, funktioner og udseende](/gc2/konfigurationer/soegning-funktioner-og-udseende)
+4. [Slå alle indstillinger op](/gc2/konfigurationer/alle-indstillinger)
+
+Start med få indstillinger, og test én ny funktion ad gangen.

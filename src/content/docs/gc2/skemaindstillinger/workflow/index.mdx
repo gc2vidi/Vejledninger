@@ -1,0 +1,80 @@
+---
+title: Workflow
+description: Vælg workflow, når versionshistorik og rollebaseret godkendelse er et reelt driftskrav
+sidebar:
+  order: 1
+---
+
+import workflowTabImg from '../../resources/workflow-workflow-tab.png';
+
+GC2 Workflow lægger et rollebaseret godkendelsesforløb oven på versionering. En ændring kan gå fra `Author` til `Reviewer` og derefter `Publisher`, mens GC2 registrerer status og de brugere, der har handlet på featuren.
+
+:::note[Krævet adgang]
+Workflow-fanen skal være aktiveret for databasen. Opsætning kræver databaseejer eller tilsvarende administrativ adgang; daglig behandling kræver en subuser med både relevante lagprivilegier og en tildelt workflowrolle.
+:::
+
+## Hvornår er workflow nyttigt?
+
+Brug workflow, når:
+
+- data ikke må blive endeligt publiceret uden en uafhængig kontrol
+- ansvar som forfatter, faglig kontrollant og udgiver skal kunne dokumenteres
+- ændringer skal kunne følges som individuelle transaktioner
+- organisationen har bemanding og svartider til at drive en godkendelseskø
+
+Workflow er normalt ikke den rigtige løsning, når:
+
+- alle redaktører må publicere direkte
+- versionshistorik alene opfylder revisionskravet
+- datakilden opdateres automatisk og ikke kan vente på manuel godkendelse
+- rollerne reelt udføres af samme person uden et krav om adskillelse
+- teamet ikke har en aftalt proces for fejl, fravær og fastlåste transaktioner
+
+## Beslutningsguide
+
+| Behov | Vælg |
+|---|---|
+| Kun den aktuelle datatilstand | Almindeligt lag uden versionering |
+| Historik og time slicing, men ingen godkendelseskæde | Versionering med `Track changes` |
+| Forfatter, kontrol og endelig publicering | Versionering plus Workflow |
+| Automatiske, tidsstyrede importer | Overvej Scheduler; Workflow kræver stadig et bevidst godkendelsesdesign |
+
+## Forudsætninger
+
+1. Tabellen har en stabil primærnøgle og et fungerende redigeringsflow.
+2. `Track changes` er startet på tabellen.
+3. Workflow er aktiveret på installationen og databasen.
+4. Subusers er oprettet og har passende læse- eller skriveprivilegier.
+5. Roller er fordelt som `Author`, `Reviewer` og `Publisher`.
+6. Teamet har testet, hvad brugerne ser før og efter hvert statusskift i GC2, WFS, Vidi og eventuelle eksterne klienter.
+
+Workflow erstatter ikke adgangskontrol. Lagets authentication og subuser-privilegier afgør, om brugeren kan se eller redigere laget; workflowrollen afgør brugerens trin i godkendelseskæden.
+
+## Hovedfanen Workflow
+
+GC2 indlæser Workflow-listen, når hovedfanen åbnes. Listen viser blandt andet operation, tabel, feature-id, versions-id, status, seneste redaktør, `Authored by`, `Reviewed by`, `Published by` og oprettelsestidspunkt.
+
+<figure class="centered-figure">
+  <img
+    src={workflowTabImg.src}
+    alt="Workflow-fanen med transaktioner og status i GC2"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Workflow-fanen samler de transaktioner, som den aktuelle rolle skal behandle.</figcaption>
+</figure>
+
+Værktøjslinjen har kildevaliderede handlinger til `Reload`, `Show all`, `See/edit feature` og `Check feature`. `Show all` omfatter også emner, som brugeren allerede har handlet på. `See/edit feature` skifter til `Kort` og indlæser den valgte feature. `Check feature` registrerer den aktuelle brugers rolle og flytter status frem efter rollens regler.
+
+## Før ibrugtagning
+
+- Brug et testskema med mindst tre særskilte subusers.
+- Gennemfør insert, update og delete, hvis alle operationstyper indgår i jeres løsning.
+- Afprøv fravær, forkert rolle og en feature, der allerede er publiceret.
+- Aftal hvem der overvåger køen, og hvem der må rette data ved fejl.
+- Dokumentér en recovery-proces, som ikke afhænger af direkte ændring af `gc2_`-systemfelter.
+
+Fortsæt med [Versionering, roller og opsætning](/gc2/skemaindstillinger/workflow/versionering-roller-og-opsaetning) og derefter [Transaktioner og godkendelse](/gc2/skemaindstillinger/workflow/transaktioner-og-godkendelse).
+
+:::caution[Workflow ændrer datamodellen]
+Aktivering tilføjer systemfelter og ændrer den daglige redigeringsadfærd. Tag backup, test integrationer, og aftal rollback eller recovery med databaseansvarlig før produktionsbrug.
+:::

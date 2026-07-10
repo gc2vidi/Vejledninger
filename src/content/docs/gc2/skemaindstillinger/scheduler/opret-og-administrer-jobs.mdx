@@ -1,0 +1,89 @@
+---
+title: Opret og administrer jobs
+description: Opret, test, aktivér og ændr Scheduler-jobs med mindst mulig risiko
+sidebar:
+  order: 2
+---
+
+Scheduler-UI'et er indlejret og kan variere mellem installationer. Denne arbejdsgang bruger kun kontroller, der findes i den kildebaserede standardklient; validér altid den lokale formular før produktionsbrug.
+
+:::note[Krævet adgang]
+Du skal være logget ind som databaseejer på en database, hvor Scheduler er aktiveret. Kildeforbindelsen skal være godkendt, og du skal have mandat til at oprette eller overskrive data i destinationsskemaet.
+:::
+
+## Før du opretter jobbet
+
+Saml og få godkendt:
+
+- ejer og fagligt formål
+- kilde-URL uden at dele secrets i dokumentation eller supportsager
+- forventet format, geometri, EPSG og encoding
+- destinationsschema og tabelnavn
+- forventet antal features og normal køretid
+- opdateringsstrategi, herunder konsekvensen af `Delete/append`
+- ønsket tidsplan og tidszone
+- valideringskriterier og rollback eller restore
+- hvem der reagerer på fejl
+
+## Kildevaliderede kontroller
+
+Standardklienten viser en jobliste med `Reload`, `New`, `Delete`, `Edit` og `Run`. Formularens kilde indeholder:
+
+- cronfelterne `Min`, `Hour`, `Day of month`, `Month` og `Day of week`
+- `Table`, `Schema`, `Url`, `Epsg`, `Type` og `Encoding`
+- `Extra fields`
+- `Delete/append`
+- `Download schema`
+- `Pre-run SQL` og `Post-run SQL`
+- `Active`
+- `Save` eller `Update`
+
+Geometrityperne i standardklienten er `AUTO`, `POINT`, `LINESTRING`, `POLYGON`, `MULTIPOINT`, `MULTILINESTRING` og `MULTIPOLYGON`; encoding-listen indeholder `UTF8` og `LATIN1`. Det dokumenterer kilden, men ikke at alle valg passer til jeres datakilde.
+
+<MediaPlaceholder
+  title="Ny Scheduler-jobformular"
+  file="gc2-scheduler-job-dialog.png"
+  format="PNG"
+>
+  UI-VALIDERING KRÆVES: Optag `New`-formularen på den aktuelle installation. Medtag alle synlige feltnavne og knapper, men brug et inaktivt testjob og slør URL, credentials og interne navne. Sammenlign formularen med den installerede GC2-version før billedet publiceres.
+</MediaPlaceholder>
+
+## Forsigtig oprettelse
+
+1. Vælg `New` i den lokale Scheduler-fane.
+2. Udfyld en konservativ tidsplan og en ufarlig testdestination.
+3. Lad `Active` være slået fra ved første gemning, hvis den lokale UI understøtter det.
+4. Vælg EPSG, type og encoding ud fra kildens dokumentation, ikke ud fra et gæt.
+5. Undlad `Delete/append`, pre-SQL og post-SQL, indtil basisimporten er valideret.
+6. Gem og kontrollér at jobbet vises med de forventede værdier.
+7. Kør manuelt med `Run`, og vent med et nyt klik; serverkilden starter jobbet asynkront.
+8. Kontrollér destination, log, featureantal og seneste status.
+9. Aktivér tidsplanen og overvåg de første automatiske kørsler.
+
+Serveren validerer de fem cronfelter som ét cron-udtryk. Et gyldigt udtryk er ikke nødvendigvis en fornuftig tidsplan. Vær især opmærksom på `*`, som kan give langt hyppigere kørsel end tilsigtet.
+
+## Ændring og sletning
+
+Brug `Edit` til at indlæse den valgte jobdefinition og `Update` til at gemme. Gør jobbet inaktivt før en risikofyldt ændring, og gentag den manuelle test.
+
+`Delete` fjerner jobdefinitionen efter bekræftelse. Kilden viser ikke, at destinationsdata, logs eller allerede startede processer slettes sammen med definitionen. Afklar disse dele separat før sletning.
+
+<MediaPlaceholder
+  title="Redigering, inaktivering og sletning af Scheduler-job"
+  file="gc2-scheduler-job-dialog.png"
+  format="PNG"
+>
+  UI-VALIDERING KRÆVES: Optag et ufarligt testjob i `Edit` samt den lokale slettebekræftelse. Vis hvordan `Active` slås fra. Bekræft på installationen om en igangværende kørsel fortsætter efter inaktivering eller sletning, og dokumentér resultatet i billedteksten.
+</MediaPlaceholder>
+
+## Højrisikofelter
+
+- `Delete/append` kan ændre måden eksisterende destinationsdata erstattes eller tilføjes på.
+- `Pre-run SQL` og `Post-run SQL` udfører databasehandlinger omkring importen og kræver særskilt review.
+- En URL kan indeholde credentials eller tokens; del den ikke i screenshots, logs eller tickets.
+- Forkert EPSG eller geometritype kan give tomme, fejlplacerede eller ugyldige geometrier.
+- `Run` kan starte en ny asynkron proces; gentagne klik er ikke en sikker retry-strategi.
+
+:::caution[UI-validering kræves]
+Knapnavne og felter ovenfor kommer fra repositoryets standardklient. Hvis den aktuelle installation afviger, skal den lokale UI og serverversion dokumenteres, før vejledningen bruges operationelt.
+:::

@@ -1,0 +1,61 @@
+---
+title: Tjenester og API
+description: Brug GC2-data gennem WMS, WFS, tiles, SQL API og Elasticsearch uden at eksponere credentials
+---
+
+:::note[Krævet adgang]
+Visning og ændring af serviceoplysninger kræver databaseejer eller tilsvarende adgang. Passwords og API-nøgler er hemmeligheder og må ikke indsættes i screenshots, tickets eller offentlig dokumentation.
+:::
+
+Dialogen `Tjenester` er knyttet til den aktuelle database/bruger og viser adgangsoplysninger samt adresser til eksterne klienter.
+
+## Indhold
+
+| Felt eller adresse | Formål |
+|---|---|
+| HTTP Basic password | Særskilt password til beskyttet WMS og WFS |
+| SQL API key | Nøgle til SQL API; behandles som et password |
+| WFS-T URL | Redigering gennem WFS Transaction |
+| OWS URL | Fælles indgang til WMS og WFS |
+| MapCache URL | WMTS, TMS eller Google XYZ afhængigt af installationen |
+| SQL API endpoint | Kontrollerede SQL-forespørgsler gennem GC2 API |
+| Elasticsearch endpoint | Søgning mod installationens indeks |
+
+<MediaPlaceholder
+  title="Tjenester og API uden credentials"
+  file="gc2-services-and-api.png"
+  format="PNG"
+>
+  Genskab dialogen med syntetiske host-, database- og brugernavne. Maskér password og API-nøgle fuldstændigt. Tidligere servicebilleder blev fjernet, fordi de lignede virkelige credentials.
+</MediaPlaceholder>
+
+## Serviceadresser
+
+Brug altid den adresse, som installationen viser. Et typisk OWS-mønster er:
+
+```text
+https://kort.eksempel.dk/ows/<bruger@database>/<skema>/
+```
+
+Capabilities bruges til at kontrollere tilgængelige lag:
+
+```text
+?service=WMS&request=GetCapabilities
+```
+
+Indsæt ikke password i URL'en. Det kan ende i browserhistorik, logs og delte beskeder.
+
+## SQL API
+
+Brug læsende forespørgsler i test, begræns datamængden og URL-encode forespørgslen. API-nøglen skal opbevares i en hemmeligheds- eller konfigurationsmekanisme, ikke i kildekode eller Vidi-konfigurationen.
+
+## Skift credentials sikkert
+
+1. Find alle klienter og jobs, der bruger credentialet.
+2. Aftal et ændringsvindue.
+3. Skift credentialet.
+4. Opdater klienterne uden at dele værdien usikkert.
+5. Test WMS, WFS/WFS-T og API separat.
+6. Dokumentér ejer og næste planlagte rotation.
+
+Se [QGIS og eksterne datakilder](/gc2/qgis-og-eksterne-datakilder) for klientopsætning og [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning) ved proxy-, certifikat- eller serverfejl.

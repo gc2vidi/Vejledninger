@@ -1,15 +1,18 @@
 ---
-title: QGIS og eksterne kilder
+title: QGIS og eksterne datakilder
 description: Arbejd med QGIS, views, WMS og andre eksterne datakilder sammen med GC2
 sidebar:
   order: 1
 ---
 
-import qgisServicesImg from '../resources/qgisstyling-gc2-services.png';
-import qgisAddConnectionGif from '../resources/qgis-postgresql-add.gif?url';
-import qgisExportGif from '../resources/qgis-export.gif?url';
+import qgisAddConnectionGif from './resources/qgis-postgresql-add.gif?url';
+import qgisExportGif from './resources/qgis-export.gif?url';
 
 ## QGIS som supplement til GC2
+
+:::note[Krævet adgang]
+Du skal have læse- eller skriveadgang svarende til den valgte forbindelse. Direkte databaseadgang og publicering af QGIS-styling kræver særskilt godkendelse og bør ikke antages ud fra GC2-login alene.
+:::
 
 QGIS bruges ofte sammen med GC2 når administratorer eller GIS-medarbejdere skal arbejde mere avanceret med data og styling end det der er praktisk direkte i browseren.
 
@@ -24,16 +27,11 @@ Typiske anvendelser er:
 
 GC2 stiller normalt services til rådighed, så lag kan hentes ind i QGIS via WFS eller lignende forbindelser. Det gør det muligt at arbejde med de samme data i desktop og web.
 
-Læs også [Tjenester og API](/gc2/integrationer/tjenester-og-api), hvis du har brug for de generelle service-URL'er, passwords eller SQL-adgang.
+Læs også [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api), hvis du har brug for de generelle service-URL'er, passwords eller SQL-adgang.
 
-<figure class="centered-figure">
-  <img
-    src={qgisServicesImg.src}
-    alt="Eksempel på services-dialog i GC2"
-    style={{ width: '760px', maxWidth: '100%' }}
-  />
-  <figcaption>Eksempel på services i GC2 som kan bruges videre i QGIS.</figcaption>
-</figure>
+<MediaPlaceholder title="Sikker serviceadresse til QGIS" file="gc2-services-wfs-url.png" format="PNG">
+  Vis den aktuelle Tjenester-dialog med en syntetisk WFS-adresse. Maskér password og API-nøgle fuldstændigt. Det gamle billede må ikke genbruges offentligt, fordi det ligner virkelige credentials.
+</MediaPlaceholder>
 
 Hvis I bruger versionering eller workflow, skal integrationen valideres ekstra nøje på den konkrete installation.
 
@@ -55,6 +53,8 @@ En praktisk arbejdsgang ser ofte sådan ud:
   />
   <figcaption>Eksempel på at oprette forbindelse til data i QGIS.</figcaption>
 </figure>
+
+Det eksisterende GIF viser en ældre QGIS-brugerflade. Brug det kun som midlertidig illustration, og erstat det med `qgis-add-postgresql-connection.gif` fra den QGIS-version organisationen understøtter.
 
 Hvis jeres brugere arbejder direkte mod databasen, er det især vigtigt at afklare hvem der må redigere, og hvordan ændringer bagefter slår igennem i GC2 og Vidi.
 
@@ -90,6 +90,8 @@ En klassisk arbejdsgang fra den ældre GC2-dokumentation er:
   />
   <figcaption>Eksempel på arbejdsgang i QGIS før publicering eller videre brug i web.</figcaption>
 </figure>
+
+Publiceringsflowet i det eksisterende GIF er ikke entydigt nok som normativ arbejdsgang. Erstat det med `qgis-publish-project.gif` eller `qgis-export-data.png`, når det officielt understøttede flow er besluttet.
 
 ## Eksterne WMS-kilder
 

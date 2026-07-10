@@ -1,0 +1,97 @@
+---
+title: Overvågning og fejlsøgning
+description: Kontrollér Scheduler-resultater, logs og driftsafhængigheder uden at lække credentials
+sidebar:
+  order: 3
+---
+
+Et Scheduler-job er først vellykket, når både kørsel, destinationsdata og efterfølgende anvendelse er kontrolleret. En grøn eller sand status alene er ikke en faglig datavalidering.
+
+:::note[Krævet adgang]
+Du skal kunne se Scheduler-jobbet og destinationsdata. Adgang til processtatus, serverlogs, lock-filer og runtime-konfiguration kræver normalt serveroperatør.
+:::
+
+## Overvåg resultatet
+
+Standardjoblisten indeholder kildevaliderede felter som `Success on latest` og `Last success`. Den separate rapportside kan desuden vise seneste kørsel, datamængde, geometrirelaterede mål, dubletter, ventetid og et link til jobloggen, afhængigt af jobtype og installeret version.
+
+Kontrollér efter en kørsel:
+
+1. om jobbet faktisk startede på det forventede tidspunkt
+2. om det afsluttede inden for normal varighed
+3. seneste status og timestamp
+4. loggens første egentlige fejl, ikke kun den sidste følgefejl
+5. featureantal, schema, geometri og kendte kontrolobjekter i destinationen
+6. om Vidi, tjenester og eventuel cache viser de nye data
+
+<MediaPlaceholder
+  title="Scheduler-status, rapport og log"
+  file="gc2-scheduler-jobs.png"
+  format="PNG"
+>
+  UI-VALIDERING KRÆVES: Optag den aktuelle jobliste og installationens rapportvisning for et ufarligt job. Vis seneste status og tidspunkt samt placeringen af loglinket. Slør URL'er, credentials, database-, schema- og tabelnavne og fjern person- eller fagdata fra logudsnittet.
+</MediaPlaceholder>
+
+## Typiske fejlkategorier
+
+| Symptom | Første kontroller |
+|---|---|
+| Scheduler-fanen mangler | `gc2scheduler`-aktivering for databasen eller globalt, login som databaseejer, installeret UI |
+| Jobbet gemmes ikke | Cronfelter, obligatoriske felter, session og browserens Network-panel |
+| Jobbet starter ikke automatisk | `Active`, cronudtryk, serverens tidszone, Scheduler-proces og databaseaktivering |
+| Manuel `Run` reagerer, men ingen data kommer | Joblog, processtatus, kilde-URL, DNS/TLS/firewall og destinationsrettigheder |
+| Seneste status er fejl | Første fejl i jobloggen, kildeformat, encoding, EPSG, geometritype og ledig diskplads |
+| Data er gamle trods succes | Kildefilens timestamp, featureantal, `Delete/append`, destinationstabel og cache |
+| Jobbet ser fastlåst ud | Kørende proces, Scheduler-lock, timeout, datamængde og serverressourcer |
+
+## Credentials og logs
+
+Kilde-URL'en kan indeholde brugeroplysninger, tokens eller signaturparametre. Opbevar dem efter organisationens secret-procedure og brug helst en serverstyret credentialmekanisme, hvis installationen understøtter det.
+
+Før en log deles:
+
+- fjern hele query-parametre med tokens eller nøgler
+- fjern passwords, cookies og session-id'er
+- fjern persondata og fortrolige attributværdier
+- bevar tidspunkt, HTTP-status, job-id og den sanitiserede fejltekst
+
+Rotér credentials, hvis de ved en fejl er skrevet til et screenshot, en ticket eller en delt log.
+
+## Retry uden dobbeltkørsel
+
+Kilden dokumenterer ikke automatisk retry med backoff. En fejlet planlagt kørsel bliver ikke sikker, blot fordi næste cron-tidspunkt kommer.
+
+1. Gør jobbet inaktivt, hvis fejlen kan gentage sig destruktivt.
+2. Kontrollér om en tidligere proces stadig kører.
+3. Fastslå om destinationen er urørt, delvist opdateret eller fuldt erstattet.
+4. Ret én identificeret årsag.
+5. Tag nødvendig backup eller gendan destinationen.
+6. Kør én manuel test, og følg log og proces til afslutning.
+7. Aktivér først planen efter faglig validering.
+
+Klik ikke gentagne gange på `Run`. Den manuelle handling starter ifølge serverkoden asynkront, og UI'et er ikke en pålidelig køindikator for hurtige gentagelser.
+
+## Faktapakke til eskalation
+
+```text
+Tidspunkt og tidszone:
+GC2-version og miljø:
+Database (sanitiseret):
+Job-id og aktiv/inaktiv:
+Cronudtryk:
+Manuel eller planlagt start:
+Seneste status og timestamp:
+Forventet og faktisk featureantal:
+Normal og faktisk køretid:
+Første sanitiserede logfejl:
+HTTP-status uden URL-secrets:
+Kører processen stadig? ja/nej/ukendt
+Destination urørt/delvis/erstattet/ukendt:
+Seneste ændring i job eller kilde:
+```
+
+Eskalér med faktapakken, når løsningen kræver ændring af Scheduler-processen, `gc2scheduler`-konfigurationen, systemdatabasen, netværk, certifikater, storage, locks eller serverlogs. Se [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning) for den generelle grænse mellem GC2-administration og serverdrift.
+
+:::caution[Ret ikke driften gennem jobfelter]
+En manglende serverproces, fuld disk eller netværksfejl løses ikke ved at ændre cron, EPSG eller `Delete/append`. Stop og eskalér, når fejlen ligger uden for jobdefinitionen.
+:::

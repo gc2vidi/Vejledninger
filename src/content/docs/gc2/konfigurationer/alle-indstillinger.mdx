@@ -1,0 +1,484 @@
+---
+title: Alle indstillinger i en Vidi-konfiguration
+description: Komplet opslagsværk med standardværdier, eksempler og kendte samspil
+---
+
+Denne side følger allow-listen i `vidi/browser/modules/init.js` i det medfølgende Vidi-repository. Når Vidi henter JSON, kopieres kun top-level-navne fra denne liste. En installation kan være en anden version eller have lokale ændringer.
+
+:::caution[Ukendte indstillinger ignoreres]
+En stavefejl giver ikke nødvendigvis en synlig fejl. Kontrollér navn, datatype og den konkrete installation.
+:::
+
+## Alfabetisk indeks
+
+`activateMainTab` · `activeLayers` · `advancedBaseLayerSwitcher` · `aboutBox` · `autoPanPopup` · `autoUpdate` · `baseLayerGroups` · `baseLayers` · `baselayerDrawer` · `brandName` · `configSwitcher` · `crossMultiSelect` · `crs` · `cssFiles` · `dateFormats` · `doNotCloseLoadScreen` · `dontUseAdvancedBaseLayerSwitcher` · `editorAlwaysActivated` · `emptyInfoCallback` · `enabledExtensions` · `enabledPrints` · `enabledSearch` · `expandFirstInLayerTree` · `extensionConfig` · `featureInfoTableOnMap` · `forceOffCanvasInfo` · `infoCallback` · `infoClickCursorStyle` · `initFunction` · `initZoomCenter` · `layerTreeFilterPlaceholder` · `loadingTimeout` · `loadCheckingInterval` · `maxZoom` · `minZoom` · `mode` · `openLayerTreeGroups` · `popupDraggable` · `removeDisabledLayersFromLegend` · `schemata` · `searchConfig` · `showLayerGroupCheckbox` · `showOffcanvas` · `singleTiled` · `snapshot` · `startUpModal` · `startupModalSupressionTemplates` · `statelessDraw` · `template` · `theme` · `title` · `vectorTable` · `wmsUriReplace`
+
+## Sådan læses posterne
+
+**Type og standard** kommer fra Vidi-kildens `defaults`. **Eksempel** viser JSON, når værdien kan gemmes i GC2. **Samspil** fremhæver typiske afhængigheder og overstyringer.
+
+## Data og opstart
+
+### `schemata`
+
+**Formål:** Indlæser skemaer, enkelte lag eller tags. **Type og standard:** array, `[]`.
+
+```json
+{ "schemata": ["plan", "miljoe.natur", "tag:borgerkort"] }
+```
+
+**Samspil:** GC2-rettigheder gælder stadig. Brug stabile tag- og lagnavne.
+
+### `activeLayers`
+
+**Formål:** Tænder lag efter opstart. **Type og standard:** array, `[]`.
+
+```json
+{ "activeLayers": ["v:plan.lokalplan", "mvt:trafik.vejarbejde"] }
+```
+
+**Samspil:** Laget skal være indlæst og tilgængeligt. Projekt, snapshot eller URL-state kan overstyre.
+
+### `snapshot`
+
+**Formål:** Indlæser en gemt state snapshot. **Type og standard:** string eller `null`, `null`.
+
+```json
+{ "snapshot": "state_snapshot_eksempel" }
+```
+
+**Samspil:** Snapshot kan overstyre skemaer, aktive lag og korttilstand. Test også uden snapshot.
+
+### `initZoomCenter`
+
+**Formål:** Sætter startzoom og centrum. **Type og standard:** slash-opdelt string eller `null`, `null`.
+
+```json
+{ "initZoomCenter": "/12/9.55/56.15" }
+```
+
+**Samspil:** Formatet er `/zoom/x/y`. Det tilsidesætter normal extent-opstart, og koordinaterne skal passe til `crs`.
+
+### `crs`
+
+**Formål:** Vælger kortets koordinatsystem. **Type og standard:** string, `"EPSG:3857"`.
+
+```json
+{ "crs": "EPSG:25832" }
+```
+
+**Samspil:** Den medfølgende kode definerer `EPSG:3857` og `EPSG:25832`. Skriv kolon i EPSG-koden.
+
+### `minZoom` og `maxZoom`
+
+**Formål:** Begrænser kortets zoomområde. **Type og standard:** number eller `null`, `null`.
+
+```json
+{ "minZoom": 6, "maxZoom": 20 }
+```
+
+**Samspil:** Lag og baggrundskort kan have egne grænser.
+
+### `singleTiled`
+
+**Formål:** Standardstrategi for relevante raster/WMS-lag. **Type og standard:** boolean, `true`.
+
+```json
+{ "singleTiled": false }
+```
+
+**Samspil:** Meta og lagtype kan påvirke den faktiske leveringsform. Test performance og feature-info.
+
+### `mode`
+
+**Formål:** Vidi-intern runtime-tilstand. **Type og standard:** number, `0`.
+
+```json
+{ "mode": 0 }
+```
+
+**Samspil:** Brug kun en anden værdi, når den konkrete kode eller installation dokumenterer betydningen.
+
+### `autoUpdate`
+
+**Formål:** Aktiverer Vidi-kernens automatiske opdateringsadfærd. **Type og standard:** boolean, `false`.
+
+```json
+{ "autoUpdate": true }
+```
+
+**Samspil:** Afklar brugeroplevelse, cache og netværksbelastning før aktivering.
+
+## Baggrundskort
+
+### `baseLayers`
+
+**Formål:** Definerer baggrundskort. **Type og standard:** array, `[]`.
+
+```json
+{
+  "baseLayers": [
+    {"id": "osm", "name": "OpenStreetMap"},
+    {"type": "wms", "id": "topo", "name": "Topografisk", "url": "/api/topo", "layers": ["topo"]}
+  ]
+}
+```
+
+**Samspil:** Felter varierer efter kilde. Proxy, licens og API-nøgler hører til serverdrift.
+
+### `baseLayerGroups`
+
+**Formål:** Samler baggrundskort i grupper. **Type og standard:** array, `[]`.
+
+```json
+{ "baseLayerGroups": [{"groupName": "Grundkort", "layers": ["osm", "topo"]}] }
+```
+
+**Samspil:** Id'erne skal findes i `baseLayers`.
+
+### `advancedBaseLayerSwitcher`
+
+**Formål:** Styrer den avancerede baggrundskortvælger. **Type og standard:** object, `{"mode":3,"default":1,"active":false}`.
+
+```json
+{ "advancedBaseLayerSwitcher": {"mode": 3, "default": 1, "active": true} }
+```
+
+**Samspil:** Betydningen af mode/default skal testes mod den konkrete UI.
+
+### `dontUseAdvancedBaseLayerSwitcher`
+
+**Formål:** Deaktiverer den avancerede vælger. **Type og standard:** boolean, `false`.
+
+```json
+{ "dontUseAdvancedBaseLayerSwitcher": true }
+```
+
+**Samspil:** Kan gøre `advancedBaseLayerSwitcher` uden synlig effekt.
+
+### `baselayerDrawer`
+
+**Formål:** Viser baggrundskort gennem drawer-layout. **Type og standard:** boolean, `false`.
+
+```json
+{ "baselayerDrawer": true }
+```
+
+**Samspil:** Test med valgt template, mobil og embed.
+
+### `wmsUriReplace`
+
+**Formål:** Erstatter WMS-adresser efter installationens regler. **Type og standard:** string/object eller `null`, `null`.
+
+```json
+{ "wmsUriReplace": null }
+```
+
+**Samspil:** Formatet er installationsafhængigt. Brug ikke en gættet erstatningsregel i produktion.
+
+## Søgning og udvidelser
+
+### `enabledSearch`
+
+**Formål:** Vælger ét søgemodul. **Type og standard:** string, `"google"`.
+
+```json
+{ "enabledSearch": "danish" }
+```
+
+**Samspil:** Modulet skal være kompileret i Vidi-installationen.
+
+### `searchConfig`
+
+**Formål:** Konfigurerer det valgte søgemodul. **Type og standard:** object, `{}`.
+
+```json
+{
+  "searchConfig": {
+    "komkode": ["851"], "advanced": true, "size": 10,
+    "esrSearchActive": true, "sfeSearchActive": true,
+    "placeholderText": "Søg efter adresse eller matrikel"
+  }
+}
+```
+
+**Samspil:** Google kan bruge `google.apiKey`, men offentligt JSON er ikke en sikker secret-store. Felter er modulspecifikke.
+
+### `enabledExtensions`
+
+**Formål:** Aktiverer allerede kompilerede udvidelser. **Type og standard:** array, `[]`.
+
+```json
+{ "enabledExtensions": ["session", "editor", "coordinates"] }
+```
+
+**Samspil:** Browserkonsollen advarer, hvis en ønsket udvidelse ikke blev kompileret.
+
+### `extensionConfig`
+
+**Formål:** Samler udvidelsers runtime-indstillinger. **Type og standard:** object, `{}`.
+
+```json
+{
+  "extensionConfig": {
+    "coordinates": {"lockUtmZoneTo": 32, "default": "utm"},
+    "streetView": {"mapillary": "https://example.invalid/{y}/{x}", "default": "mapillary"},
+    "editor": {"tooltip": true, "repeatMode": false, "defaultValues": {"status": "kladde"}},
+    "symbols": {"files": [{"file": "symboler.json", "title": "Symboler"}], "stateless": false},
+    "session": {"autoLogin": false, "autoLoginMaxAge": 86400},
+    "embed": {"useAltLayerTree": false}
+  }
+}
+```
+
+**Samspil:** Udvidelser kan have flere versionsafhængige felter. Kildekoden viser også konfiguration for `conflictSearch`, `directions`, `languages` og `offlineMap`; kontrollér deres konkrete modul før brug.
+
+## Identitet, layout og navigation
+
+### `title`, `brandName`, `aboutBox` og `startUpModal`
+
+**Formål:** Titel, brand og informationsindhold. **Standard:** `title` er `"MapCentia Vidi"`; de øvrige er tomme strings.
+
+```json
+{
+  "title": "Plankort",
+  "brandName": "Eksempel Kommune",
+  "aboutBox": "<p>Om kortet</p>",
+  "startUpModal": "<p>Velkommen</p>"
+}
+```
+
+**Samspil:** HTML skal være betroet. Cookie/adfærd kan påvirke om startmodalen vises igen.
+
+### `startupModalSupressionTemplates`
+
+**Formål:** Skjuler startmodalen for bestemte templates. **Type og standard:** array, `[]`.
+
+```json
+{
+  "startupModalSupressionTemplates": [
+    "print.tmpl",
+    {"regularExpression": true, "name": "print_[\\w]+\\.tmpl"}
+  ]
+}
+```
+
+**Samspil:** Navnet er stavet `Supression` i kilden og skal bruges sådan.
+
+### `template`
+
+**Formål:** Vælger overordnet Vidi-layout. **Type og standard:** string, `"default.tmpl"`.
+
+```json
+{ "template": "default.tmpl" }
+```
+
+**Samspil:** Layouttemplates bruger Mustache. Feature-/felttemplates bruger Handlebars.
+
+### `theme`
+
+**Formål:** Vælger tema. **Type og standard:** string, `"light"`.
+
+```json
+{ "theme": "light" }
+```
+
+**Samspil:** Temaer skal findes i installationen og testes med custom CSS.
+
+### `cssFiles`
+
+**Formål:** Indlæser ekstra CSS-filer gennem Vidis CSS-proxy. **Type og standard:** array af filnavne, `[]`.
+
+```json
+{ "cssFiles": ["kommunekort.css"] }
+```
+
+**Samspil:** Vidi henter hvert navn som `/api/css/<database>/<filnavn>`. Filen skal derfor ligge, hvor installationens CSS-controller forventer den; det er ikke en vilkårlig ekstern URL. CSS kan bryde templates og mobilvisning.
+
+### `activateMainTab`
+
+**Formål:** Vælger hovedfane ved start. **Type og standard:** string, `"layer"`.
+
+```json
+{ "activateMainTab": "legend" }
+```
+
+**Samspil:** Fanen skal findes i den valgte template og installation.
+
+### `showOffcanvas` og `forceOffCanvasInfo`
+
+**Formål:** Viser offcanvas og kan tvinge info dertil. **Type og standard:** boolean, begge `false`.
+
+```json
+{ "showOffcanvas": true, "forceOffCanvasInfo": true }
+```
+
+**Samspil:** Test sammen med `featureInfoTableOnMap`, template, mobil og embed.
+
+### `expandFirstInLayerTree`, `openLayerTreeGroups` og `showLayerGroupCheckbox`
+
+**Formål:** Styrer lagtræets starttilstand. **Standard:** `false`, `[]`, `false`.
+
+```json
+{
+  "expandFirstInLayerTree": true,
+  "openLayerTreeGroups": ["Plan"],
+  "showLayerGroupCheckbox": true
+}
+```
+
+**Samspil:** Gruppenavne skal matche GC2. Gemte states kan ændre den synlige tilstand.
+
+### `layerTreeFilterPlaceholder`
+
+**Formål:** Hjælpetekst i lagtræets filter. **Type og standard:** string eller `null`, `null`.
+
+```json
+{ "layerTreeFilterPlaceholder": "Filtrér lag" }
+```
+
+### `removeDisabledLayersFromLegend`
+
+**Formål:** Fjerner slukkede lag fra signaturen. **Type og standard:** boolean, `false`.
+
+```json
+{ "removeDisabledLayersFromLegend": true }
+```
+
+### `configSwitcher`
+
+**Formål:** Konfigurationsskifter, kommenteret som build-time-brug, men stadig allow-listet. **Type og standard:** boolean, `false`.
+
+```json
+{ "configSwitcher": false }
+```
+
+**Samspil:** Betragt den som installationsfunktion; aktiver ikke uden lokal validering.
+
+## Feature-info og popup
+
+### `autoPanPopup`, `crossMultiSelect`, `featureInfoTableOnMap` og `popupDraggable`
+
+**Formål:** Styrer popup-position, valg og feature-info-visning. **Standard:** alle `false`.
+
+```json
+{
+  "autoPanPopup": true,
+  "crossMultiSelect": false,
+  "featureInfoTableOnMap": true,
+  "popupDraggable": true
+}
+```
+
+**Samspil:** Embed og offcanvas kan overstyre eller ændre den praktiske oplevelse.
+
+### `infoClickCursorStyle`
+
+**Formål:** CSS-cursor ved infoforespørgsel. **Type og standard:** string, `"crosshair"`.
+
+```json
+{ "infoClickCursorStyle": "pointer" }
+```
+
+### `dateFormats`
+
+**Formål:** Navngivne datoformater til Handlebars-helperen `formatDate`. **Type og standard:** object, `{}`.
+
+```json
+{ "dateFormats": {"kortDato": "DD-MM-YYYY", "datoTid": "DD-MM-YYYY HH:mm"} }
+```
+
+### `emptyInfoCallback` og `infoCallback`
+
+**Formål:** Developer-callbacks ved tomt eller eksisterende inforesultat. **Type og standard:** function eller `null`, `null`.
+
+```json
+{ "emptyInfoCallback": null, "infoCallback": null }
+```
+
+**Samspil:** Funktioner kan ikke gemmes som funktioner i almindelig JSON. Implementér dem i betroet frontend/buildkode.
+
+## Print og tabeller
+
+### `enabledPrints`
+
+**Formål:** Vælger serverdefinerede printdefinitioner. **Type og standard:** array, `[]`.
+
+```json
+{ "enabledPrints": ["print"] }
+```
+
+**Samspil:** Navnet skal findes under serverens `print.templates`.
+
+### `vectorTable`
+
+**Formål:** Placering og størrelse for vektortabellen. **Type og standard:** object, `{"position":"right","width":"30%","height":"250px"}`.
+
+```json
+{ "vectorTable": {"position": "bottom", "width": "100%", "height": "250px"} }
+```
+
+**Samspil:** Ved `bottom` er højden typisk vigtigst; ved `right` er bredden typisk vigtigst.
+
+## Editor, tegning og indlæsning
+
+### `editorAlwaysActivated`
+
+**Formål:** Holder editoradfærd aktiveret, når editoren findes. **Type og standard:** boolean, `true`.
+
+```json
+{ "editorAlwaysActivated": false }
+```
+
+**Samspil:** Nyere editorvalg ligger normalt under `extensionConfig.editor`.
+
+### `statelessDraw`
+
+**Formål:** Udelader tegnetilstand fra gemt state. **Type og standard:** boolean, `false`.
+
+```json
+{ "statelessDraw": true }
+```
+
+### `doNotCloseLoadScreen`
+
+**Formål:** Holder loadskærmen åben. **Type og standard:** boolean, `false`.
+
+```json
+{ "doNotCloseLoadScreen": true }
+```
+
+**Samspil:** Bruges kun i særlige integrationsflows; kan få løsningen til at se fastlåst ud.
+
+### `loadingTimeout` og `loadCheckingInterval`
+
+**Formål:** Millisekunder for load-timeout og brugerens lang-load-kontrol. **Standard:** `45000` og `15000`.
+
+```json
+{ "loadingTimeout": 60000, "loadCheckingInterval": 20000 }
+```
+
+**Samspil:** Højere værdier løser ikke langsomme services; mål årsagen først.
+
+### `initFunction`
+
+**Formål:** Developer-hook ved initialisering. **Type og standard:** function eller `null`, `null`.
+
+```json
+{ "initFunction": null }
+```
+
+**Samspil:** Kan ikke leveres som funktion i ren JSON. Brug betroet frontend/buildkode.
+
+## Server- og buildindstillinger
+
+Disse er ikke normale top-level-indstillinger i en GC2-gemt Vidi-konfiguration:
+
+- `gc2.host` eller `GC2_HOST`
+- `PORT`
+- `extensions.browser` og `extensions.server`
+- `searchModules`
+- `print.templates`, printpool og print-timeout
+- `configUrl`, `autoLoadingConfig` og `defaultConfig`
+
+De styrer installationen eller valget af konfigurationskilde. Se [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning).

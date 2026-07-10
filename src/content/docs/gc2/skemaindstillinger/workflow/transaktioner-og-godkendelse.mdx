@@ -1,0 +1,88 @@
+---
+title: Transaktioner og godkendelse
+description: Behandl Workflow-køen sikkert fra redigering til endelig publicering
+sidebar:
+  order: 3
+---
+
+import workflowTabImg from '../../resources/workflow-workflow-tab.png';
+
+Den daglige arbejdsgang foregår i hovedfanen `Workflow`. Hver række repræsenterer en operation på en feature og viser den status og historik, som den aktuelle bruger skal forholde sig til.
+
+:::note[Krævet adgang]
+Du skal være logget ind som den subuser, der har den relevante `Author`, `Reviewer` eller `Publisher`-rolle, og have de nødvendige privilegier på laget. Test roller med separate konti.
+:::
+
+## Læs transaktionen før handling
+
+<figure class="centered-figure">
+  <img
+    src={workflowTabImg.src}
+    alt="Workflow-listen i GC2 med operation, status og rollehistorik"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Kontrollér tabel, feature-id, operation og status, før du åbner eller godkender rækken.</figcaption>
+</figure>
+
+De kildevaliderede kolonner er `Operation`, `Table`, `Fid`, `Version id`, `Status`, `Latest edit by`, `Authored by`, `Reviewed by`, `Published by` og `Created`.
+
+## Dagligt flow
+
+1. Tryk `Reload` for at hente den aktuelle kø.
+2. Find den rigtige tabel, operation og feature. Brug `Show all` kun hvis du også skal se emner, du allerede har handlet på.
+3. Vælg rækken og brug `See/edit feature`. GC2 skifter til `Kort`, finder lagets primærnøgle og indlæser featuren til kontrol.
+4. Kontrollér geometri, attributter, version og den faglige ændring. Ret kun data, hvis jeres rolle og procedure tillader det.
+5. Gå tilbage til `Workflow`, genindlæs listen og vælg den samme transaktion.
+6. Brug `Check feature`, når kontrollen er bestået. GC2 opdaterer rollen og status efter den aktuelle brugers tildelte rolle.
+7. Kontrollér at række, status og rollekolonne er opdateret.
+
+`Check feature` er ikke en neutral afkrydsning. Forfatter fører til status 1, reviewer til 2 og publisher til 3. Kilden viser ingen generel `Reject`- eller `Undo`-knap i Workflow-fanen.
+
+## Godkendelsesprincipper
+
+- Kontrollér operationen særskilt: insert, update og delete kan have forskellige faglige konsekvenser.
+- Sammenlign med den aktive version og eventuel historik, ikke kun den viste sluttilstand.
+- Lad en anden person reviewe eller publicere, hvis rolleopdelingen skal være en reel kontrol.
+- Genindlæs efter hver handling; arbejd ikke ud fra en gammel kø.
+- Brug `Show all` til revision, ikke som standardvisning for den aktuelle arbejdsbunke.
+
+## Test og recovery
+
+Før drift skal I gennemføre mindst disse scenarier:
+
+| Scenarie | Forventet kontrol |
+|---|---|
+| Ny feature | Author, Reviewer og Publisher registreres i rækkefølge |
+| Opdatering | Tidligere version afsluttes, og den nye version følger workflowet |
+| Sletning | Operationen er tydelig, og resultatet i Vidi svarer til jeres publiceringsregel |
+| Forkert rolle | Brugeren kan ikke udføre et trin, rollen ikke tillader |
+| Allerede publiceret | Author og Reviewer kan ikke flytte den baglæns gennem `Check feature` |
+| Fejl i data | Teamet følger en aftalt rettelsesprocedure uden manuel ændring af systemfelter |
+
+<MediaPlaceholder
+  title="Workflow-fejl og lokal recovery-procedure"
+  file="gc2-workflow-recovery.png"
+  format="PNG"
+>
+  Optag fra den aktuelle installation en afvist workflowhandling med den fulde fejlbesked samt den lokalt godkendte recovery-procedure. Slør brugernavne og data. Skærmbilledet må først erstatte denne placeholder, når UI og procedure er valideret af databaseansvarlig.
+</MediaPlaceholder>
+
+Der er ingen kildevalideret universel UI-rollback. Ved forkert publicering, fastlåst status eller beskadigede versioner skal du stoppe nye handlinger, gemme feature-id og versions-id og eskalere til den ansvarlige for databasen. Ret ikke `gc2_status`, `gc2_workflow` eller versionsfelter direkte uden en specifik, testet procedure.
+
+## Faktapakke ved fejl
+
+```text
+Tidspunkt og tidszone:
+Database og skema:
+Tabel, Fid og Version id:
+Operation og vist status:
+Aktuel subuser og rolle (ingen password/token):
+Seneste redaktør / authored / reviewed / published:
+Forventet handling og faktisk fejl:
+Virker See/edit feature? ja/nej
+Seneste vellykkede trin:
+```
+
+:::caution[Godkend kun det, du har kontrolleret]
+`Check feature` ændrer workflowstatus og skaber en ny historisk version i serverens godkendelsesflow. Brug ikke knappen til blot at fjerne en række fra din kø.
+:::

@@ -1,0 +1,55 @@
+---
+title: Redigering i kortet
+description: Brug Start edit og Quick draw i GC2 Administration og kend forskellen til Vidi-editoren
+sidebar:
+  order: 8
+---
+
+Denne side beskriver redigering i GC2 Administrations hovedfane `Kort`. Det er et administratorværktøj til datakontrol og vedligeholdelse, ikke den editoroplevelse slutbrugere får i Vidi.
+
+:::note[Krævet adgang]
+Laget skal kunne skrives, og brugeren skal have skriveprivilegium. Til ændring af lagopsætning kræves normalt `All`. Tabellen skal have en brugbar primærnøgle og en konkret understøttet vektorgeometri.
+:::
+
+## Forudsætninger
+
+- Laget er en vektorkilde med geometri af typen punkt, linje eller polygon.
+- Geometrifeltet er registreret korrekt.
+- Tabellen har en primærnøgle, så features kan identificeres ved opdatering og sletning.
+- Brugeren har skriveadgang til laget.
+- Felter, datatyper og eventuelle værdilister er klargjort under `Database`.
+- Ved workflow eller versionering er roller og testforløb allerede afklaret.
+
+Hvis GC2 ser typen som `GEOMETRY` eller `RASTER`, stopper begge knapper og henviser til `Geom type` under `Settings`. Sæt kun typen der, hvis den svarer til de faktiske data.
+
+## Start edit
+
+`Start edit` initialiserer attributformularen og åbner et filterbaseret flow til at indlæse features. Når udvalget er hentet, udvides `Attribute table`, og geometri og attributter kan behandles i kortets redigeringsværktøjer.
+
+Brug denne vej, når du skal finde eller kontrollere eksisterende objekter før ændring.
+
+## Quick draw
+
+`Quick draw` starter WFS-redigering med et tomt udvalg, deaktiverer attributformularen under opstarten og aktiverer værktøjet til at oprette ny geometri. Brug den kun, når du bevidst vil oprette et nyt objekt uden først at indlæse eksisterende features.
+
+Kontrollér geometri og attributter før gemning. Quick draw omgår ikke databasekrav, obligatoriske felter, adgang eller workflow.
+
+## Sikker redigering
+
+1. Vælg og vis det rigtige lag.
+2. Zoom til et lille, kendt område.
+3. Brug `Start edit` til eksisterende features eller `Quick draw` til en ny feature.
+4. Kontrollér objekt-id, geometri og alle ændrede attributter.
+5. Gem og bekræft resultatet ved at genindlæse data.
+6. Kontrollér eventuel versionshistorik eller workflowstatus.
+7. Afslut redigering før `Reload`, lag- eller faneskift.
+
+## Ikke det samme som Vidi-editoren
+
+GC2s `Start edit` og `Quick draw` er implementeret direkte i administrationskortet. Vidi-editoren kræver en Vidi-konfiguration, editerbare lag, formularopsætning og brugerrettigheder. At redigering virker i GC2 beviser derfor ikke, at Vidi-editoren er korrekt konfigureret.
+
+Se [Editerbare lag](/gc2/skemaindstillinger/database/editerbare-lag) for opsætningen og [Editor i Vidi](/vidi/extensions/editor) for slutbrugerens arbejdsgang.
+
+:::caution[Redigér ikke uden et kontrolpunkt]
+Brug et testobjekt og en kendt gendannelsesvej, især ved versionering, workflow eller direkte produktionsdata. `Reload` stopper aktiv redigering og bør ikke bruges som en fortrydelsesfunktion.
+:::

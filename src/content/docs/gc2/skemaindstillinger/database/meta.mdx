@@ -1,0 +1,122 @@
+---
+title: Meta
+description: Styr hvordan et lag indlæses, vises, filtreres og opfører sig i Vidi
+---
+
+import subgroupMetaImg from '../../resources/gc2-layer-meta-subgroup.png';
+import subgroupResultImg from '../../resources/gc2-layer-subgroup-example.png';
+import filterConfigImg from '../../resources/vidi-menu-lagstyring-filter-config.png';
+import filterPredefinedImg from '../../resources/vidi-menu-lagstyring-filter-predefined.png';
+
+:::note[Krævet adgang]
+Du skal kunne ændre lagets metadata. Meta påvirker alle Vidi-løsninger, der bruger laget. Gem og test én gruppe indstillinger ad gangen.
+:::
+
+`Meta` er lagets udvidede adfærdskonfiguration. Formularen bygges dynamisk, så en installation kan have ekstra felter ud over standardfelterne i GC2-kilden.
+
+<MediaPlaceholder
+  title="Meta-dialogens standardgrupper"
+  file="gc2-database-meta-dialog.png"
+  format="PNG"
+>
+  Vis hele Meta-dialogens navigation eller grupper fra den aktuelle installation. Brug et testlag og sørg for, at Layer type, Info pop-up, Tables, Editor, Tile settings, Vector settings, Filters, Mouse over, References og Layer tree kan identificeres.
+</MediaPlaceholder>
+
+## Begynd med disse indstillinger
+
+### Layer type
+
+Vælg leveringsform efter datamængde og brugerbehov. Den konkrete Meta-form viser tilgængelige og valgte typer. Et lag, der skal redigeres eller have klientbaseret interaktion, har andre krav end et rent rasterkort.
+
+Test performance, feature-info, styling og redigering efter ændring af lagtype.
+
+### Layer tree
+
+Her kan du blandt andet vælge undergruppe, åbne lagværktøjer fra start og deaktivere lagets checkbox.
+
+<figure class="centered-figure">
+  <img src={subgroupMetaImg.src} alt="Meta-felt til undergruppe i Vidi-lagtræet" style={{ width: '760px', maxWidth: '100%' }} />
+  <figcaption>Det eksisterende billede viser princippet; brug den aktuelle installation ved næste optagelse.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={subgroupResultImg.src} alt="Undergruppe vist i Vidi-lagtræet" style={{ width: '520px', maxWidth: '100%' }} />
+  <figcaption>Kontrollér resultatet i den Vidi-konfiguration, som brugerne åbner.</figcaption>
+</figure>
+
+### Info pop-up
+
+Standard-Meta omfatter popup-template, elementselector, funktioner ved visning og valg samt accordion-felter. Start med almindelig click info fra feltopsætningen. Brug templates og JavaScript-relaterede funktioner kun, når den simple visning ikke er tilstrækkelig.
+
+### Tables
+
+Styrer blandt andet zoom ved valg og maksimalt zoomniveau for tabelinteraktion. Kontrollér samspillet med Vidi-attributtabellen og `vectorTable` i Vidi-konfigurationen.
+
+### Editor
+
+`vidi_layer_editable` markerer laget som redigerbart i Vidi. Det erstatter ikke `Editable`, skriveprivilegier, authentication eller den installerede `editor`-udvidelse. Se [Editerbare lag](/gc2/skemaindstillinger/database/editerbare-lag).
+
+## Filtre
+
+Meta kan definere almindelig filterkonfiguration, foruddefinerede filtre, standardmatch, låste filtre, HTML-template og krav om aktivt filter.
+
+```json
+[
+  {"field": "type", "operator": "="},
+  {"field": "datoetableret", "operator": ">="}
+]
+```
+
+<figure class="centered-figure">
+  <img src={filterConfigImg.src} alt="Almindeligt lagfilter i Vidi" style={{ width: '520px', maxWidth: '100%' }} />
+  <figcaption>Resultatet af en filterkonfiguration i Vidi.</figcaption>
+</figure>
+
+Et foruddefineret filter kan give brugeren navngivne faglige valg:
+
+```json
+{
+  "Åbne ventiler": "aabningsgrad = 100",
+  "Lukkede ventiler": "aabningsgrad = 0"
+}
+```
+
+<figure class="centered-figure">
+  <img src={filterPredefinedImg.src} alt="Foruddefinerede filtre i Vidi" style={{ width: '520px', maxWidth: '100%' }} />
+  <figcaption>Brug faglige navne, og test udtrykkene mod null-værdier og adgangsfiltre.</figcaption>
+</figure>
+
+:::caution[Filtre er ikke adgangskontrol]
+Et brugerfilter skjuler data i brugeroplevelsen, men erstatter ikke Authentication, privilegier eller en sikker serverforespørgsel.
+:::
+
+## Avancerede Meta-grupper
+
+### Vector settings
+
+Omfatter blandt andet statisk/dynamisk load strategy, maksimalt antal features, clustering, punkt- og stylefunktioner, tabel, genindlæsning, feature-info, zoom, tooltip og highlight-styling. Ændr kun værdier, som løser et målbart performance- eller interaktionsbehov.
+
+### Tile settings
+
+Omfatter brug af tile cache, serviceadresse, valgt style og tiled adfærd. Den detaljerede cacheopsætning ligger under [Tile cache](/gc2/skemaindstillinger/kort/tile-cache).
+
+### Mouse over
+
+Aktivering, template og UTF-grid-cache. Mouse-over kan sende mange forespørgsler og vise for meget information; brug korte templates og test performance.
+
+### References
+
+`referenced_by` beskriver relationer til andre lag. Dokumentér nøglefelter og forventet filteradfærd, og test hvad der sker, når den relaterede feature mangler.
+
+### Konflikt
+
+Standardfelterne omfatter korte/lange beskrivelser, buffer, analyse-SQL og overskrift. De er kun relevante for en konkret opsætning af konfliktsøgning.
+
+## Test efter ændring
+
+1. Genåbn Meta og kontrollér, at værdien er gemt.
+2. Åbn en ren Vidi-URL uden projekt/state.
+3. Kontrollér lagtræ, feature-info, tabel og filtre.
+4. Test performance med en realistisk datamængde.
+5. Test anonym og beskyttet adgang separat.
+6. Notér eventuelle installationsspecifikke Meta-felter i konfigurationens beskrivelse.

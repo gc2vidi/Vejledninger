@@ -1,0 +1,99 @@
+---
+title: Klasser, symboler og labels
+description: Opbyg og test GC2-styling gennem Classes, Class wizard og klassens fem detaljefaner
+sidebar:
+  order: 3
+---
+
+import stylingWizardImg from '../../resources/styling-wizard.png';
+
+GC2s class-baserede styling bestemmer, hvilke features der tegnes, hvordan de symboliseres, og hvilke labels der vises. Arbejd fra klasselisten til detaljerne, ikke omvendt.
+
+:::note[Krævet adgang]
+Du skal kunne ændre lagets egenskaber, normalt med `All`-privilegium eller som databaseejer. Udtryk og styling kan påvirke alle brugere af lagets publicerede korttjeneste.
+:::
+
+## Det faktiske flow
+
+1. Vælg laget i lagtræet og åbn `Classes`.
+2. Opret en startopsætning i `Class wizard`, eller tilføj en klasse manuelt.
+3. Vælg en klasse i listen. Først da aktiveres detaljefanerne.
+4. Redigér `Base`, `Symbol1`, `Symbol2`, `Label1` og `Label2` efter behov.
+5. Tryk `Update` over detaljefanerne.
+6. Kontrollér kort, genereret signatur, tile cache og Vidi.
+
+<figure class="centered-figure">
+  <img
+    src={stylingWizardImg.src}
+    alt="Class wizard til klassificering og styling i GC2"
+    style={{ width: '640px', maxWidth: '100%' }}
+  />
+  <figcaption>Class wizard kan danne et udgangspunkt; kontrollér altid de oprettede klasser bagefter.</figcaption>
+</figure>
+
+<MediaPlaceholder
+  title="Aktuel Class wizard og style-panel"
+  file="gc2-kort-class-wizard.png"
+  format="PNG"
+>
+  Erstat det eksisterende billede med den aktuelle installation. Vis klasseliste, wizardtype og knapper uden faglige produktionsdata. Supplér med `gc2-kort-style-panel.png` og `gc2-kort-label-panel.png` for Base/Symbol og Label-fanerne.
+</MediaPlaceholder>
+
+## Classes og Class wizard
+
+Klasselisten har `Sort id`, `Name` og `Expression`. Rækkefølgen styres af `Sort id`, navnet bruges i den genererede signatur, og udtrykket afgør hvilke features klassen rammer. Et tomt eller forkert udtryk kan give overlap mellem klasser eller få data til at forsvinde.
+
+Wizardens kilde understøtter disse typer:
+
+| Type | Brug den når |
+|---|---|
+| `Single` | Alle relevante features skal have samme grundstil |
+| `Unique` | Et kategorifelt skal give én klasse pr. unik værdi |
+| `Intervals` | Et numerisk felt skal opdeles i intervaller |
+| `Clusters` | Tætte punktdata skal samles visuelt |
+
+Wizard-generering kan erstatte eller gendanne klasser afhængigt af valgene. Brug den derfor først på et testlag eller dokumentér den eksisterende klasseliste.
+
+## Base
+
+`Base` indeholder klassens navn, udtryk og klassens skalaområde. Her fastlægges selve udvælgelsen, før symboler og labels finjusteres.
+
+- Brug entydige klassenavne, der kan forstås i en signaturforklaring.
+- Skriv udtryk mod faktiske feltnavne og værdier, og test null-værdier særskilt.
+- Brug klassens minimums- og maksimumsskaladenominator til at begrænse hele klassen.
+
+Skalabetegnelserne kan virke omvendte: GC2s hjælpetekst beskriver `Min scale denominator` som det største målforhold, hvor klassen tegnes, og `Max scale denominator` som det mindste. Test derfor altid på begge sider af grænseværdien.
+
+## Symbol1 og Symbol2
+
+`Symbol1` er den primære stil. `Symbol2` er et ekstra symbol-lag oven på det første, eksempelvis en ekstra streg, markør eller kontur. Lad `Symbol2` være ubrugt, hvis ét symbol er nok.
+
+De kildeunderstøttede egenskaber omfatter blandt andet farve, outline-farve, symbol, størrelse, linjebredde, vinkel, mønster, line cap, offsets og opacity. Hvilke kombinationer der giver mening, afhænger af geometri og MapServer-symbol.
+
+- Punkt: kontrollér symbol, størrelse, vinkel og outline.
+- Linje: kontrollér farve, bredde, mønster og line cap.
+- Polygon: kontrollér fyldfarve, opacity og en tydelig outline.
+- Brug opacity med måde; gennemsigtige lag kan ændre udseende markant over forskellige baggrundskort.
+
+## Label1 og Label2
+
+Begge labelfaner kan indeholde tekst eller feltvalg, skalaområde, placering, størrelse, tekstfarve, outline, buffer, gentagelsesafstand, vinkel, baggrund og offsets. `Label2` er et ekstra label-lag og bør kun bruges, når to separate tekstelementer er nødvendige.
+
+`Force` kan gennemtvinge labels, som ellers ville blive fjernet på grund af kollision. Det kan løse manglende labels, men også skabe ulæselige overlap. Test først placering, skala, gentagelsesafstand og tekstlængde; brug derefter `Force` restriktivt.
+
+Et labeludtryk er ikke det samme som klassens `Expression`: klasseudtrykket vælger features, mens labeludtrykket styrer labeladfærd for den valgte klasse.
+
+## Testmatrix
+
+1. Kontrollér mindst én feature i hver klasse og én feature, som ikke bør rammes.
+2. Test ved, under og over hver skalaafgrænsning.
+3. Test lyse og mørke baggrundskort.
+4. Se efter huller og dobbeltmatch i klasseudtryk.
+5. Kontrollér labelkollisioner i tætte områder og ved tilekanter.
+6. Åbn [Signaturforklaring](/gc2/skemaindstillinger/kort/signaturforklaring) og kontrollér navn og rækkefølge.
+7. Ryd kun relevant cache efter retningslinjerne i [Tile cache](/gc2/skemaindstillinger/kort/tile-cache).
+8. Test samme udsnit i Vidi og i et repræsentativt print.
+
+:::caution[Gemte styles publiceres bredt]
+En klasseopdatering skriver kortkonfigurationen og kan automatisk ugyldiggøre lagets tile cache. Hav et kendt testudsnit klar, og undgå mange uprøvede ændringer i én gemning.
+:::

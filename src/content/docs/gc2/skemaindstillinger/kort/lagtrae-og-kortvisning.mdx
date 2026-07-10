@@ -1,0 +1,55 @@
+---
+title: Lagtræ og kortvisning
+description: Vælg, vis og kontrollér lag sikkert i GC2s Kort-fane
+sidebar:
+  order: 2
+---
+
+Lagtræet i `Kort` grupperer skemaets kortlag. Et klik vælger laget og indlæser dets indstillinger; afkrydsningsfeltet styrer lagets synlighed i forhåndsvisningen.
+
+:::note[Krævet adgang]
+Du skal have adgang til skemaet og mindst læseadgang til laget. Knapper og indstillinger til redigering kræver højere privilegier.
+:::
+
+## Vælg og vis et lag
+
+1. Udvid den relevante laggruppe.
+2. Klik på lagets navn for at vælge det. GC2 åbner style-panelet til højre.
+3. Markér afkrydsningsfeltet for at vise laget i kortet.
+4. Klik på ikonet for lagets udbredelse, hvis du vil zoome til hele vektorlaget.
+5. Slå andre lag fra, hvis du skal vurdere netop dette lags stil eller labels.
+
+Valg og synlighed er to forskellige handlinger. Et lag kan derfor være valgt uden at være synligt, eller synligt mens et andet lag er valgt.
+
+Ved det valgte lag viser GC2 også et ikon til at skifte mellem almindelig WMS og tile cache. Skift kun visningstype som en kontrolleret test: cachede tiles kan vise en ældre gengivelse end den direkte WMS-visning.
+
+## Kort og attributter
+
+Kortvisningen er en administrativ forhåndsvisning. Brug den til at kontrollere:
+
+- om laget tegnes og har forventet udbredelse
+- om klasser og symboler er synlige ved det aktuelle målforhold
+- om labels overlapper eller forsvinder
+- om direkte WMS og tile cache giver samme faglige resultat
+
+`Attribute table` ligger sammenfoldet under kortet. Panelet bruges af GC2s redigeringsflow, når features indlæses. Det er ikke det samme som `Data`-fanen under hovedfanen `Database`, og det er heller ikke Vidi-brugerens tabelvisning.
+
+## Reload
+
+`Reload` stopper en eventuel aktiv kortredigering og genindlæser laglisten. Brug den efter ændringer, der skal slå igennem i træet, men ikke som erstatning for at trykke `Update` eller en anden gemmeknap i det aktive panel.
+
+## Sikker validering
+
+1. Notér lag, visningstype og målforhold før ændringen.
+2. Ændr én indstilling og gem med panelets egen `Update`-knap.
+3. Vent på GC2s succesbesked.
+4. Brug `Reload`, hvis lagtræ eller metadata skal genindlæses.
+5. Slå laget fra og til, og kontrollér mindst to målforhold.
+6. Sammenlign WMS og tile cache, hvis laget publiceres cachet.
+7. Kontrollér Vidi i et nyt browservindue og til sidst relevante print.
+
+:::caution[Genindlæsning kan afbryde arbejde]
+`Reload` kalder stop for aktiv redigering. Gem eller afslut derfor alle igangværende featureændringer først.
+:::
+
+Hvis laget mangler helt, ikke har en gyldig geometritype eller viser de forkerte felter, skal fejlen som udgangspunkt løses under `Database`, før du fortsætter i `Kort`.

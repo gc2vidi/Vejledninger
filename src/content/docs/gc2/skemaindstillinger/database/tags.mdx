@@ -1,0 +1,52 @@
+---
+title: Tags
+description: Organiser lag på tværs af skemaer og genbrug udvalget i Vidi-konfigurationer
+---
+
+:::note[Krævet adgang]
+Du skal kunne ændre metadata på de valgte lag. Test altid resultatet, hvis tags ændres på flere lag samtidig.
+:::
+
+Tags er maskinlæsbare mærkater, som kan samle lag efter formål i stedet for deres fysiske skema. De er særligt nyttige i Vidi-konfigurationer.
+
+## Eksempel
+
+Lagene:
+
+- `plan.lokalplan`
+- `miljoe.naturbeskyttelse`
+- `trafik.vejarbejde`
+
+kan alle få tagget `borgerkort`. Vidi kan derefter hente dem med:
+
+```json
+{
+  "schemata": ["tag:borgerkort"]
+}
+```
+
+## Arbejdsgang
+
+1. Vælg ét eller flere lag i Database-oversigten.
+2. Åbn `Tags`.
+3. Vælg om nye tags skal erstatte eller tilføjes til eksisterende tags.
+4. Brug korte, stabile navne uden miljø- eller årstal, medmindre dette er en del af formålet.
+5. Gem og genindlæs lagoversigten.
+6. Test en Vidi-konfiguration, som bruger `tag:<navn>`.
+
+<MediaPlaceholder
+  title="Tildel tags til flere lag"
+  file="gc2-database-tags.png"
+  format="PNG"
+>
+  Vis to valgte testlag og Tags-dialogen. Demonstrér tydeligt forskellen mellem at erstatte og tilføje tags med syntetiske navne som borgerkort og intern-drift.
+</MediaPlaceholder>
+
+## Navngivning
+
+- Brug ét begreb pr. tag, fx `borgerkort` eller `intern-drift`.
+- Dokumentér hvem der vedligeholder tagget.
+- Undgå næsten ens varianter som `borger`, `borgerkort` og `borger_kort`.
+- Fjern ikke et tag, før du har fundet alle konfigurationer, der bruger det.
+
+Tags erstatter ikke `Group` eller Meta-undergrupper. Tags vælger lag; `Group` og lagtræ-Meta bestemmer, hvordan de organiseres for brugeren.

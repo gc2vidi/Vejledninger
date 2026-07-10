@@ -1,0 +1,27 @@
+---
+interface Props {
+  title: string;
+  file: string;
+  format: 'PNG' | 'SVG' | 'GIF';
+}
+
+const { title, file, format } = Astro.props as Props;
+---
+
+<aside class="media-placeholder" aria-label={`Manglende medie: ${title}`}>
+  <div class="media-placeholder__heading">Medie mangler: {title}</div>
+  <dl>
+    <div>
+      <dt>Fil</dt>
+      <dd><code>{file}</code></dd>
+    </div>
+    <div>
+      <dt>Format</dt>
+      <dd>{format}</dd>
+    </div>
+  </dl>
+  <div class="media-placeholder__instructions">
+    <strong>Optagelse eller indhold</strong>
+    <slot />
+  </div>
+</aside>

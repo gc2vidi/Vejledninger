@@ -1,0 +1,160 @@
+---
+title: Admin-drift og fejlsøgning
+description: Forstå de serverafhængigheder som en GC2-administrator skal kunne genkende og beskrive
+sidebar:
+  order: 1
+---
+
+Denne sektion er ikke en installationsvejledning. Den forklarer den del af driften, som en GC2-administrator skal kende for at kunne skelne mellem:
+
+- en fejl i GC2-data eller rettigheder
+- en fejl i kørselskonfigurationen
+- en Vidi-funktion, der ikke er installeret
+- en server-, proxy- eller ekstern tjenestefejl
+
+Målet er, at du kan gennemføre de første kontroller og give serveroperatøren eller et AI-værktøj præcise oplysninger.
+
+:::note[Krævet adgang]
+De første kontroller kan udføres med adgang til den fejlende løsning. Serverlogs, processer, containere, miljøvariabler og buildkonfiguration kræver normalt serveroperatør.
+:::
+
+## Systemerne og deres ansvar
+
+| Del | Typisk ansvar |
+|---|---|
+| GC2 | Databaser, lag, metadata, brugere, privilegier og publicerede konfigurationer |
+| Vidi-server | Henter GC2-konfigurationer, stiller frontend til rådighed, proxyer kald og genererer print |
+| Vidi-browser | Fortolker runtime-konfigurationen og viser kortets brugerflade |
+| Eksterne tjenester | Baggrundskort, søgning, gadefoto, ruter og andre integrationer |
+
+<MediaPlaceholder
+  title="Driftsgrænsen mellem GC2 og Vidi"
+  file="gc2-admin-drift-arkitektur.svg"
+  format="SVG"
+>
+  Tegn GC2, Vidi-server, browser og eksterne tjenester som fire tydelige bokse. Vis konfigurationsflow, dataforespørgsler, proxykald og print som navngivne pile. Diagrammet skal kunne forstås uden resten af siden.
+</MediaPlaceholder>
+
+## Installationens `config.js`
+
+Vidi-serverens `config.js` indeholder indstillinger, som ikke kan ændres fra en GC2-gemt runtime-konfiguration. De vigtigste for en GC2-administrator er:
+
+- `gc2.host`: hvilken GC2-server Vidi bruger
+- `extensions.browser`: udvidelser kompileret til browseren
+- `extensions.server`: installerede serverdele til udvidelser
+- `searchModules`: tilgængelige søgemoduler
+- `print.templates`: installerede printdefinitioner og papirformater
+- `configUrl`: ekstern kilde til filbaserede runtime-konfigurationer
+- `autoLoadingConfig` og `defaultConfig`: automatisk valg og fallback
+
+Serveroperatøren kan også sætte GC2-adressen med miljøvariablen `GC2_HOST` og Vidi-porten med `PORT`.
+
+:::note[Hvorfor er dette relevant?]
+Hvis `enabledExtensions` indeholder `symbols`, men `symbols` ikke findes i `extensions.browser`, er JSON-dokumentet korrekt uden at funktionen kan starte. Det kræver en ændring og normalt en genstart eller rebuild af Vidi-installationen.
+:::
+
+## En enkel fejlmodel
+
+### Konfigurationen kan ikke hentes
+
+**Symptomer:** `403`, `404`, tom standardløsning eller “Could not get the requested config JSON file”.
+
+Kontroller:
+
+1. rå `.json`-adresse
+2. publiceringsstatus
+3. database og konfigurations-id
+4. om Vidi peger på den rigtige GC2-host
+5. Vidi-serverens proxylog
+
+### Konfigurationen hentes, men en nøgle har ingen effekt
+
+**Symptomer:** Resten af konfigurationen virker, men én indstilling gør ikke.
+
+Kontroller:
+
+1. nøglens præcise navn og datatype
+2. om nøglen findes i [Alle indstillinger i en Vidi-konfiguration](/gc2/konfigurationer/alle-indstillinger)
+3. om projekt, state eller embed overstyrer værdien
+4. browserkonsollen
+5. Vidi-versionen
+
+### En udvidelse mangler
+
+**Symptomer:** Id'et står i `enabledExtensions`, men der kommer ingen knap eller funktion.
+
+Kontroller:
+
+1. “not initially compiled” i browserkonsollen
+2. `extensions.browser`
+3. eventuel `extensions.server`
+4. `extensionConfig`
+5. GC2-lag og privilegier
+
+### Eksternt indhold fejler
+
+**Symptomer:** Baggrundskort, søgning, gadefoto eller ruter giver netværksfejl.
+
+Kontroller:
+
+1. HTTP-status og fejladresse i browserens Network-panel
+2. proxyens serverlog
+3. nøgle, abonnement, referer- eller IP-begrænsning
+4. CORS, TLS-certifikat og DNS
+5. om tjenesten kan nås fra Vidi-serveren og ikke kun din egen pc
+
+### Printdialogen virker, men PDF fejler
+
+Kontroller Vidi-serverens printlog, headless browser, ressourceforbrug, timeout og adgang til alle eksterne ressourcer. Se [Søgning, funktioner og udseende](/gc2/konfigurationer/soegning-funktioner-og-udseende).
+
+## Faktapakke til support
+
+Indsaml dette, før du beder om hjælp:
+
+```text
+Tidspunkt og tidszone:
+Miljø og Vidi-URL:
+GC2-database:
+Konfigurations-id:
+Brugerrolle (ikke password/token):
+Forventet resultat:
+Faktisk resultat:
+Kan rå .json hentes anonymt? ja/nej
+HTTP-status og fejladresse:
+Browserkonsollens fejl:
+Seneste ændring:
+Virker en kendt tidligere konfiguration? ja/nej
+```
+
+Fjern cookies, tokens, passwords, API-nøgler og personoplysninger, før pakken deles.
+
+## Brug dokumentationen med et AI-værktøj
+
+En agent kan hjælpe bedre, når problemet er afgrænset og kildehenvisningerne er med. Brug eksempelvis:
+
+```text
+Hjælp mig med at diagnosticere denne GC2/Vidi-fejl.
+Skeln mellem GC2-data/rettigheder, runtime-konfiguration,
+Vidi build/server og ekstern tjeneste. Foreslå først read-only kontroller.
+Gæt ikke på passwords eller hemmelige værdier.
+
+Faktapakke:
+<indsæt den udfyldte faktapakke>
+
+Relevant dokumentation:
+<indsæt links til Konfigurationer, Alle indstillinger og denne side>
+```
+
+Giv helst agenten adgang til den samme version af `geocloud2`- og `vidi`-repositoryet, som dokumentationen bygger på. Bed den citere fil og linje for tekniske påstande.
+
+## Hvornår skal du eskalere?
+
+Kontakt serveroperatøren, når løsningen kræver ændring af:
+
+- miljøvariabler eller serverens `config.js`
+- kompilerede udvidelser eller søgemoduler
+- proxy-, certifikat-, DNS- eller firewallopsætning
+- printservice, processer, containere eller serverressourcer
+- logs, som GC2-administratoren ikke har adgang til
+
+Send faktapakken og beskriv, hvilke kontroller du allerede har gennemført. Det reducerer både svartid og risikoen for, at problemet undersøges i det forkerte system.

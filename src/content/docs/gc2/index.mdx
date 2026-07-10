@@ -11,71 +11,52 @@ import gc2VidiArkitekturImg from './resources/gc2-vidi-architecture.png';
 
 ## Hvad er GC2?
 
-GeoCloud2, forkortet GC2, er administrationsplatformen bag Vidi. Det er her en administrator opretter og organiserer lag, styrer metadata og rettigheder, samt sætter de konfigurationer som bestemmer hvordan kortet opfører sig i Vidi.
+GeoCloud2, forkortet GC2, er administrationsplatformen bag Vidi. Her organiserer administratoren data, lag, metadata, adgang, tjenester og de konfigurationer, som bestemmer Vidi-løsningens indhold og opstart.
 
-GC2 samler en række geospatiale komponenter bag et webinterface, så du kan arbejde med blandt andet PostGIS, MapServer, QGIS Server, MapCache og søgning uden at konfigurere alting direkte i underliggende services.
-
-I praksis er samspillet ofte:
+I samspillet:
 
 - PostgreSQL gemmer data og struktur
-- GC2 styrer administration, metadata, rettigheder og tjenester
-- Vidi viser data og værktøjer til slutbrugeren
-- QGIS, GC2 og Vidi kan alle bruges til redigering, hvis løsningen er sat op til det
+- GC2 administrerer lag, metadata, rettigheder og tjenester
+- Vidi viser kort og værktøjer til slutbrugeren
+- QGIS og andre klienter kan bruge de samme data gennem database- eller serviceforbindelser
 
 <figure class="centered-figure">
-  <img
-    src={gc2VidiArkitekturImg.src}
-    alt="Sammenhængen mellem Vidi, GC2, databasen og GIS-værktøjer"
-    style={{ width: '820px', maxWidth: '100%' }}
-  />
-  <figcaption>Sammenhængen mellem Vidi, GC2, databasen og GIS-værktøjer.</figcaption>
+  <img src={gc2VidiArkitekturImg.src} alt="Sammenhængen mellem Vidi, GC2, database og GIS-værktøjer" style={{ width: '820px', maxWidth: '100%' }} />
+  <figcaption>Det eksisterende diagram viser hoveddelene, men bør erstattes med den mere komplette SVG beskrevet nedenfor.</figcaption>
 </figure>
 
-## Hvem er denne dokumentation til?
+<MediaPlaceholder title="GC2/Vidi-arkitektur" file="gc2-vidi-architecture.svg" format="SVG">
+  Vis database, GC2-dashboard, skemaindstillinger, Vidi-server, Vidi-browser, QGIS og eksterne tjenester. Tegn data-, service- og konfigurationsflow som navngivne pile.
+</MediaPlaceholder>
 
-Denne del af dokumentationen er skrevet primært til administratorer og fagpersoner, der:
+## Hvem er dokumentationen til?
 
-- opretter og vedligeholder lag i GC2
-- styrer metadata, filtre og styling
-- aktiverer udvidelser og konfigurationer til Vidi
-- tildeler brugere, roller og privilegier
-- arbejder med print, templates og integrationer
+GC2-delen er skrevet til administratorer og GIS-fagpersoner, som:
+
+- opretter brugere og adgangsprofiler
+- opretter, importerer og organiserer lag
+- konfigurerer felter, Meta, styling og labels
+- gør lag redigerbare
+- publicerer Vidi-konfigurationer
+- arbejder med tjenester, QGIS, Workflow eller Scheduler
 
 :::tip[Afgrænsning]
-Udviklerdokumentation tager vi separat. Fokus her er den daglige administration af data, lag og konfigurationer.
+Vi forventer, at GC2 og Vidi allerede er installeret. Begrænset server- og buildkontekst findes under [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning), når den er nødvendig for administrationen.
 :::
 
-## GC2 og Vidi
+## Anbefalet læringssti
 
-Vidi er den del brugeren ser i browseren. GC2 er stedet hvor du som administrator bestemmer:
+1. [Log ind og forstå dashboardet](/gc2/log-ind-og-dashboard).
+2. [Opret brugere og adgangsprofiler](/gc2/brugere-og-adgang).
+3. Åbn [Skemaindstillinger](/gc2/skemaindstillinger).
+4. Begynd i [Database](/gc2/skemaindstillinger/database) med lag, felter, adgang og Meta.
+5. Fortsæt i [Kort](/gc2/skemaindstillinger/kort) med styling og labels.
+6. Brug kun [Workflow](/gc2/skemaindstillinger/workflow) og [Scheduler](/gc2/skemaindstillinger/scheduler), når arbejdsprocessen kræver det.
+7. Saml de færdige lag under [Konfigurationer](/gc2/konfigurationer).
 
-- hvilke lag der vises
-- hvilke felter der kan søges i og filtreres på
-- hvordan lag styles og labels vises
-- hvilke udvidelser der er aktive
-- hvilke brugere der må læse eller redigere data
-- hvilke printskabeloner, baggrundskort og konfigurationer der stilles til rådighed
+## Direkte tekniske emner
 
-Det betyder at mange funktioner i Vidi faktisk bliver styret fra GC2. Derfor henviser flere Vidi-artikler til GC2-dokumentationen.
+- [QGIS og eksterne datakilder](/gc2/qgis-og-eksterne-datakilder)
+- [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning)
 
-## Start her
-
-Hvis du er ny i GC2, anbefaler vi denne rækkefølge:
-
-1. [Kom i gang](/gc2/kom-i-gang/oversigt) for at forstå dashboard, skemaer og konfigurationer
-2. [Kørselskonfiguration](/gc2/koerselskonfiguration/oversigt) for at styre lag, søgning, baggrundskort og opstart
-3. [Lag og metadata](/gc2/lag/indstillinger) for at konfigurere det indhold som brugerne møder i Vidi
-4. [Brugere og rettigheder](/gc2/brugere/roller-og-privilegier) for at styre adgang
-5. [Tjenester og API](/gc2/integrationer/tjenester-og-api) hvis data også skal bruges i QGIS eller integrationer
-
-## Sektioner i GC2-dokumentationen
-
-- [Kom i gang](/gc2/kom-i-gang/oversigt) - login, dashboard, skemaer og konfigurationer
-- [Konfiguration](/gc2/koerselskonfiguration/oversigt) - konfigurationer, udvidelser, print og templates
-- [Lag og metadata](/gc2/lag/opret-importer-organiser) - lagoprettelse, metadata, filtre, styling og labels
-- [Redigering](/gc2/redigering/editerbare-lag-og-snap) - editerbare lag, formularer og snap
-- [Brugere og rettigheder](/gc2/brugere/roller-og-privilegier) - subusers, roller og privilegier
-- [Integrationer](/gc2/integrationer/qgis-og-eksterne-kilder) - QGIS, tjenester, API og eksterne datakilder
-- [Avanceret](/gc2/avanceret/versionering-og-workflow) - versionering og workflow
-
-Hvis du gerne vil hjælpe med at forbedre dokumentationen, kan du læse [bidragsguiden →](/bidrag).
+Hvis du vil bidrage, kan du læse [bidragsguiden](/bidrag).

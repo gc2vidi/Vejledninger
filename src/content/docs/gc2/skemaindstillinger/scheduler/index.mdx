@@ -1,0 +1,75 @@
+---
+title: Scheduler
+description: Forstå Scheduler som en installationsafhængig tjeneste til tidsstyrede datajobs
+sidebar:
+  order: 1
+---
+
+GC2 Scheduler bruges til at gemme og køre tidsstyrede datajobs. Et job beskriver både **hvornår** en kørsel skal starte, **hvilken kilde** der skal hentes fra, og **hvor i den aktuelle database** resultatet skal placeres.
+
+:::note[Krævet adgang]
+Scheduler skal være aktiveret for databasen i serverens `gc2scheduler`-konfiguration. Oprettelse, ændring, sletning og manuel kørsel er reserveret til databaseejeren og kan ikke udføres som almindelig subuser.
+:::
+
+## Indlejret, men separat
+
+Hovedfanen `Scheduler` indlejrer den separate side `/scheduler/index2.html` i en iframe. Jobdata ligger i systemdatabasen `gc2scheduler`, og kørsler udføres af serverens Scheduler-scripts og processer. Fanen kan derfor godt ligne en del af GC2 Administration, selv om dens UI, lagring og runtime har separate afhængigheder.
+
+Det har tre konsekvenser:
+
+- Fanen skjules, hvis Scheduler ikke er aktiveret for databasen eller globalt med `*`.
+- En synlig fane beviser ikke, at den tidsstyrede serverproces faktisk kører.
+- Knapper og felter kan variere mellem installationer og versioner, fordi det indlejrede Scheduler-UI kan være udskiftet eller tilpasset.
+
+## Installationsafhængigheder
+
+Serveroperatøren skal som minimum have:
+
+- aktiveret databasen i `gc2scheduler`-konfigurationen
+- oprettet og migreret systemdatabasen `gc2scheduler`
+- installeret PHP-afhængigheden til cron-udtryk og Scheduler-kørsel
+- etableret en tilbagevendende serverproces, der starter Scheduler-scriptet
+- givet processen adgang til kildeadresser, database, midlertidige mapper og logplacering
+- etableret oprydning og overvågning for midlertidige tabeller, lock-filer og logs
+
+Dette er en driftsafhængighed, ikke noget en GC2-administrator kan reparere alene i jobformularen.
+
+## Hvornår skal Scheduler bruges?
+
+Brug Scheduler til gentagne importer eller opdateringer, hvor en kendt ekstern datakilde skal indlæses efter en fast tidsplan. Eksempler kan være en natlig opdatering eller en kontrolleret ugentlig synkronisering.
+
+Brug ikke Scheduler som standardløsning, når:
+
+- data kan læses stabilt direkte fra en tjeneste uden lokal kopi
+- opgaven kun skal køres én gang
+- kildeformat, schema eller credentials ændres ofte uden en ansvarlig ejer
+- der kræves en kompleks afhængighedskæde, transaktionel orkestrering eller automatisk rollback
+- konsekvensen af `Delete/append`, pre-SQL eller post-SQL ikke er fuldt forstået
+
+## Et planlagt job
+
+Den kildebaserede standardformular indeholder fem cron-felter for minut, time, dag i måned, måned og ugedag samt felter som tabelnavn, schema, URL, EPSG, geometritype, encoding, ekstra felter og aktive/destruktive valgmuligheder. Serveren validerer det samlede cron-udtryk ved oprettelse og opdatering.
+
+En aktiv jobdefinition køres kun, hvis den pågældende database fortsat er tilladt i serverkonfigurationen. Den medfølgende jobmodel dokumenterer ikke en sikker blokering af parallelle manuelle eller planlagte kørsler. Kontrollér derfor altid processtatus, før et job startes igen.
+
+<MediaPlaceholder
+  title="Scheduler på den aktuelle installation"
+  file="gc2-scheduler-jobs.png"
+  format="PNG"
+>
+  Brug den aktuelle installation som baseline: optag hele den indlejrede Scheduler-fane med version/dato noteret uden for billedet. Medtag jobliste, kolonneoverskrifter og værktøjslinje, men slør URL'er, credentials, databasenavne og faglige tabelnavne. Validér at fanen stadig indlæser `/scheduler/index2.html` før publicering.
+</MediaPlaceholder>
+
+## Sikker ibrugtagning
+
+1. Få serveroperatøren til at bekræfte installation og runtime.
+2. Opret et inaktivt testjob mod en ufarlig destination.
+3. Kør det manuelt én gang og kontrollér data, status og log.
+4. Aktivér først tidsplanen efter en vellykket test.
+5. Overvåg de første planlagte kørsler og dokumentér normal varighed og datamængde.
+
+Fortsæt med [Opret og administrer jobs](/gc2/skemaindstillinger/scheduler/opret-og-administrer-jobs) og [Overvågning og fejlsøgning](/gc2/skemaindstillinger/scheduler/overvaagning-og-fejlsoegning).
+
+:::caution[Et gemt job er ikke en backup]
+Scheduler kan overskrive eller udskifte destinationsdata. Sørg for backup, datavalidering og en aftalt gendannelsesvej uafhængigt af jobdefinitionen.
+:::

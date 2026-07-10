@@ -1,0 +1,58 @@
+---
+title: Lagoversigt og grundindstillinger
+description: Konfigurer identitet, organisering, publicering og adgang i Database-gridet
+---
+
+:::note[Krævet adgang]
+Ændringer kræver adgang til at administrere det valgte lag. `Name` og `Type` er ikke direkte redigerbare i gridet; brug den særskilte omdøbningsfunktion, hvis relationens navn skal ændres.
+:::
+
+## Indstillinger i den viste rækkefølge
+
+| Felt | Betydning og eksempel |
+|---|---|
+| `Relation` | Viser om kilden er tabel, view, materialized view eller foreign table. Bruges til at forstå begrænsninger, ikke som præsentationstekst. |
+| `Type` | Lagets registrerede geometri- eller relationstype. Kontrollér den mod data, især før redigering. |
+| `Name` | Teknisk relationsnavn, fx `lokalplan`. Brug små bogstaver og stabile navne uden brugerrettet pynt. |
+| `Title` | Brugertitel, fx `Lokalplaner`. Dette er normalt den tekst, brugeren skal møde. |
+| `Description` | Kort faglig beskrivelse af indhold, aktualitet og anvendelse. |
+| `Note` | Intern eller supplerende note; brug den ikke som erstatning for dokumenteret ejerskab. |
+| `Group` | Hovedgruppe i Vidi-lagtræet, fx `Plan`. Samme stavning samler lagene. |
+| `Extra` | Installationsspecifikt felt, som kun vises nogle steder. Dokumentér lokal betydning, før det bruges. |
+| `OWS` | Styrer publicering gennem OGC-webservices. Kontrollér resultatet med capabilities. |
+| `Sort id` | Numerisk rækkefølge inden for gruppen. Brug mellemrum mellem værdier, så nye lag kan indsættes senere. |
+| `Authentication` | `None`, `Write` eller `Read/write`. Bestemmer om læsning og/eller skrivning kræver godkendelse. |
+| `Editable` | Markerer laget som kandidat til redigering; privilegier, Meta og Vidi-udvidelse skal også være korrekte. |
+| `Skip conflict` | Installationsspecifik konfliktsøgningsindstilling. Brug den kun, når den lokale konfliktmodel er dokumenteret. |
+
+<MediaPlaceholder
+  title="Grundindstillinger i Database-gridet"
+  file="gc2-database-layer-grid.png"
+  format="PNG"
+>
+  Vis kolonnerne fra Relation til Editable og eventuelle installationsfelter. Brug to testlag med tydelige Title, Group, Sort id og forskellige Authentication-værdier.
+</MediaPlaceholder>
+
+## Et praktisk eksempel
+
+| Indstilling | Værdi |
+|---|---|
+| Name | `lokalplan` |
+| Title | `Lokalplaner` |
+| Description | `Gældende og vedtagne lokalplaner` |
+| Group | `Plan` |
+| Sort id | `20` |
+| Authentication | `None` for offentligt lag eller `Read/write` for beskyttet lag |
+| Editable | Kun `true`, hvis en kontrolleret redigeringsproces er etableret |
+
+## Authentication er ikke det samme som privilegier
+
+Authentication fastlægger, om tjenesten kræver en godkendt bruger. Privilegier fastlægger, hvad den konkrete subuser må på laget. Læs [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication), før et beskyttet lag publiceres.
+
+## Kontrollér ændringen
+
+1. Gem én logisk ændring ad gangen.
+2. Genindlæs lagoversigten og kontrollér den gemte værdi.
+3. Kontrollér gruppe og rækkefølge i Vidi.
+4. Test både anonymt og med en realistisk brugerrolle.
+5. Kontrollér capabilities, hvis `OWS` eller adgang er ændret.

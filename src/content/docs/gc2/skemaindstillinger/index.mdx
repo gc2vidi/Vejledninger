@@ -1,0 +1,68 @@
+---
+title: Skemaindstillinger
+description: Få overblik over administrationen af et skema i GC2 og den anbefalede arbejdsrækkefølge
+---
+
+Skemaindstillinger er GC2s administrationsmodul for et valgt skema. Her arbejder du med lag, felter, adgang, styling, workflow, planlagte jobs og logning.
+
+:::note[Krævet adgang]
+Du skal være logget ind og have adgang til skemaet. Hvilke faner og handlinger du kan se, afhænger af din brugerrolle og installationens opsætning.
+:::
+
+## Åbn skemaindstillinger
+
+Fra dashboardet udvider du et skema og åbner dets indstillinger. Læs [Log ind og dashboard](/gc2/log-ind-og-dashboard), hvis du ikke er kommet hertil endnu.
+
+<MediaPlaceholder
+  title="Overblik over skemaindstillinger"
+  file="gc2-skemaindstillinger-overview.png"
+  format="PNG"
+>
+  Vis hele administrationsvinduet fra den aktuelle installation med fanerne Kort, Database, Workflow, Scheduler og Log. Brug et ufarligt testskema, og markér hovedfanerne uden at skjule værktøjslinjerne.
+</MediaPlaceholder>
+
+## Fanerne
+
+| Fane | Hvad du bruger den til |
+|---|---|
+| `Kort` | Kontrollér lag i et kort, opbyg klasser, symboler og labels, administrér cache og redigér data |
+| `Database` | Opret og organiser lag, ret grundindstillinger, felter, privilegier, tjenester, tags og Meta |
+| `Workflow` | Versionsbaseret behandling, kontrol og godkendelse af ændringer |
+| `Scheduler` | Tidsstyrede importer og andre datajobs, når funktionen er installeret |
+| `Log` | Undersøg hændelser og fejl i sammenhæng med den opgave, du arbejder på |
+
+`Workflow` og `Scheduler` kan være skjult, hvis de ikke er aktiveret på installationen.
+
+## Hvorfor begynder vejledningen i Database?
+
+GC2 åbner normalt fanen `Kort` først. Denne dokumentation begynder alligevel i `Database`, fordi et lag bør have korrekt titel, gruppe, adgang, felter og Meta, før du bruger tid på styling.
+
+Den anbefalede rækkefølge er:
+
+1. [Opret eller importer laget](/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag).
+2. Udfyld [grundindstillingerne](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger).
+3. Gennemgå [tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter).
+4. Indstil [privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
+5. Tilføj [tags](/gc2/skemaindstillinger/database/tags) og konfigurer [Meta](/gc2/skemaindstillinger/database/meta).
+6. Gå til [Kort](/gc2/skemaindstillinger/kort) og opbyg styling og labels.
+7. Brug kun [Workflow](/gc2/skemaindstillinger/workflow) eller [Scheduler](/gc2/skemaindstillinger/scheduler), når arbejdsprocessen kræver det.
+8. Saml de færdige lag i en [Vidi-konfiguration](/gc2/konfigurationer).
+
+<MediaPlaceholder
+  title="Anbefalet arbejdsgang fra lag til Vidi"
+  file="gc2-skemaindstillinger-workflow.svg"
+  format="SVG"
+>
+  Tegn et vandret eller lodret flow: Opret lag → Database → Felter og adgang → Meta → Kort og styling → Vidi-konfiguration → Test. Vis Workflow og Scheduler som valgfrie sidegrene.
+</MediaPlaceholder>
+
+## Brug Log i den relevante sammenhæng
+
+`Log` får ikke sit eget dokumentationsforløb. Brug fanen sammen med den konkrete opgave:
+
+- efter import eller ændring af tabelstruktur
+- når kortfiler eller tile cache ikke opdateres
+- ved workflowtransaktioner
+- ved fejlede Scheduler-jobs
+
+Se [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning), når problemet går på tværs af GC2, Vidi og serverdrift.

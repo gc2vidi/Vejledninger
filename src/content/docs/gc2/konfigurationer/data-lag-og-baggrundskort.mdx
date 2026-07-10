@@ -1,0 +1,113 @@
+---
+title: Data, lag og baggrundskort
+description: Vælg hvilke GC2-lag Vidi indlæser, hvad der er aktivt, og hvilke baggrundskort brugeren kan vælge
+---
+
+:::note[Krævet adgang]
+Du skal kunne ændre Vidi-konfigurationen. Lagets faktiske tilgængelighed bestemmes fortsat af GC2s authentication og brugerprivilegier.
+:::
+
+## Vælg indhold med `schemata`
+
+```json
+{
+  "schemata": [
+    "plan",
+    "miljoe.naturbeskyttelse",
+    "tag:borgerkort"
+  ]
+}
+```
+
+Et element kan være et helt skema, et bestemt `skema.lag` eller et tag. Tags forklares under [Tags](/gc2/skemaindstillinger/database/tags).
+
+## Tænd lag med `activeLayers`
+
+```json
+{
+  "activeLayers": [
+    "v:plan.lokalplan",
+    "mvt:trafik.vejarbejde",
+    "w:ekstern.ortofoto"
+  ]
+}
+```
+
+Brug det relevante typepræfiks. Et projekt, snapshot eller URL-state kan overstyre aktive lag, så test først en ren konfigurations-URL.
+
+## Startudsnit og CRS
+
+```json
+{
+  "initZoomCenter": "/12/9.55/56.15",
+  "crs": "EPSG:25832",
+  "minZoom": 6,
+  "maxZoom": 20
+}
+```
+
+`initZoomCenter` er en slash-opdelt string i formen `/zoom/x/y`. Den påvirker den normale extent-opstart. Koordinaterne skal passe til kortets CRS. Den medfølgende Vidi-kode understøtter `EPSG:3857` og `EPSG:25832` som kort-CRS.
+
+## Baggrundskort
+
+```json
+{
+  "baseLayers": [
+    {"id": "osm", "name": "OpenStreetMap"},
+    {
+      "type": "wms",
+      "url": "/api/dataforsyningen/topo_skaermkort_DAF",
+      "layers": ["topo_skaermkort"],
+      "id": "topo_skaermkort",
+      "name": "Topografisk kort",
+      "minZoom": 8,
+      "maxZoom": 22,
+      "transparent": true
+    }
+  ]
+}
+```
+
+Et objekt kan pege på installationens navngivne kort eller en konkret XYZ-, WMS-, WMTS- eller GC2-kilde. Proxy, licens og leverandørnøgle skal være etableret på serveren.
+
+## Grupper
+
+```json
+{
+  "baseLayerGroups": [
+    {
+      "groupName": "Grundkort",
+      "layers": ["osm", "topo_skaermkort"]
+    }
+  ],
+  "openLayerTreeGroups": ["Plan"],
+  "showLayerGroupCheckbox": true
+}
+```
+
+Gruppenavne skal matche de værdier, som lagene bruger i GC2.
+
+## Genbrug med `$ref`
+
+Vidi-serveren opløser JSON References i både eksterne filer og GC2-konfigurationer:
+
+```json
+{
+  "baseLayers": {
+    "$ref": "https://konfiguration.eksempel.dk/faelles.json#/baseLayers"
+  },
+  "schemata": ["plan"]
+}
+```
+
+Den refererede adresse skal kunne hentes fra Vidi-serveren. Alle afhængige GC2-konfigurationer skal være udgivet, hvis anonyme brugere skal kunne åbne løsningen.
+
+## Byg trinvist
+
+1. Start med `schemata` og ét lag.
+2. Tilføj `activeLayers`.
+3. Tilføj ét baggrundskort.
+4. Kontrollér startudsnit og CRS.
+5. Tilføj grupper og avanceret baggrundskortvælger til sidst.
+
+Se [Alle indstillinger i en Vidi-konfiguration](/gc2/konfigurationer/alle-indstillinger) for felter og standardværdier.

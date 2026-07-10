@@ -1,0 +1,55 @@
+---
+title: Lagindstillinger
+description: Brug Settings-fanen til kildeafhængige indstillinger for hele kortlaget
+sidebar:
+  order: 4
+---
+
+`Settings` gælder hele det valgte kortlag. Det adskiller sig fra `Classes`, hvor indstillingerne gælder én klasse eller ét symbol- og label-lag.
+
+:::note[Krævet adgang]
+Du skal kunne ændre lagets egenskaber, normalt med `All`-privilegium eller som databaseejer.
+:::
+
+## Felterne afhænger af kilden
+
+GC2 bygger panelet ud fra lagets registrerede egenskaber. Du kan derfor ikke forvente samme felter på en vektortabel, en raster, et view eller en ekstern kilde. Dokumentér kun og ændr kun de kontroller, der faktisk vises for det valgte lag.
+
+Kildekoden definerer blandt andet disse relevante kontroller:
+
+| Kontrol | Formål |
+|---|---|
+| `Label item` | Vælger et felt til lagets labels |
+| `Class item` | Vælger et felt til klassifikation |
+| `Opacity` | Sætter gennemsigtighed på lagniveau |
+| `Label min/max scale denominator` | Afgrænser labels på lagniveau |
+| `Min/Max scale denominator` | Afgrænser hele lagets tegning |
+| `Symbol scale denominator` | Angiver referenceskala for dynamisk skalering af symboler eller tekst |
+| `Geom type` | Kan sættes til `Default`, `POINT`, `LINE` eller `POLYGON` |
+| `Clustering distance` | Angiver clusteringafstand, når clustering bruges |
+| `No clipping of labels` | Kan stabilisere labelplacering og undgå dubletter ved tilekanter |
+| `No clipping of polylines` | Kan reducere kantartefakter på stylede linjer i tiles |
+| `Offsite` og `Bands` | Rasterrelaterede kontroller, som kun er relevante for passende kilder |
+
+Listen er ikke en garanti for, at alle felter vises eller virker for alle kildetyper.
+
+## Geometri og type
+
+Hvis `Start edit` eller `Quick draw` melder, at laget har typen `GEOMETRY` eller `RASTER`, henviser GC2 til `Geom type` i `Settings`. Sæt kun en konkret type, når datasættet faktisk er ensartet og valget svarer til kildens geometri. En UI-overstyring retter ikke ugyldige eller blandede geometrier i databasen.
+
+## Skala
+
+Der findes skalaindstillinger på både lag-, klasse- og labelniveau. Den mest restriktive kombination afgør, hvad brugeren ser.
+
+1. Sæt først lagets overordnede synlighedsinterval.
+2. Afgræns derefter enkelte klasser, hvis de skal opføre sig anderledes.
+3. Afgræns labels særskilt, så de ikke fylder ved små målforhold.
+4. Test præcist omkring hver grænseværdi.
+
+## Opdater og kontrollér
+
+Tryk `Update` i `Settings`. Ved succes skriver GC2 kortkonfigurationen, opdaterer lagindstillingerne og håndterer det valgte lags cache. Kontrollér derefter direkte WMS, tilevisning og Vidi.
+
+:::caution[Undgå at gætte]
+Sæt ikke rasterfelter på vektordata, en geometritype på et uafklaret datasæt eller tilfældige skalaværdier for at fjerne en fejlmeddelelse. Kontrollér først kildens faktiske type under `Database`.
+:::

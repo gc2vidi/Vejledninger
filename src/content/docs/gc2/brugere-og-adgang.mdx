@@ -1,16 +1,18 @@
 ---
-title: Roller og privilegier
-description: Administrer subusers, nedarvning, adgang og rettigheder i GC2
+title: Brugere og adgang
+description: Opret subusers og planlæg adgangsprofiler før du beskytter lag
 sidebar:
   order: 1
 ---
 
-import subuserOverviewImg from '../resources/gc2-subuser-overview.png';
-import subuserDetailsImg from '../resources/gc2-subuser-form.png';
-import subuserPrivilegesImg from '../resources/gc2-subuser-privileges.png';
-import authLayerImg from '../resources/add_read_write_on_layer.png';
+import subuserOverviewImg from './resources/gc2-subuser-overview.png';
+import subuserDetailsImg from './resources/gc2-subuser-form.png';
 
 ## Databasebruger og subusers
+
+:::note[Krævet adgang]
+Oprettelse og ændring af subusers kræver databaseejer eller tilsvarende brugeradministrativ adgang.
+:::
 
 I GC2 er databasebrugeren normalt den overordnede ejer af databasen og administrationen. Under denne kan du oprette subusers med mere afgrænsede rettigheder.
 
@@ -28,6 +30,10 @@ Det er nyttigt hvis:
   />
   <figcaption>Oversigt over subusers og knappen til at oprette en ny bruger.</figcaption>
 </figure>
+
+<MediaPlaceholder title="Aktuel subuser-oversigt" file="gc2-dashboard-subusers-overview.png" format="PNG">
+  Vis listen med syntetiske subusers og knappen til at oprette en bruger. Brug ingen virkelige navne eller mailadresser.
+</MediaPlaceholder>
 
 ## Opret subuser
 
@@ -50,6 +56,10 @@ I mange installationer er det især `Navn` og `Adgangskode` der er afgørende. F
   />
   <figcaption>Eksempel på oprettelse af sub-bruger med mulighed for nedarvning.</figcaption>
 </figure>
+
+<MediaPlaceholder title="Opret subuser" file="gc2-subuser-create.png" format="PNG">
+  Vis den aktuelle formular med syntetisk brugernavn, mail og valg af nedarvning. Password må ikke kunne læses.
+</MediaPlaceholder>
 
 Hvis en bruger nedarver rettigheder, fungerer den valgte sub-bruger i praksis som en slags rolle eller brugergruppe. Det gør administrationen enklere, men betyder også at adgangen skal vedligeholdes ét centralt sted.
 
@@ -81,14 +91,7 @@ Det sidste niveau bruges normalt kun til få administratorer, da det giver adgan
 
 Hvis du har mange subusers, er det ofte bedre at tænke i få faste adgangsprofiler end at tildele alt individuelt. Det gør både drift og fejlfinding lettere.
 
-<figure class="centered-figure">
-  <img
-    src={subuserPrivilegesImg.src}
-    alt="Privilegier for sub-brugere i GC2"
-    style={{ width: '760px', maxWidth: '100%' }}
-  />
-  <figcaption>Eksempel på privilegier for valgte lag og sub-brugere.</figcaption>
-</figure>
+Den konkrete tildeling beskrives under [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
 
 ## Authentication og privilegier skal passe sammen
 
@@ -101,15 +104,6 @@ Et praktisk mønster er derfor:
 1. Lås laget med `Read/Write`
 2. Tildel derefter eksplicitte læse- eller skrivetilladelser til de relevante subusers eller grupper
 
-<figure class="centered-figure">
-  <img
-    src={authLayerImg.src}
-    alt="Eksempel på ændring af authentication på et lag i GC2"
-    style={{ width: '760px', maxWidth: '100%' }}
-  />
-  <figcaption>Eksempel på at ændre et lag fra åbent til beskyttet adgang.</figcaption>
-</figure>
-
 ## WMS/WFS-password og API-nøgle
 
 Subusers kan også have behov for selvstændige adgangsoplysninger til tjenester og integrationer, fx:
@@ -121,7 +115,7 @@ Det er relevant når data skal bruges uden for Vidi, fx i eksterne klienter elle
 
 Hvis et lag er låst med `Read/Write`, skal du altså ikke kun tænke på Vidi-login. Du skal også tænke på hvordan brugeren eller integrationen autentificerer sig mod WMS eller WFS.
 
-Læs videre i [Tjenester og API](/gc2/integrationer/tjenester-og-api).
+Læs videre i [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api).
 
 ## Hvad bruger Vidi dette til?
 

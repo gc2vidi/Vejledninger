@@ -139,53 +139,86 @@ export default defineConfig({
               link: "/gc2",
             },
             {
-              label: "Kom i gang",
-              collapsed: false,
-              autogenerate: {
-                directory: "gc2/kom-i-gang",
-              },
+              label: "Log ind og dashboard",
+              link: "/gc2/log-ind-og-dashboard",
             },
             {
-              label: "Konfiguration",
-              collapsed: false,
-              autogenerate: {
-                directory: "gc2/koerselskonfiguration",
-              },
+              label: "Brugere og adgang",
+              link: "/gc2/brugere-og-adgang",
             },
             {
-              label: "Lag og metadata",
+              label: "Skemaindstillinger",
               collapsed: false,
-              autogenerate: {
-                directory: "gc2/lag",
-              },
+              items: [
+                { label: "Oversigt", link: "/gc2/skemaindstillinger" },
+                {
+                  label: "Database",
+                  collapsed: false,
+                  items: [
+                    { label: "Oversigt", link: "/gc2/skemaindstillinger/database" },
+                    { label: "Opret, importer og organiser lag", link: "/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag" },
+                    { label: "Lagoversigt og grundindstillinger", link: "/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger" },
+                    { label: "Tabelstruktur, data og felter", link: "/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter" },
+                    { label: "Privilegier og authentication", link: "/gc2/skemaindstillinger/database/privilegier-og-authentication" },
+                    { label: "Editerbare lag", link: "/gc2/skemaindstillinger/database/editerbare-lag" },
+                    { label: "Avancerede lagindstillinger", link: "/gc2/skemaindstillinger/database/avancerede-lagindstillinger" },
+                    { label: "Tjenester og API", link: "/gc2/skemaindstillinger/database/tjenester-og-api" },
+                    { label: "Tags", link: "/gc2/skemaindstillinger/database/tags" },
+                    { label: "Meta", link: "/gc2/skemaindstillinger/database/meta" },
+                  ],
+                },
+                {
+                  label: "Kort",
+                  collapsed: true,
+                  items: [
+                    { label: "Oversigt", link: "/gc2/skemaindstillinger/kort" },
+                    { label: "Lagtræ og kortvisning", link: "/gc2/skemaindstillinger/kort/lagtrae-og-kortvisning" },
+                    { label: "Klasser, symboler og labels", link: "/gc2/skemaindstillinger/kort/klasser-symboler-og-labels" },
+                    { label: "Lagindstillinger", link: "/gc2/skemaindstillinger/kort/lagindstillinger" },
+                    { label: "Tile cache", link: "/gc2/skemaindstillinger/kort/tile-cache" },
+                    { label: "Signaturforklaring", link: "/gc2/skemaindstillinger/kort/signaturforklaring" },
+                    { label: "QML og QGIS-styling", link: "/gc2/skemaindstillinger/kort/qml-og-qgis-styling" },
+                    { label: "Redigering i kortet", link: "/gc2/skemaindstillinger/kort/redigering-i-kortet" },
+                  ],
+                },
+                {
+                  label: "Workflow",
+                  collapsed: true,
+                  items: [
+                    { label: "Workflow", link: "/gc2/skemaindstillinger/workflow" },
+                    { label: "Versionering, roller og opsætning", link: "/gc2/skemaindstillinger/workflow/versionering-roller-og-opsaetning" },
+                    { label: "Transaktioner og godkendelse", link: "/gc2/skemaindstillinger/workflow/transaktioner-og-godkendelse" },
+                  ],
+                },
+                {
+                  label: "Scheduler",
+                  collapsed: true,
+                  items: [
+                    { label: "Scheduler", link: "/gc2/skemaindstillinger/scheduler" },
+                    { label: "Opret og administrer jobs", link: "/gc2/skemaindstillinger/scheduler/opret-og-administrer-jobs" },
+                    { label: "Overvågning og fejlsøgning", link: "/gc2/skemaindstillinger/scheduler/overvaagning-og-fejlsoegning" },
+                  ],
+                },
+              ],
             },
             {
-              label: "Redigering",
-              collapsed: false,
-              autogenerate: {
-                directory: "gc2/redigering",
-              },
-            },
-            {
-              label: "Brugere og rettigheder",
-              collapsed: false,
-              autogenerate: {
-                directory: "gc2/brugere",
-              },
-            },
-            {
-              label: "Integrationer",
+              label: "Konfigurationer",
               collapsed: true,
-              autogenerate: {
-                directory: "gc2/integrationer",
-              },
+              items: [
+                { label: "Introduktion", link: "/gc2/konfigurationer" },
+                { label: "Opret, udgiv og test", link: "/gc2/konfigurationer/opret-udgiv-og-test" },
+                { label: "Data, lag og baggrundskort", link: "/gc2/konfigurationer/data-lag-og-baggrundskort" },
+                { label: "Søgning, funktioner og udseende", link: "/gc2/konfigurationer/soegning-funktioner-og-udseende" },
+                { label: "Alle indstillinger i en Vidi-konfiguration", link: "/gc2/konfigurationer/alle-indstillinger" },
+              ],
             },
             {
-              label: "Avanceret",
-              collapsed: true,
-              autogenerate: {
-                directory: "gc2/avanceret",
-              },
+              label: "QGIS og eksterne datakilder",
+              link: "/gc2/qgis-og-eksterne-datakilder",
+            },
+            {
+              label: "Admin-drift og fejlsøgning",
+              link: "/gc2/admin-drift-og-fejlsoegning",
             },
           ],
         },
@@ -199,8 +232,9 @@ export default defineConfig({
       imports: [
         // Add global components:
         './src/components/Ref.astro',
-        './src/components/MenuPath.astro',
-        './src/components/Key.astro',
+         './src/components/MenuPath.astro',
+         './src/components/Key.astro',
+         './src/components/MediaPlaceholder.astro',
       ],
     }),
   ],

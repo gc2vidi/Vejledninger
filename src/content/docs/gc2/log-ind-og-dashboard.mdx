@@ -1,14 +1,14 @@
 ---
-title: Kom i gang
-description: Forstå dashboard, skemaer og konfigurationer i GC2
+title: Log ind og dashboard
+description: Log ind i GC2, forstå dashboardet og åbn et skemas indstillinger
 sidebar:
   order: 1
 ---
 
-import dashboardLoginImg from '../resources/gc2-dashboard-login.png';
-import dashboardImg from '../resources/gc2-dashboard.png';
-import adminOpenGif from '../resources/gc2-open-settings.gif?url';
-import adminWindowImg from '../resources/gc2-admin-window.png';
+import dashboardLoginImg from './resources/gc2-dashboard-login.png';
+import dashboardImg from './resources/gc2-dashboard.png';
+import adminOpenGif from './resources/gc2-open-settings.gif?url';
+import adminWindowImg from './resources/gc2-admin-window.png';
 
 ## Hvad møder du i GC2?
 
@@ -19,6 +19,10 @@ Når du logger ind i GC2, lander du typisk i kontrolcenteret. Herfra arbejder du
 - brugere og rettigheder
 
 Det er også herfra du kommer videre til administrationsmodulet for et skema.
+
+:::note[Krævet adgang]
+Du skal have en konto på installationen. Databaseejere og subusers kan se forskellige skemaer, faner og handlinger.
+:::
 
 ## Log ind
 
@@ -37,6 +41,10 @@ Som administrator arbejder du som regel med databasebrugeren eller en subuser me
   />
   <figcaption>Eksempel på login til GC2 dashboard.</figcaption>
 </figure>
+
+<MediaPlaceholder title="Aktuelt login til GC2" file="gc2-login.png" format="PNG">
+  Erstat det eksisterende loginbillede med den aktuelle installations loginflow. Vis ingen brugernavne, browserhistorik eller organisationens loginoplysninger.
+</MediaPlaceholder>
 
 :::tip[God praksis]
 Brug helst en navngivet administrationsbruger til daglig drift og undgå at dele login mellem flere personer.
@@ -63,6 +71,10 @@ Hvis du arbejder meget med Vidi, er konfigurationerne ofte dit hurtigste springb
   />
   <figcaption>Eksempel på dashboard i GC2 med oversigt over tilgængelige skemaer.</figcaption>
 </figure>
+
+<MediaPlaceholder title="Aktuelt GC2-dashboard" file="gc2-dashboard-overview.png" format="PNG">
+  Vis dashboardets områder for skemaer, konfigurationer og subusers med syntetiske eksempler. Billedet skal gøre det let at finde indgangen til skemaindstillinger.
+</MediaPlaceholder>
 
 ## Åbn administrationsmodulet
 
@@ -101,7 +113,7 @@ En konfiguration kan blandt andet bestemme:
 - hvilke printskabeloner der er tilgængelige
 - hvordan søgning, popups og tabeller fungerer
 
-Læs videre i [Kørselskonfiguration](/gc2/koerselskonfiguration/oversigt).
+Læs videre i [Konfigurationer](/gc2/konfigurationer), når lagene er klargjort.
 
 ## Administrationsmodulet
 
@@ -131,6 +143,8 @@ De vigtigste faner er normalt:
 
 Den konkrete brugerflade kan variere mellem installationer og versioner, men arbejdsdelingen er som regel den samme.
 
+Det eksisterende billede viser hovedstrukturen, men bør erstattes med `gc2-skemaindstillinger-overview.png`, som beskrevet på [Skemaindstillinger](/gc2/skemaindstillinger).
+
 ## Anbefalet arbejdsgang
 
 Hvis du skal sætte et nyt datasæt op til Vidi, er denne rækkefølge et godt udgangspunkt:
@@ -139,8 +153,8 @@ Hvis du skal sætte et nyt datasæt op til Vidi, er denne rækkefølge et godt u
 2. Importer eller opret lag
 3. Ret titel, beskrivelse, grupper og authentication
 4. Sæt felter op med aliaser, søgbarhed og filtermuligheder
-5. Konfigurer styling og labels
-6. Aktiver de relevante lag i en konfiguration
-7. Tildel brugere og privilegier
+5. Tildel brugere og privilegier
+6. Konfigurér Meta, styling og labels
+7. Saml de færdige lag i en Vidi-konfiguration
 
-De næste sider gennemgår hvert trin mere detaljeret.
+Fortsæt med [Brugere og adgang](/gc2/brugere-og-adgang), og gå derefter til [Skemaindstillinger](/gc2/skemaindstillinger).

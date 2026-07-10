@@ -1,0 +1,52 @@
+---
+title: Editerbare lag
+description: Klargør et lag til sikker redigering i GC2, Vidi og eksterne klienter
+---
+
+:::note[Krævet adgang]
+Opsætning kræver administrative lagrettigheder. Den bruger, der redigerer, skal have skriveprivilegium og kunne godkendes efter lagets Authentication.
+:::
+
+`Editable` er kun ét af flere krav. Et lag er først klar til redigering, når datamodel, adgang, Meta og den valgte klient passer sammen.
+
+## Krav
+
+1. Tabellen har en stabil primærnøgle.
+2. Geometritypen er kendt og understøttet.
+3. Obligatoriske felter kan udfyldes af brugeren eller har standardværdier.
+4. Laget er markeret `Editable`.
+5. Authentication og skriveprivilegier er korrekte.
+6. Meta-indstillingen for Vidi-editor er aktiveret, hvis laget skal redigeres i Vidi.
+7. Vidi-installationen indeholder og aktiverer `editor`-udvidelsen.
+
+## Felter og formularer
+
+Gennemgå [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter):
+
+- Giv felter forståelige aliaser og beskrivelser.
+- Undgå at vise tekniske systemfelter uden behov.
+- Brug `Allow null`, standardværdier og `Properties` bevidst.
+- Kontrollér links, billeder og templates som visning, ikke som rå brugerinput.
+
+## Meta og Vidi
+
+Meta har indstillingen `vidi_layer_editable`. Derefter skal Vidi-konfigurationen aktivere `editor`, og udvidelsen skal være kompileret i Vidi-installationen. Se [Meta](/gc2/skemaindstillinger/database/meta) og [Søgning, funktioner og udseende](/gc2/konfigurationer/soegning-funktioner-og-udseende).
+
+## Snap
+
+Snap bruges i redigeringsklienten, men datakvaliteten afhænger stadig af de valgte snaplag, tolerancen og geometrien. Test oprettelse og ændring tæt på eksisterende objekter, og kontrollér den gemte geometri efterfølgende.
+
+## Test
+
+1. Opret et objekt med alle obligatoriske felter.
+2. Ret attributter uden at ændre geometrien.
+3. Ret geometrien med og uden snap.
+4. Slet et testobjekt, hvis brugerne skal kunne slette.
+5. Gentag med en bruger, som kun må læse.
+6. Kontrollér resultatet via Vidi og eventuel WFS-T.
+
+Redigering direkte i GC2s Kort-fane beskrives under [Redigering i kortet](/gc2/skemaindstillinger/kort/redigering-i-kortet). Slutbrugerens Vidi-flow beskrives under [Editor](/vidi/extensions/editor).
+
+:::caution[Start ikke versionering ved et uheld]
+Versionering og Workflow ændrer datamodellen og redigeringsforløbet. Brug [Workflow](/gc2/skemaindstillinger/workflow), hvis historik eller godkendelse er et reelt krav.
+:::

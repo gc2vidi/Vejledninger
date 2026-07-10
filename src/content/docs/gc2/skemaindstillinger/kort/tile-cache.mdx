@@ -1,0 +1,62 @@
+---
+title: Tile cache
+description: Konfigurér og ryd tile cache på det rigtige niveau uden unødig driftsbelastning
+sidebar:
+  order: 5
+---
+
+Tile cache gemmer renderede kortbilleder, så gentagne kortvisninger kan leveres hurtigere. Til gengæld kan en cache vise en ældre version af data eller styling, indtil den bliver ugyldiggjort eller gendannet.
+
+:::note[Krævet adgang]
+Du skal kunne ændre lagets egenskaber for at bruge lagets `Tile cache`-fane. Den skemadækkende `Clear tile cache`/`Ryd tile cache`-handling er kun tilgængelig for databaseejeren eller en tilsvarende administrativ session.
+:::
+
+## To forskellige handlinger
+
+**Lagets `Tile cache`-fane** konfigurerer det valgte lags cache. Når du trykker `Update`, gemmes indstillingerne, MapCache-konfigurationen skrives, og GC2 anmoder om rydning af det valgte lags cache.
+
+**`Clear tile cache` for skemaet** ligger som en administrativ handling ved lagoversigten. Den viser en bekræftelse og sletter cache for hele skemaet, hvorefter MapCache-konfigurationen skrives igen. Den er ikke en gemmeknap for det valgte lag.
+
+## Kildeunderstøttede indstillinger
+
+| Indstilling | Betydning |
+|---|---|
+| `Meta tile size` | Antal kolonner og rækker i metatiling; kildehjælpen angiver standarden 3 |
+| `Meta buffer size (px)` | Ekstra område omkring tile eller metatile, der beskæres for at mindske kantartefakter |
+| `Time to live (TTL)` | Sekunder brugt i HTTP `Expires` og `Cache-Control`; sletter ikke i sig selv tiles fra cachen |
+| `Auto expire` | Alder i sekunder, hvorefter en tile genhentes ved adgang; overskriver ifølge kildehjælpen TTL og begrænser ikke cachens størrelse |
+| `Format` | `PNG` eller JPEG i lav, mellem eller høj kvalitet |
+| `Lock` | Låser cachen, så den ikke kan bustes |
+| `Layers` | Kommasepareret liste af schema-kvalificerede lag, der flettes oven på laget |
+| `S3 tile set name` | Navn til S3-cache; standard er lagets navn |
+| `Cache` | `Disk`, `SQLite`, `S3` eller `Memcache` |
+
+Tilgængelighed afhænger af serverens MapCache- og storageopsætning. Vælg ikke eksempelvis S3 eller Memcache, før serveroperatøren har bekræftet, at backend og credentials er konfigureret.
+
+## Hvornår skal cache ryddes?
+
+Ryd det enkelte lag, når en gemt ændring i data, styling eller cacheopsætning ikke slår igennem, og du har bekræftet forskellen ved at sammenligne direkte WMS med tilevisningen. Brug kun den skemadækkende handling, når flere lag i samme skema beviseligt er forældede, eller når en aftalt driftsændring kræver det.
+
+GC2s lagopdateringer kalder i flere flows automatisk skrivning af kort- eller MapCache-filen med lagets nøgle, hvorefter det konkrete lags cache ugyldiggøres. Manuel sletning efter hver lille ændring er derfor normalt unødvendig.
+
+## Risici
+
+- Første forespørgsel efter rydning kan være langsommere, fordi tiles skal gendannes.
+- Skemadækkende rydning kan skabe samtidig belastning på mange lag.
+- `Lock` kan forhindre den forventede ugyldiggørelse.
+- JPEG kan give artefakter og mangler transparens, hvor PNG ofte er bedre til signaturgrafik.
+- Forkerte `Layers` kan blande data ind i tiles, som ikke fremgår af lagets eget navn.
+- Sletning løser ikke fejl i SQL, klasseudtryk, services eller adgang.
+
+## Test
+
+1. Gem og kontrollér succesbeskeden.
+2. Åbn samme udsnit og målforhold som direkte WMS og som tile cache.
+3. Brug et kendt ændret objekt eller symbol som kontrolpunkt.
+4. Test tilekanter, transparens og labels.
+5. Kontrollér browserens Network-panel for fejlstatus.
+6. Test Vidi og relevante print, før ændringen betragtes som færdig.
+
+:::caution[Ryd mindst muligt]
+Start aldrig med at rydde hele skemaets cache. Afgræns først fejlen til cache og derefter til det konkrete lag.
+:::

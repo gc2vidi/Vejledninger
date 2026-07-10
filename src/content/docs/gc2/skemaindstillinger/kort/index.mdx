@@ -1,0 +1,58 @@
+---
+title: Kort
+description: Brug Kort-fanen til at kontrollere lag, styling, signatur og administrativ redigering
+sidebar:
+  order: 1
+---
+
+`Kort` er GC2 Administrations arbejdsflade for det valgte skemas kortlag. Her mødes lagtræ, kortvisning og de indstillinger, der omsætter data til en publiceret kortpræsentation.
+
+:::note[Krævet adgang]
+Du skal være logget ind i GC2 Administration og have adgang til skemaet. Ændring af lagets egenskaber kræver normalt `All`-privilegium eller adgang som databaseejer; redigering af data kræver skriveadgang.
+:::
+
+## Først Database, derefter Kort
+
+Denne dokumentation bruger en bevidst rækkefølge:
+
+1. Klargør tabellen i `Database`: struktur, felter, primærnøgle, geometri og adgang.
+2. Åbn `Kort`: kontrollér at laget kan indlæses, og opsæt præsentation, cache og signatur.
+3. Test resultatet i GC2 og derefter i den Vidi-konfiguration, som brugerne skal anvende.
+
+`Kort` reparerer ikke en manglende primærnøgle, en forkert kolonnedatatype eller ugyldige data. Gå tilbage til `Database`, hvis grundlaget ikke er i orden.
+
+<MediaPlaceholder
+  title="Overblik over Kort-fanen"
+  file="gc2-kort-overview.png"
+  format="PNG"
+>
+  Vis hele Kort-fanen med et valgt og synligt testlag. Lagtræ, kort, Attribute table, Start edit, Quick draw, style-panelet og Class wizard skal kunne identificeres.
+</MediaPlaceholder>
+
+## Arbejdsfladens dele
+
+| Del | Formål |
+|---|---|
+| Lagtræ | Vælg et lag, slå dets synlighed til eller fra, skift mellem WMS og tile cache og zoom til lagets udbredelse |
+| Kortvisning | Kontrollér udbredelse, symboler, labels og samspil med andre synlige lag |
+| Attribute table | Viser attributter i forbindelse med indlæsning og redigering i kortet; panelet er som udgangspunkt foldet sammen |
+| `Start edit` | Starter det filterbaserede redigeringsflow for et valgt vektorlag |
+| `Quick draw` | Går direkte til oprettelse af ny geometri uden først at udvælge eksisterende objekter |
+| Style panel | Indeholder `Classes`, `Settings`, `Tile cache`, `Legend` og `QML` for det valgte lag |
+| `Class wizard` | Opretter en startklassifikation som `Single`, `Unique`, `Intervals` eller `Clusters` |
+
+Når du klikker på et almindeligt lag i lagtræet, åbner GC2 style-panelet og indlæser lagets klasser og indstillinger. Afkrydsningsfeltet styrer derimod, om laget er synligt i kortet.
+
+## Vælg den rigtige vej
+
+- Brug [Lagtræ og kortvisning](/gc2/skemaindstillinger/kort/lagtrae-og-kortvisning), når du skal finde laget og kontrollere resultatet sikkert.
+- Brug [Klasser, symboler og labels](/gc2/skemaindstillinger/kort/klasser-symboler-og-labels), når GC2 skal eje lagets visuelle udtryk.
+- Brug [Lagindstillinger](/gc2/skemaindstillinger/kort/lagindstillinger), når hele laget skal have skala-, type- eller labelrelaterede indstillinger.
+- Brug [Tile cache](/gc2/skemaindstillinger/kort/tile-cache), når cachetypen eller tile-genereringen skal ændres.
+- Brug [Signaturforklaring](/gc2/skemaindstillinger/kort/signaturforklaring), når signaturen skal kontrolleres eller erstattes med en billed-URL.
+- Brug [QML og QGIS-styling](/gc2/skemaindstillinger/kort/qml-og-qgis-styling), hvis styling udveksles med QGIS.
+- Brug [Redigering i kortet](/gc2/skemaindstillinger/kort/redigering-i-kortet) til GC2 Administrations egne `Start edit`- og `Quick draw`-funktioner.
+
+:::caution[Arbejd på ét lag ad gangen]
+Gem en ændring, kontrollér GC2-kortet, og test derefter Vidi. Samtidige ændringer af SQL, klasseudtryk, skala og cache gør fejl svære at isolere.
+:::

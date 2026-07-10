@@ -1,0 +1,48 @@
+---
+title: Avancerede lagindstillinger
+description: Brug tekniske kilder, SQL-afgrænsning, feature-id og viewdefinition med forsigtighed
+---
+
+:::note[Krævet adgang]
+Dialogen kræver administrative lagrettigheder. Flere felter påvirker tjenester og alle klienter. Hav en kendt fungerende værdi og en tilbagerulningsplan.
+:::
+
+Brug først `Avanceret`, når lagets almindelige Database- og Meta-indstillinger ikke løser opgaven.
+
+<MediaPlaceholder
+  title="Dialogen Avanceret"
+  file="gc2-database-advanced-dialog.png"
+  format="PNG"
+>
+  Vis hele dialogen for et syntetisk testlag. Felter med URL, SQL, QML eller viewdefinition må ikke vise produktionsadresser eller følsomme forespørgsler.
+</MediaPlaceholder>
+
+## Felter i den medfølgende kilde
+
+| Felt | Anvendelse og risiko |
+|---|---|
+| `Meta data URL` | Ekstern metadataadresse. Kontrollér tilgængelighed og langsigtet ejerskab. |
+| `WMS source` | Ekstern eller særlig WMS-kilde. Fejl rammer alle visninger af laget. |
+| `WMS EPSGs` | Koordinatsystemer, som kilden understøtter. Angiv kun verificerede værdier. |
+| `Not queryable` | Slår forespørgsel på laget fra, når info ikke må eller kan hentes. |
+| `Is baselayer` | Behandler laget som baggrundskort i relevante sammenhænge. |
+| `SQL where clause` | Permanent dataafgrænsning på serverniveau. Test null-værdier og rettigheder. |
+| `File source` | Filbaseret kilde eller reference, afhængigt af lagtypen. |
+| `Enable SQL filtering in Viewer` | Tillader viewer-relateret SQL-filtrering. Brug kun med en forstået sikkerhedsmodel. |
+| `ES trigger table` | Knytter Elasticsearch-opdatering til en tabel. Kræver fungerende indeksdrift. |
+| `Feature id` | Vælger stabil identifikation af features. Må ikke være tilfældig eller ikke-entydig. |
+| `QML` | QGIS-stil knyttet til laget. Se [QML og QGIS-styling](/gc2/skemaindstillinger/kort/qml-og-qgis-styling). |
+| `View definition` | Skrivebeskyttet visning af SQL-definitionen for et view. |
+
+## Sikker ændringsmetode
+
+1. Beskriv det konkrete problem, indstillingen skal løse.
+2. Gem den nuværende værdi sikkert.
+3. Test ændringen på et ikke-kritisk lag eller skema.
+4. Kontrollér direkte service, GC2 Kort og Vidi.
+5. Kontrollér Log og serverfejl.
+6. Rul tilbage, hvis effekten ikke kan forklares.
+
+:::caution[SQL og eksterne kilder]
+Et forkert SQL-filter kan skjule data uden at slette dem, mens en defekt ekstern kilde kan gøre laget utilgængeligt. Undgå prøve-og-fejl i produktion.
+:::
