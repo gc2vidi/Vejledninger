@@ -1,0 +1,112 @@
+---
+title: Styling og labels
+description: Styr lagets visuelle udtryk, signatur og labels i Vidi
+sidebar:
+  order: 4
+---
+
+import stylingWizardImg from '../resources/styling-wizard.png';
+
+## Styling i GC2
+
+Det visuelle udtryk for et lag bliver i mange løsninger styret fra GC2. Det omfatter blandt andet farver, symboler, klassifikation og labels.
+
+Når brugeren i Vidi:
+
+- ser en signaturforklaring
+- tænder eller slukker labels
+- oplever at et lag ser anderledes ud end forventet
+
+... er forklaringen ofte at finde i GC2s styling eller metaopsætning.
+
+## Class wizard
+
+Den hurtigste vej til en brugbar styling er ofte en wizard eller standardopsætning. Den er god når du vil:
+
+- give nye data en fornuftig startstil
+- klassificere data efter unikke værdier
+- lave intervaller på numeriske felter
+- gruppere punktdata i clusters
+
+<figure class="centered-figure">
+  <img
+    src={stylingWizardImg.src}
+    alt="Eksempel på styling wizard i GC2"
+    style={{ width: '640px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på klassificering og styling i GC2.</figcaption>
+</figure>
+
+De mest almindelige tilgange er:
+
+- enkel stil til hurtig opstart
+- unikke værdier når et felt repræsenterer kategorier
+- intervaller når et numerisk felt skal inddeles i klasser
+- clusters når mange punkter ellers bliver uoverskuelige
+
+Et godt administratorvalg er at starte simpelt og først derefter gøre stylingen mere avanceret, hvis brugeren faktisk har brug for det.
+
+## Manuel styling
+
+Når standardopsætningen ikke er nok, kan du arbejde mere detaljeret med class-baseret styling. Her kan du blandt andet styre:
+
+- navn på class
+- expressions og regler
+- symbolstørrelse, farver og outline
+- labels, skrifttype og placering
+- skalaafhængig visning
+
+Det er her du typisk finjusterer det som senere vises i Vidi.
+
+Typiske ting der er værd at justere manuelt er:
+
+- klassernes navne, så signaturforklaringen bliver forståelig
+- outline og kontrast, så lag kan læses oven på flere baggrundskort
+- skalaafhængighed, så kortet ikke bliver visuelt støjende i små målforhold
+- regler og expressions, så komplekse datasæt stadig vises konsistent
+
+## Labels
+
+Hvis brugeren i Vidi kan tænde labels for et lag, er det fordi laget er sat op til det i GC2.
+
+Overvej blandt andet:
+
+- hvilket felt label skal bygge på
+- om label skal vises i alle skalaer
+- om teksten skal have baggrund eller outline
+- om labels skal være diskrete eller prioriteres højt
+
+Som hovedregel bør labels kun vises når de hjælper brugeren med at orientere sig. For mange labels gør kortet tungt og svært at læse.
+
+Et godt labelsetup tænker derfor i:
+
+- hvilket felt der er mest meningsfuldt for brugeren
+- hvilke målforhold labels giver mening i
+- hvordan tekst og baggrund står mod både lyse og mørke baggrundskort
+
+## Signaturforklaring
+
+Vidi bruger lagets styling som grundlag for signaturforklaring. Derfor giver det god mening at holde navngivning og klassifikation enkel og konsekvent.
+
+Hvis signaturen bliver svær at læse, er det ofte et tegn på at stylinglogikken er blevet for kompleks eller for teknisk formuleret.
+
+Det er ofte bedre med få tydelige klasser end mange næsten ens symboler.
+
+## QGIS eller GC2?
+
+I nogle løsninger kan styling komme fra QGIS-projekter. I andre ligger den direkte i GC2. Hvis I bruger begge tilgange, er det vigtigt at vide hvilken der faktisk er den styrende kilde i den konkrete opsætning.
+
+Læs mere i [QGIS og eksterne kilder](/gc2/integrationer/qgis-og-eksterne-kilder).
+
+:::note[Bemærk]
+Vi tilføjer senere flere opdaterede skærmbilleder af styling-flowet. Indtil da fungerer denne side som admin-overblik og terminologiguide.
+:::
+
+## God praksis
+
+Når du arbejder med styling og labels, så prøv at:
+
+1. tage udgangspunkt i brugerens opgave og ikke i alle tekniske muligheder
+2. sikre god kontrast mod de baggrundskort der faktisk bruges
+3. holde signaturforklaring og klassenavne enkle
+4. teste både på desktop og i kompakte visninger som embed

@@ -1,0 +1,140 @@
+---
+title: Roller og privilegier
+description: Administrer subusers, nedarvning, adgang og rettigheder i GC2
+sidebar:
+  order: 1
+---
+
+import subuserOverviewImg from '../resources/gc2-subuser-overview.png';
+import subuserDetailsImg from '../resources/gc2-subuser-form.png';
+import subuserPrivilegesImg from '../resources/gc2-subuser-privileges.png';
+import authLayerImg from '../resources/add_read_write_on_layer.png';
+
+## Databasebruger og subusers
+
+I GC2 er databasebrugeren normalt den overordnede ejer af databasen og administrationen. Under denne kan du oprette subusers med mere afgrænsede rettigheder.
+
+Det er nyttigt hvis:
+
+- forskellige teams skal have forskellig adgang
+- eksterne samarbejdspartnere kun skal se enkelte lag
+- nogle brugere skal læse, mens andre må redigere
+
+<figure class="centered-figure">
+  <img
+    src={subuserOverviewImg.src}
+    alt="Ny sub-bruger i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Oversigt over subusers og knappen til at oprette en ny bruger.</figcaption>
+</figure>
+
+## Opret subuser
+
+Ved oprettelse af en subuser arbejder du normalt med:
+
+- brugernavn
+- mailadresse
+- password
+- eventuel nedarvning fra en anden bruger eller gruppe
+
+Nedarvning er praktisk hvis mange brugere skal have samme adgangsmønster.
+
+I mange installationer er det især `Navn` og `Adgangskode` der er afgørende. Feltet `E-mail` bruges ofte ikke aktivt og kan derfor være mindre vigtigt i den daglige administration.
+
+<figure class="centered-figure">
+  <img
+    src={subuserDetailsImg.src}
+    alt="Opsætning af sub-bruger og nedarvning i GC2"
+    style={{ width: '620px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på oprettelse af sub-bruger med mulighed for nedarvning.</figcaption>
+</figure>
+
+Hvis en bruger nedarver rettigheder, fungerer den valgte sub-bruger i praksis som en slags rolle eller brugergruppe. Det gør administrationen enklere, men betyder også at adgangen skal vedligeholdes ét centralt sted.
+
+Det betyder også, at du normalt ikke bør give ekstra privilegier direkte til en bruger der nedarver. Hvis adgangsmønsteret skal ændres, skal det som regel ske på den bruger eller gruppe der nedarves fra.
+
+Når en subuser oprettes, bliver der typisk også oprettet et tilsvarende skema i databasen med samme navn. Subuseren har fulde rettigheder til dette eget skema, mens adgang til andre skemaer og lag styres via privilegier.
+
+## Brug grupper eller arketyper
+
+En god praksis er at oprette få, tydelige adgangsprofiler som andre subusers kan nedarve fra. Eksempler kan være:
+
+- `intern_read`
+- `intern_edit`
+- `ekstern_read`
+- `admin`
+
+Det gør det langt lettere at vedligeholde rettigheder over tid.
+
+## Privilegier på lag
+
+Privilegier gives typisk på lagniveau. De almindelige niveauer er:
+
+- `Ingen`
+- `Kun læse`
+- `Læse og skrive`
+- `Alle`
+
+Det sidste niveau bruges normalt kun til få administratorer, da det giver adgang til mere end almindelig redigering.
+
+Hvis du har mange subusers, er det ofte bedre at tænke i få faste adgangsprofiler end at tildele alt individuelt. Det gør både drift og fejlfinding lettere.
+
+<figure class="centered-figure">
+  <img
+    src={subuserPrivilegesImg.src}
+    alt="Privilegier for sub-brugere i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på privilegier for valgte lag og sub-brugere.</figcaption>
+</figure>
+
+## Authentication og privilegier skal passe sammen
+
+Der er en vigtig sammenhæng mellem lagets authentication og subuserens privilegier.
+
+Hvis et lag skal være beskyttet for læsning, skal laget som regel være sat til `Read/Write`. Ellers kan laget stadig være læsbart selv om du kun giver udvalgte brugere adgang.
+
+Et praktisk mønster er derfor:
+
+1. Lås laget med `Read/Write`
+2. Tildel derefter eksplicitte læse- eller skrivetilladelser til de relevante subusers eller grupper
+
+<figure class="centered-figure">
+  <img
+    src={authLayerImg.src}
+    alt="Eksempel på ændring af authentication på et lag i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på at ændre et lag fra åbent til beskyttet adgang.</figcaption>
+</figure>
+
+## WMS/WFS-password og API-nøgle
+
+Subusers kan også have behov for selvstændige adgangsoplysninger til tjenester og integrationer, fx:
+
+- WMS/WFS password
+- API-nøgle
+
+Det er relevant når data skal bruges uden for Vidi, fx i eksterne klienter eller systemintegrationer.
+
+Hvis et lag er låst med `Read/Write`, skal du altså ikke kun tænke på Vidi-login. Du skal også tænke på hvordan brugeren eller integrationen autentificerer sig mod WMS eller WFS.
+
+Læs videre i [Tjenester og API](/gc2/integrationer/tjenester-og-api).
+
+## Hvad bruger Vidi dette til?
+
+Flere funktioner i Vidi afhænger direkte af denne opsætning, blandt andet:
+
+- login og session
+- editor-funktioner
+- adgang til låste lag
+- læsning og skrivning via services
+
+## Anbefalet drift
+
+1. Giv brugere mindst mulig nødvendig adgang
+2. Brug nedarvning eller grupper hvor det giver mening
+3. Test altid et lag med en reel slutbrugerrolle
+4. Dokumenter hvilke lag der er offentlige, låsbare eller redigerbare

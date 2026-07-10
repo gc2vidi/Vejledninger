@@ -1,0 +1,205 @@
+---
+title: Kørselskonfiguration
+description: Styr hvordan Vidi starter op og hvilke funktioner der er tilgængelige
+sidebar:
+  order: 1
+---
+
+## Hvad er en kørselskonfiguration?
+
+En kørselskonfiguration er den JSON-baserede opsætning der bestemmer, hvordan en konkret Vidi-løsning starter op. Den bruges til at vælge indhold, funktioner og standardadfærd for kortet.
+
+I praksis er det ofte her du binder GC2-data og Vidi-oplevelsen sammen.
+
+## Typisk start-URL
+
+Vidi startes ofte med en URL i denne form:
+
+```text
+https://eksempel.dk/app/min-db/?config=min-konfiguration.json
+```
+
+Det vil sige at selve kortet åbnes på en database, mens konfigurationen styrer indholdet i visningen.
+
+Mange administratorer tænker derfor på en konfiguration som "den konkrete kortløsning" - altså kombinationen af lag, søgning, baggrundskort, print og udvidelser.
+
+## Hvad kan du styre?
+
+En typisk konfiguration styrer blandt andet:
+
+- hvilke skemaer, lag eller tags der indlæses
+- hvilke udvidelser der er aktive
+- hvilke baggrundskort der tilbydes
+- hvilken søgning der bruges
+- hvilke printskabeloner der er tilgængelige
+- hvilke lag der er tændt fra start
+- hvilken template eller branding der bruges
+
+## Centrale nøgler i en konfiguration
+
+### `schemata`
+
+Bruges til at hente lag ind i lagtræet. Du kan pege på:
+
+- et helt skema
+- et konkret lag
+- et tag
+
+Eksempel:
+
+```json
+{
+  "schemata": [
+    "forsyning",
+    "forsyning.ledninger",
+    "tag:borgerkort"
+  ]
+}
+```
+
+:::note[Bemærk]
+Lag skal være organiseret og placeret i grupper, før de giver mening i Vidi. Tjek derfor altid grupper, titler og metadata på laget samtidig.
+:::
+
+### `activeLayers`
+
+Bruges hvis nogle lag skal være tændt fra start.
+
+```json
+{
+  "activeLayers": [
+    "forsyning.ledninger",
+    "forsyning.ventiler"
+  ]
+}
+```
+
+Det er nyttigt hvis brugeren altid skal lande med bestemte data synlige.
+
+### `showLayerGroupCheckbox`
+
+Viser afkrydsningsfelt på laggrupper i Vidi, så hele grupper kan tændes og slukkes på en gang.
+
+### `title`
+
+Sætter sidens titel i browserfanen.
+
+## Søgning
+
+To af de mest synlige administratorvalg er søgning og baggrundskort.
+
+`enabledSearch` bruges til at vælge hvilket søgemodul der er aktivt. En typisk værdi er:
+
+```json
+{
+  "enabledSearch": "danish"
+}
+```
+
+Til det danske modul kan du supplere med `searchConfig`, fx:
+
+```json
+{
+  "searchConfig": {
+    "size": 10,
+    "komkode": ["851", "461"],
+    "esrSearchActive": true,
+    "sfeSearchActive": true,
+    "placeholderText": "Søg efter adresse, matrikel eller sted"
+  }
+}
+```
+
+Det er især nyttigt når løsningen skal begrænses til bestemte kommuner eller have en mere præcis hjælpetekst i søgefeltet.
+
+Hvis I har brugerdefinerede søgninger i Vidi, er det normalt også her konfigurationen peger på de relevante indeks eller kilder.
+
+## Baggrundskort
+
+`baseLayers` bruges til at definere hvilke baggrundskort der er tilgængelige. Det kan være:
+
+- indbyggede baggrundskort
+- WMS-lag
+- XYZ-lag
+- GC2-lag
+
+Et simpelt eksempel kan være:
+
+```json
+{
+  "baseLayers": [
+    { "id": "osm", "name": "OpenStreetMap" },
+    { "id": "bingAerial", "name": "Bing Aerial" }
+  ]
+}
+```
+
+Et mere avanceret eksempel kan være et WMS-baggrundskort:
+
+```json
+{
+  "baseLayers": [
+    {
+      "type": "wms",
+      "url": "/api/dataforsyningen/topo_skaermkort_DAF",
+      "layers": ["topo_skaermkort"],
+      "id": "topo_skaermkort",
+      "name": "Topografisk kort",
+      "minZoom": 8,
+      "maxZoom": 22,
+      "transparent": true
+    }
+  ]
+}
+```
+
+Hvis I bruger Datafordeler eller Dataforsyningen, skal adgang og proxy-lag tænkes sammen med den underliggende systemopsætning.
+
+## Grupper af baggrundskort
+
+Hvis mange baggrundskort hører sammen, kan de samles i `baseLayerGroups`. Det er især nyttigt ved ortofotoserier eller historiske kort.
+
+```json
+{
+  "baseLayerGroups": [
+    {
+      "groupName": "Ortofotos",
+      "layers": ["ortofoto_2023", "ortofoto_2022", "ortofoto_2021"]
+    }
+  ]
+}
+```
+
+## Et samlet eksempel
+
+```json
+{
+  "schemata": ["forsyning", "tag:borgerkort"],
+  "activeLayers": ["forsyning.ledninger"],
+  "enabledSearch": "danish",
+  "searchConfig": {
+    "komkode": "851",
+    "placeholderText": "Søg efter adresse eller matrikel"
+  },
+  "enabledExtensions": ["session", "editor", "streetView"],
+  "enabledPrints": ["print"],
+  "showLayerGroupCheckbox": true,
+  "title": "Mit kort"
+}
+```
+
+## God administrator-checkliste
+
+Når en konfiguration ikke opfører sig som forventet, så gennemgå:
+
+1. om den rigtige `config` faktisk bruges i URL'en
+2. om alle relevante lag findes og er placeret i grupper
+3. om `schemata` henter det forventede indhold ind
+4. om baggrundskort og søgning er gyldige i den konkrete installation
+5. om de nødvendige udvidelser også er aktiveret
+
+## Næste skridt
+
+- Læs [Udvidelser](/gc2/koerselskonfiguration/udvidelser) hvis du skal aktivere funktioner som editor, session, streetView eller symbols
+- Læs [Print og templates](/gc2/koerselskonfiguration/print-og-templates) hvis du arbejder med print, embed eller layout
+- Læs [Lagindstillinger](/gc2/lag/indstillinger) hvis lagene er indlæst men ikke opfører sig som forventet

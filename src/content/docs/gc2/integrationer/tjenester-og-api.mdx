@@ -1,0 +1,100 @@
+---
+title: Tjenester og API
+description: Opsæt WMS, WFS og SQL-adgang til GC2-data
+sidebar:
+  order: 2
+---
+
+import servicesImg from '../resources/gc2-services.png';
+
+## Hvad dækker denne side?
+
+GC2 kan stille data til rådighed som tjenester, så de kan bruges uden for selve webinterfacet. Det gælder især:
+
+- WMS til kortvisning
+- WFS til feature-data og redigering
+- SQL-API til mere direkte dataudtræk
+
+Det er især relevant når data skal bruges i QGIS, andre GIS-klienter eller i integrationer til andre systemer.
+
+## Tjenester på skema- eller brugerniveau
+
+Når du åbner menuen `Tjenester`, kan du opsætte adgang til de services der gælder for det aktuelle skema eller den aktuelle bruger.
+
+Det vigtigste i første omgang er typisk:
+
+- HTTP Basic Password til WMS/WFS
+- adgang til de viste service-URL'er
+- eventuelt API-nøgle til SQL-adgang
+
+<figure class="centered-figure">
+  <img
+    src={servicesImg.src}
+    alt="Eksempel på tjenesteopsætning i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Tjenesteindstillinger med HTTP Basic Password og service-URL'er for en sub-bruger.</figcaption>
+</figure>
+
+## HTTP Basic Password
+
+WMS- og WFS-adgang beskyttes ofte med et særskilt HTTP Basic Password. Det er vigtigt at forstå at dette password ikke nødvendigvis er det samme som brugerens almindelige login til GC2 eller Vidi.
+
+:::caution[Vigtigt]
+Når et service-password først er taget i brug i klienter og integrationer, bør det kun ændres med omtanke. En ændring kan bryde eksisterende forbindelser i QGIS, scripts og andre systemer.
+:::
+
+## Typiske URL-formater
+
+Som super-bruger vil service-URL'en ofte have denne form:
+
+```text
+https://eksempel.dk/ows/<database>/<skema>/
+```
+
+Som super-bruger er databasenavn og brugernavn ofte identiske.
+
+Som sub-bruger ser formatet ofte sådan ud:
+
+```text
+https://eksempel.dk/ows/<sub-bruger@database>/<skema>/
+```
+
+De præcise adresser afhænger af jeres installation, men mønstret er nyttigt når du skal hjælpe brugere med at forbinde eksterne klienter.
+
+## Direkte adgang med Basic Auth
+
+Til test eller midlertidig fejlfinding kan du i nogle tilfælde kalde en tjeneste direkte med brugernavn og password i URL'en.
+
+```text
+https://<brugernavn>:<password>@eksempel.dk/ows/<database>/<skema>/?service=WMS&request=GetCapabilities
+```
+
+:::note[Bemærk]
+Denne metode er primært egnet til test. Undgå at dele URL'er med password i klartekst i mails, tickets eller dokumenter.
+:::
+
+## SQL-API
+
+GC2 har også en SQL-API, som kan bruges til kontrollerede dataudtræk. Det er nyttigt når du vil:
+
+- hente data til integrationer
+- lave specialfiltreringer
+- teste datasæt uden at åbne en GIS-klient
+
+Et typisk mønster er:
+
+```text
+https://eksempel.dk/api/v2/sql/<bruger@database>?q=SELECT * FROM skema.lag&key=<api-nøgle>
+```
+
+API-nøglen findes typisk samme sted som HTTP Basic Password i tjenestemenuen. Den skal behandles som en adgangsoplysning på linje med password.
+
+## God praksis
+
+Når du arbejder med tjenester og API-adgang, så husk:
+
+1. dokumentér hvem der bruger hvilke endpoints
+2. adskil almindeligt brugerlogin fra service-passwords
+3. begræns adgang med authentication og privilegier før du deler endpoints
+4. brug helst `SELECT` i API-eksempler og testforespørgsler

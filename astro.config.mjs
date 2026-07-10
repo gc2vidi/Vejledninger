@@ -133,17 +133,58 @@ export default defineConfig({
         },
         {
           label: "GC2",
-          //badge: { text: "Ny", variant: "success" },
           items: [
             {
               label: "Hvad er GC2?",
               link: "/gc2",
             },
             {
-              label: "Indhold",
+              label: "Kom i gang",
               collapsed: false,
               autogenerate: {
-                directory: "gc2/pages",
+                directory: "gc2/kom-i-gang",
+              },
+            },
+            {
+              label: "Konfiguration",
+              collapsed: false,
+              autogenerate: {
+                directory: "gc2/koerselskonfiguration",
+              },
+            },
+            {
+              label: "Lag og metadata",
+              collapsed: false,
+              autogenerate: {
+                directory: "gc2/lag",
+              },
+            },
+            {
+              label: "Redigering",
+              collapsed: false,
+              autogenerate: {
+                directory: "gc2/redigering",
+              },
+            },
+            {
+              label: "Brugere og rettigheder",
+              collapsed: false,
+              autogenerate: {
+                directory: "gc2/brugere",
+              },
+            },
+            {
+              label: "Integrationer",
+              collapsed: true,
+              autogenerate: {
+                directory: "gc2/integrationer",
+              },
+            },
+            {
+              label: "Avanceret",
+              collapsed: true,
+              autogenerate: {
+                directory: "gc2/avanceret",
               },
             },
           ],

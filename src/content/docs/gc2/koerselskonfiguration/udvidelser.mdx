@@ -1,0 +1,118 @@
+---
+title: Udvidelser
+description: Aktiver og konfigurer Vidi-udvidelser fra GC2
+sidebar:
+  order: 2
+---
+
+## Udvidelser i GC2 og Vidi
+
+Mange ekstra funktioner i Vidi aktiveres gennem kørselskonfigurationen i GC2. Det gælder blandt andet udvidelser som:
+
+- `session`
+- `editor`
+- `streetView`
+- `symbols`
+- `coordinates`
+- `conflictSearch`
+- `languages`
+
+For brugeren ser det ud som en funktion i Vidi. For administratoren starter arbejdet som regel i GC2.
+
+## `enabledExtensions`
+
+Selve aktiveringen sker normalt i listen `enabledExtensions`.
+
+```json
+{
+  "enabledExtensions": [
+    "session",
+    "editor",
+    "streetView",
+    "symbols",
+    "coordinates"
+  ]
+}
+```
+
+Det er en god idé kun at aktivere de udvidelser der reelt bruges. For mange aktive funktioner gør ofte løsningen mere kompleks at forstå og supportere.
+
+## `extensionConfig`
+
+Nogle udvidelser kræver ekstra opsætning. Det sker i `extensionConfig`, hvor hver udvidelse får sit eget objekt.
+
+```json
+{
+  "extensionConfig": {
+    "streetView": {
+      "mapillary": "https://www.mapillary.com/app/?lat={y}&lng={x}&z=17"
+    },
+    "symbols": {
+      "files": [
+        { "file": "symboler.json", "title": "Standardsymboler" }
+      ]
+    }
+  }
+}
+```
+
+## Typiske udvidelser i praksis
+
+### `editor`
+
+Kræver normalt tre ting:
+
+- udvidelsen er aktiveret i konfigurationen
+- laget er gjort editerbart i GC2
+- brugeren har de rigtige privilegier
+
+Læs videre i [Editerbare lag og snap](/gc2/redigering/editerbare-lag-og-snap) og [Roller og privilegier](/gc2/brugere/roller-og-privilegier).
+
+### `session`
+
+Bruges når Vidi skal have login, gemte tilstande eller brugerafhængig adgang. Her spiller konfiguration og brugerstyring tæt sammen.
+
+Typiske scenarier er:
+
+- interne løsninger med låste lag
+- løsninger hvor brugeren skal kunne logge ind før redigering
+- løsninger med brugerafhængige projekter eller adgangsniveauer
+
+### `streetView`
+
+Bruges når man vil åbne et eksternt gadefoto- eller billedværktøj fra kortet. Det kræver som regel en URL-skabelon i `extensionConfig`.
+
+### `symbols`
+
+Bruges når brugeren skal kunne placere eller arbejde med faste symboler i kortet. Her peger du normalt på en eller flere symbolfiler.
+
+### `coordinates` og `conflictSearch`
+
+Disse udvidelser kræver ofte mindre opsætning, men de skal stadig være aktivt slået til før de bliver synlige i Vidi.
+
+## Sådan tænker du som administrator
+
+Når en udvidelse skal i drift, er det ofte ikke nok bare at slå den til. Overvej også:
+
+- om brugeren skal have ekstra privilegier
+- om laget skal være redigerbart
+- om der er behov for eksterne nøgler eller integrationer
+- om funktionen giver mening på mobil, desktop eller embed
+- om funktionen bør være standard eller kun bruges i særlige konfigurationer
+
+## Fejlfinding
+
+Hvis en udvidelse ikke vises i Vidi:
+
+1. bekræft at den findes i `enabledExtensions`
+2. tjek om der mangler `extensionConfig`
+3. tjek om brugeren mangler adgang eller privilegier
+4. tjek om funktionen er afhængig af et bestemt lag eller metadatafelt
+5. tjek om den aktive `config` er den du forventer at teste med
+
+## God praksis
+
+- hold konfigurationen kort og målrettet
+- dokumentér særlige afhængigheder pr. udvidelse
+- test altid med en reel brugerrolle
+- undgå at aktivere udvidelser "for en sikkerheds skyld"

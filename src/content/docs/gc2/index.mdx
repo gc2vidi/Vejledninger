@@ -1,16 +1,81 @@
 ---
-title: GeoCloud2 
-description: Beskrivelse af GeoCloud2
+title: GeoCloud2
+description: Introduktion til GC2 for administratorer
 next: false
 prev: false
 ---
 
+import gc2VidiArkitekturImg from './resources/gc2-vidi-architecture.png';
+
+**Forfatter:** [Martin Høgh](mailto:mh@mapcentia.com), [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
+
 ## Hvad er GC2?
 
-GeoCloud2 eller fremover GC2 er en enterprise platform for håndtering af geospatial data, kort-visualisering og spatiale værktøjer. Bygget på de bedste opensource og standard baserede programmer.
+GeoCloud2, forkortet GC2, er administrationsplatformen bag Vidi. Det er her en administrator opretter og organiserer lag, styrer metadata og rettigheder, samt sætter de konfigurationer som bestemmer hvordan kortet opfører sig i Vidi.
 
-GC2 gør det nemt at starte med PostGIS, MapServer, QGIS Server, MapCache, Elasticsearch, GDAL/OGR2OGR. Brugerfladen i GC2, er et simpelt web-interface til administration af hele software-pakken.
+GC2 samler en række geospatiale komponenter bag et webinterface, så du kan arbejde med blandt andet PostGIS, MapServer, QGIS Server, MapCache og søgning uden at konfigurere alting direkte i underliggende services.
 
-Målet med GC2 er at gøre det nemt for organisationer at bruge opensource værktøjer til at bygge en geospatial infrastruktur.
+I praksis er samspillet ofte:
+
+- PostgreSQL gemmer data og struktur
+- GC2 styrer administration, metadata, rettigheder og tjenester
+- Vidi viser data og værktøjer til slutbrugeren
+- QGIS, GC2 og Vidi kan alle bruges til redigering, hvis løsningen er sat op til det
+
+<figure class="centered-figure">
+  <img
+    src={gc2VidiArkitekturImg.src}
+    alt="Sammenhængen mellem Vidi, GC2, databasen og GIS-værktøjer"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Sammenhængen mellem Vidi, GC2, databasen og GIS-værktøjer.</figcaption>
+</figure>
+
+## Hvem er denne dokumentation til?
+
+Denne del af dokumentationen er skrevet primært til administratorer og fagpersoner, der:
+
+- opretter og vedligeholder lag i GC2
+- styrer metadata, filtre og styling
+- aktiverer udvidelser og konfigurationer til Vidi
+- tildeler brugere, roller og privilegier
+- arbejder med print, templates og integrationer
+
+:::tip[Afgrænsning]
+Udviklerdokumentation tager vi separat. Fokus her er den daglige administration af data, lag og konfigurationer.
+:::
+
+## GC2 og Vidi
+
+Vidi er den del brugeren ser i browseren. GC2 er stedet hvor du som administrator bestemmer:
+
+- hvilke lag der vises
+- hvilke felter der kan søges i og filtreres på
+- hvordan lag styles og labels vises
+- hvilke udvidelser der er aktive
+- hvilke brugere der må læse eller redigere data
+- hvilke printskabeloner, baggrundskort og konfigurationer der stilles til rådighed
+
+Det betyder at mange funktioner i Vidi faktisk bliver styret fra GC2. Derfor henviser flere Vidi-artikler til GC2-dokumentationen.
+
+## Start her
+
+Hvis du er ny i GC2, anbefaler vi denne rækkefølge:
+
+1. [Kom i gang](/gc2/kom-i-gang/oversigt) for at forstå dashboard, skemaer og konfigurationer
+2. [Kørselskonfiguration](/gc2/koerselskonfiguration/oversigt) for at styre lag, søgning, baggrundskort og opstart
+3. [Lag og metadata](/gc2/lag/indstillinger) for at konfigurere det indhold som brugerne møder i Vidi
+4. [Brugere og rettigheder](/gc2/brugere/roller-og-privilegier) for at styre adgang
+5. [Tjenester og API](/gc2/integrationer/tjenester-og-api) hvis data også skal bruges i QGIS eller integrationer
+
+## Sektioner i GC2-dokumentationen
+
+- [Kom i gang](/gc2/kom-i-gang/oversigt) - login, dashboard, skemaer og konfigurationer
+- [Konfiguration](/gc2/koerselskonfiguration/oversigt) - konfigurationer, udvidelser, print og templates
+- [Lag og metadata](/gc2/lag/opret-importer-organiser) - lagoprettelse, metadata, filtre, styling og labels
+- [Redigering](/gc2/redigering/editerbare-lag-og-snap) - editerbare lag, formularer og snap
+- [Brugere og rettigheder](/gc2/brugere/roller-og-privilegier) - subusers, roller og privilegier
+- [Integrationer](/gc2/integrationer/qgis-og-eksterne-kilder) - QGIS, tjenester, API og eksterne datakilder
+- [Avanceret](/gc2/avanceret/versionering-og-workflow) - versionering og workflow
 
 Hvis du gerne vil hjælpe med at forbedre dokumentationen, kan du læse [bidragsguiden →](/bidrag).

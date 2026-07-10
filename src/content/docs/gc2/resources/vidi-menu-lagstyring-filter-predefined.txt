@@ -1,6 +1,6 @@
 {
-      "Ventil - Kontraventil": "type='Kontraventil'",
-      "Afspærringsventil, anden ejer": "funktion = 'Afspærring' AND (ejer = 'Privat' OR ejer = 'Andet forsyningsselskab')'",
-      "Åben": "aabningsgrad='100'",
-      "Lukket": "aabningsgrad='0'"
+  "Ventil - Kontraventil": "type='Kontraventil'",
+  "AfspÃ¦rringsventil, anden ejer": "funktion = 'AfspÃ¦rring' AND (ejer = 'Privat' OR ejer = 'Andet forsyningsselskab')'",
+  "Ã…ben": "aabningsgrad='100'",
+  "Lukket": "aabningsgrad='0'"
 }

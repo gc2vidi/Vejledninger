@@ -1,0 +1,123 @@
+---
+title: Opret, importer og organiser lag
+description: Kom data ind i GC2 og få dem klar til brug i Vidi
+sidebar:
+  order: 1
+---
+
+import newLayerButtonImg from '../resources/gc2-new-layer-button.png';
+import newLayerMenuImg from '../resources/gc2-new-layer-menu.png';
+import uploadLayerImg from '../resources/gc2-layer-upload.png';
+
+## Opret struktur for dine data
+
+Før du opretter eller importerer lag, er det en god idé at beslutte hvordan data skal organiseres. De fleste administrationer bliver lettere hvis du på forhånd har styr på:
+
+- hvilket skema laget skal ligge i
+- om laget er midlertidigt eller permanent
+- om laget skal bruges internt, offentligt eller i embed
+- om laget skal redigeres senere
+
+## Nyt skema
+
+Et nyt skema er ofte det bedste sted at starte, hvis data hører til et nyt fagområde eller projekt. Det giver bedre overblik, enklere rettighedsstyring og mere forudsigelige konfigurationer.
+
+## Opret nyt lag
+
+I administrationsmodulet kan du normalt oprette nye lag på flere måder:
+
+- import af vektordata
+- import af raster eller billeder
+- oprettelse af en tom tabel
+- oprettelse af database view
+- oprettelse af lag baseret på eksterne tjenester som WMS
+
+Hvis du er logget ind som subuser, er det som hovedregel kun muligt at importere nye lag i subuserens eget skema. En superbruger kan derimod oprette og importere lag i alle skemaer.
+
+<figure class="centered-figure">
+  <img
+    src={newLayerButtonImg.src}
+    alt="Menu til at oprette nyt lag i GC2"
+    style={{ width: '420px', maxWidth: '100%' }}
+  />
+  <figcaption>Fra databasefanen kan du åbne menuen til nye lag.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img
+    src={newLayerMenuImg.src}
+    alt="Valg af lagtype i GC2"
+    style={{ width: '520px', maxWidth: '100%' }}
+  />
+  <figcaption>Her vælger du om du vil importere vektor, raster eller oprette andre lagtyper.</figcaption>
+</figure>
+
+## Import af vektordata
+
+Ved import af vektordata skal du særligt holde øje med:
+
+- koordinatsystem
+- geometri-type
+- encoding for tegn som æ, ø og å
+- om eksisterende lag skal overskrives eller opdateres
+
+De vigtigste valg fra den nyere kursusdialog kan oversættes til denne tommelfingerregel:
+
+- brug korrekt EPSG-kode fra start
+- angiv geometri-type hvis du importerer shapefiler
+- ret encoding hvis danske tegn ikke ser rigtige ud
+- vælg bevidst om du vil overskrive, tilføje eller tømme og genindlæse et eksisterende lag
+
+<figure class="centered-figure">
+  <img
+    src={uploadLayerImg.src}
+    alt="Upload af nyt lag i GC2"
+    style={{ width: '520px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på uploaddialog efter at filen er valgt og klar til import.</figcaption>
+</figure>
+
+Efter importen bør du altid kontrollere titel, grupper, metadata og authentication, før laget frigives til brugere.
+
+## Raster og billeder
+
+Rasterlag kan bruges som baggrund eller fagspecifik datakilde. Også her er det vigtigt at få koordinatsystemet korrekt ved import.
+
+## Database views
+
+Et view er nyttigt når du vil udstille et filtreret eller afledt datasæt uden at kopiere data til en ny tabel.
+
+Det er ofte en god løsning til:
+
+- udsnit af store datasæt
+- faglige filtreringer
+- forenklede lag til embed eller borgerkort
+- sammensatte visninger til Vidi
+
+Et view skal stadig have en brugbar nøgle og en geometri hvis det skal fungere som normalt kortlag.
+
+Et godt minimum er derfor:
+
+- et unikt `gid`-felt eller tilsvarende nøgle
+- et geometri-felt
+- tydelige feltnavne eller aliaser, så laget også giver mening i Vidi
+
+## Eksterne tjenester
+
+Du kan også bygge lag oven på eksterne kilder, fx WMS. Det kan være relevant hvis laget ikke skal vedligeholdes i jeres egen database, men stadig skal vises sammen med egne data.
+
+Denne model er især nyttig når:
+
+- en tredjepart ejer data og drift
+- laget kun skal bruges som reference
+- I vil undgå at kopiere datasæt ind i egen database
+
+## Organisering i grupper
+
+Når lagene er oprettet, er organiseringen vigtig for brugeroplevelsen i Vidi. Giv derfor laget:
+
+- en tydelig titel
+- en meningsfuld gruppe
+- en passende placering i laghierarkiet
+
+Læs videre i [Lagindstillinger](/gc2/lag/indstillinger).

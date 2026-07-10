@@ -1,0 +1,73 @@
+---
+title: Editerbare lag og snap
+description: Gør lag redigerbare og klargør dem til editor-funktioner i Vidi
+sidebar:
+  order: 1
+---
+
+## Når Vidi skal kunne redigere data
+
+Hvis brugerne skal kunne redigere features direkte i Vidi, er det ikke nok bare at aktivere editor-udvidelsen. Laget skal også være forberedt i GC2.
+
+Typisk skal du have styr på tre ting:
+
+- laget skal være gjort editerbart
+- brugeren skal have de rette privilegier
+- editor-udvidelsen skal være aktiv i kørselskonfigurationen
+
+## Gør laget editerbart
+
+I GC2 meta eller lagegenskaber kan du markere laget som editerbart. Det fortæller Vidi at laget må åbnes i editorflowet.
+
+Vurder samtidig om laget skal vises som vektor eller tile i den konkrete løsning. Ved redigering er vektor ofte den mest naturlige model.
+
+Som administrator bør du normalt også kontrollere:
+
+- om laget faktisk har de felter brugeren skal udfylde
+- om brugeren kun ser de relevante felter
+- om værdilister og referencefelter er sat op før løsningen går i drift
+
+## Formularfelter og værdilister
+
+Feltniveauet har stor betydning for hvor god redigeringsoplevelsen bliver. Du kan blandt andet styre:
+
+- aliaser på felter
+- hvilke felter brugeren skal se
+- om feltet skal have faste værdier i en dropdown
+- om værdier skal komme fra en referencetabel
+
+Det er særligt nyttigt til statusfelter, kategorier og valg der ikke bør indtastes frit.
+
+Hvis du springer denne del over, bliver redigering ofte teknisk korrekt men dårlig at bruge i praksis.
+
+## Snap
+
+Snap bruges når nye eller redigerede geometrier skal kunne låse sig til eksisterende objekter. Det er vigtigt i løsninger hvor geometri skal være præcis, fx ledninger, skel eller andre netværksdata.
+
+Snap-opsætningen kan variere mellem installationer, men pointen er den samme: administratoren skal beslutte hvilke lag og arbejdsgange der kræver ekstra geometrisk kontrol.
+
+Typiske scenarier er:
+
+- ledninger der skal mødes præcist
+- polygoner der ikke må få huller eller overlap uden grund
+- registrering hvor nye objekter skal følge eksisterende strukturer
+
+## Samspil med privilegier
+
+Selv hvis laget er redigerbart, må brugeren stadig ikke nødvendigvis redigere det. Brugerstyring og lagets authentication skal spille sammen.
+
+Læs videre i [Roller og privilegier](/gc2/brugere/roller-og-privilegier).
+
+Hvis brugeren ikke kan redigere et lag i Vidi, så er fejlen ofte en af disse tre:
+
+- udvidelsen er ikke aktiveret
+- laget er ikke markeret som editerbart
+- brugeren mangler skriveadgang
+
+## God tjekliste før drift
+
+1. Er `editor` aktiveret i konfigurationen?
+2. Er laget markeret som editerbart?
+3. Har brugeren skriveadgang?
+4. Er felter og aliaser gjort redigeringsvenlige?
+5. Er der behov for snap eller versionskontrol?

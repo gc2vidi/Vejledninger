@@ -1,0 +1,115 @@
+---
+title: QGIS og eksterne kilder
+description: Arbejd med QGIS, views, WMS og andre eksterne datakilder sammen med GC2
+sidebar:
+  order: 1
+---
+
+import qgisServicesImg from '../resources/qgisstyling-gc2-services.png';
+import qgisAddConnectionGif from '../resources/qgis-postgresql-add.gif?url';
+import qgisExportGif from '../resources/qgis-export.gif?url';
+
+## QGIS som supplement til GC2
+
+QGIS bruges ofte sammen med GC2 når administratorer eller GIS-medarbejdere skal arbejde mere avanceret med data og styling end det der er praktisk direkte i browseren.
+
+Typiske anvendelser er:
+
+- avanceret redigering
+- styling i desktop-GIS
+- kontrol af geometri og attributter
+- publicering af projektbaseret visning
+
+## Data ud af GC2 og ind i QGIS
+
+GC2 stiller normalt services til rådighed, så lag kan hentes ind i QGIS via WFS eller lignende forbindelser. Det gør det muligt at arbejde med de samme data i desktop og web.
+
+Læs også [Tjenester og API](/gc2/integrationer/tjenester-og-api), hvis du har brug for de generelle service-URL'er, passwords eller SQL-adgang.
+
+<figure class="centered-figure">
+  <img
+    src={qgisServicesImg.src}
+    alt="Eksempel på services-dialog i GC2"
+    style={{ width: '760px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på services i GC2 som kan bruges videre i QGIS.</figcaption>
+</figure>
+
+Hvis I bruger versionering eller workflow, skal integrationen valideres ekstra nøje på den konkrete installation.
+
+## Typisk arbejdsgang i QGIS
+
+En praktisk arbejdsgang ser ofte sådan ud:
+
+1. find service-URL eller databaseforbindelse i GC2
+2. opret forbindelsen i QGIS
+3. hent de relevante lag ind
+4. kontrollér geometri, attributter og styling
+5. gem eller publicér ændringer efter jeres aftalte proces
+
+<figure class="centered-figure">
+  <img
+    src={qgisAddConnectionGif}
+    alt="Eksempel på oprettelse af forbindelse til data i QGIS"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på at oprette forbindelse til data i QGIS.</figcaption>
+</figure>
+
+Hvis jeres brugere arbejder direkte mod databasen, er det især vigtigt at afklare hvem der må redigere, og hvordan ændringer bagefter slår igennem i GC2 og Vidi.
+
+## QGIS-baseret styling
+
+I nogle setup kan et QGIS-projekt uploades eller bruges som kilde til webvisning. Det kan give høj visuel ensartethed mellem desktop og web, men det kræver også mere disciplin i driften.
+
+Ting der er gode at afklare i teamet:
+
+- om styling ejes af GC2 eller QGIS
+- hvem der må publicere ændringer
+- hvordan performance testes efter stylingændringer
+
+Hvis I bruger QGIS som stylingkilde, så aftal tydeligt:
+
+- hvor projektfiler ligger
+- hvem der må overskrive publiceret styling
+- hvordan ændringer testes før de kommer i drift
+- hvordan man håndterer konflikter mellem QGIS-styling og styling i GC2
+
+En klassisk arbejdsgang fra den ældre GC2-dokumentation er:
+
+1. hent lag ind i QGIS via WFS eller anden relevant forbindelse
+2. opsæt styling og gem projektet
+3. upload eller publicér projektet som QGIS-lag hvis jeres installation bruger den model
+4. opdatér eventuelt tile cache hvis ændringerne ikke slår igennem med det samme
+
+<figure class="centered-figure">
+  <img
+    src={qgisExportGif}
+    alt="Eksempel på eksport eller publicering fra QGIS"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på arbejdsgang i QGIS før publicering eller videre brug i web.</figcaption>
+</figure>
+
+## Eksterne WMS-kilder
+
+GC2 kan også inddrage lag fra eksterne WMS-tjenester. Det er praktisk når I vil kombinere egne data med tredjepartskilder uden at kopiere datasættet ind i egen database.
+
+## Views som integrationslag
+
+Database views er ofte den mest robuste måde at bygge en integrationsvenlig visning på. De kan bruges til at:
+
+- afgrænse datasæt
+- skjule tekniske felter
+- samle data fra flere tabeller
+- klargøre data til embed eller Vidi
+
+Det er ofte en god idé at bruge views når:
+
+- eksterne brugere ikke skal se hele datamodellen
+- QGIS-brugere kun skal arbejde med et fagligt udsnit
+- Vidi skal have et enklere og mere kontrolleret lag end grundtabellen
+
+:::note[Bemærk]
+Den ældre dokumentation har en mere detaljeret QGIS-proces med skærmbilleder. Vi genintroducerer kun de dele der stadig matcher den nuværende arbejdsgang.
+:::

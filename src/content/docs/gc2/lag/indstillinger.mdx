@@ -1,0 +1,121 @@
+---
+title: Lagindstillinger
+description: Styr titel, grupper, sortering, authentication og andre grundlæggende lagegenskaber
+sidebar:
+  order: 2
+---
+
+import layerListImg from '../resources/gc2-layer-list.png';
+import subgroupMetaImg from '../resources/gc2-layer-meta-subgroup.png';
+import subgroupExampleImg from '../resources/gc2-layer-subgroup-example.png';
+
+## Lagets grundindstillinger
+
+Når et lag er oprettet, er de grundlæggende indstillinger afgørende for hvordan laget optræder i GC2, Vidi og eksterne tjenester.
+
+De vigtigste felter er normalt:
+
+- titel
+- beskrivelse
+- notat
+- gruppe
+- OWS
+- sortering
+- authentication
+- skrivebar / redigerbar status
+
+<figure class="centered-figure">
+  <img
+    src={layerListImg.src}
+    alt="Lagliste i GC2"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Lagliste med centrale lagegenskaber som titel, gruppe, OWS, sortering og authentication.</figcaption>
+</figure>
+
+Feltlisten i lagoversigten kan typisk læses sådan:
+
+- `Type` viser lagets geometritype og kan normalt ikke ændres
+- `Navn` er det tekniske lagnavn i databasen
+- `Titel` er det navn brugeren typisk ser i Vidi og tjenester
+- `Beskrivelse` bruges også som abstract i WMS/WFS
+- `Notat` er intern hjælpetekst til administration
+- `Gruppe` styrer placeringen i lagtræet
+- `OWS` styrer om laget eksponeres via webtjenester
+- `Sort id` styrer lagets rækkefølge i visningerne
+- `Authentication` bestemmer adgangsniveauet
+- `Skrivebar` afgør om laget kan redigeres
+- `Tile cache` bruges til at rydde cache hvis det er nødvendigt
+
+## Titel og beskrivelse
+
+Lagets tekniske navn bruges internt, men det er som regel titlen der vises i Vidi, signaturforklaring og tjenester. Brug derfor en kort og meningsfuld titel.
+
+Beskrivelsen bruges til at forklare laget for brugeren og kan også genbruges i metadata og tjenester.
+
+## Gruppe og sortering
+
+Grupper bruges til at opbygge lagtræet i Vidi. En god gruppestruktur gør det lettere at finde lag, og den giver en mere rolig brugeroplevelse.
+
+Sortering bruges til at styre rækkefølgen i laglisten og dermed ofte også den visuelle lagdeling i kortet.
+
+Hvis I arbejder med mange lag, kan det også være relevant at bruge undergrupper. Det gøres typisk via lagets `Meta`-indstillinger, hvor du angiver en undergruppe som laget skal vises under i Vidi.
+
+<figure class="centered-figure">
+  <img
+    src={subgroupMetaImg.src}
+    alt="Opsætning af undergruppe via Meta i GC2"
+    style={{ width: '420px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på hvor undergruppe sættes på et lag.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img
+    src={subgroupExampleImg.src}
+    alt="Eksempel på lag i undergruppe i Vidi"
+    style={{ width: '420px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på hvordan undergruppen bagefter vises i Vidi.</figcaption>
+</figure>
+
+## Authentication
+
+Authentication på laget styrer hvem der må læse eller skrive.
+
+De typiske niveauer er:
+
+- `None` - laget er åbent
+- `Write` - alle kan læse, men redigering kræver login
+- `Read/Write` - både læsning og skrivning kræver adgang
+
+Dette valg spiller tæt sammen med subuser-privilegier. Hvis laget er åbent, kan du ikke efterfølgende indskrænke det meningsfuldt med finere privilegier alene.
+
+`OWS`-indstillingen er også relevant, hvis laget skal eksponeres via WMS eller WFS til eksterne klienter eller integrationer.
+
+Læs videre i [Roller og privilegier](/gc2/brugere/roller-og-privilegier) og [Tjenester og API](/gc2/integrationer/tjenester-og-api).
+
+## Tags og udvælgelse i konfigurationer
+
+Hvis et lag skal bruges i en særlig Vidi-løsning, fx embed eller borgerkort, kan det være praktisk at mærke laget med et tag og derefter hente det ind via `schemata` i konfigurationen.
+
+Det giver en mere fleksibel opsætning end at hardcode mange enkelte lagnavne.
+
+## Tile eller vektor
+
+Afhængigt af lagtype og metaopsætning kan et lag ofte vises som tilelag, vektorlag eller begge dele. Valget påvirker blandt andet:
+
+- performance
+- mulighed for feature info og filtrering
+- redigering
+- visning i tabeller og embed
+
+## Praktisk checkliste
+
+Før du udgiver et lag til brug i Vidi, så gennemgå:
+
+1. Har laget en forståelig titel?
+2. Ligger det i den rigtige gruppe?
+3. Er beskrivelsen opdateret?
+4. Er authentication sat korrekt?
+5. Er laget gjort skrivebart kun hvis det faktisk skal redigeres?

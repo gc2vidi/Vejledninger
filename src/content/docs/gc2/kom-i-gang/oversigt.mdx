@@ -1,0 +1,146 @@
+---
+title: Kom i gang
+description: Forstå dashboard, skemaer og konfigurationer i GC2
+sidebar:
+  order: 1
+---
+
+import dashboardLoginImg from '../resources/gc2-dashboard-login.png';
+import dashboardImg from '../resources/gc2-dashboard.png';
+import adminOpenGif from '../resources/gc2-open-settings.gif?url';
+import adminWindowImg from '../resources/gc2-admin-window.png';
+
+## Hvad møder du i GC2?
+
+Når du logger ind i GC2, lander du typisk i kontrolcenteret. Herfra arbejder du som administrator normalt med tre ting:
+
+- skemaer og lag
+- konfigurationer til Vidi
+- brugere og rettigheder
+
+Det er også herfra du kommer videre til administrationsmodulet for et skema.
+
+## Log ind
+
+Du logger ind på den GC2-installation jeres organisation bruger. Afhængigt af opsætningen kan du typisk logge ind med:
+
+- databasebruger, som ejer databasen og administrationen
+- subuser, som har færre og mere afgrænsede rettigheder
+
+Som administrator arbejder du som regel med databasebrugeren eller en subuser med udvidede privilegier.
+
+<figure class="centered-figure">
+  <img
+    src={dashboardLoginImg.src}
+    alt="Login til GC2 dashboard"
+    style={{ width: '360px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på login til GC2 dashboard.</figcaption>
+</figure>
+
+:::tip[God praksis]
+Brug helst en navngivet administrationsbruger til daglig drift og undgå at dele login mellem flere personer.
+:::
+
+## Dashboard og kontrolcenter
+
+Dashboardet fungerer som din indgang til resten af platformen.
+
+Her kan du typisk:
+
+- se hvilke skemaer der findes i databasen
+- oprette og vedligeholde konfigurationer
+- åbne administrationsmodulet for et skema
+- få overblik over subusers
+
+Hvis du arbejder meget med Vidi, er konfigurationerne ofte dit hurtigste springbræt mellem GC2 og den konkrete kortløsning.
+
+<figure class="centered-figure">
+  <img
+    src={dashboardImg.src}
+    alt="Eksempel på dashboard i GC2"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på dashboard i GC2 med oversigt over tilgængelige skemaer.</figcaption>
+</figure>
+
+## Åbn administrationsmodulet
+
+Fra dashboardet åbner du typisk et skemas indstillinger via pilen ved skemanavnet og derefter tandhjulet.
+
+<figure class="centered-figure">
+  <img
+    src={adminOpenGif}
+    alt="Åbn skemaindstillinger via pil og tandhjul"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på hvordan du åbner administrationsmodulet for et skema.</figcaption>
+</figure>
+
+## Skemaer
+
+Et skema er en logisk beholder for tabeller, views og lag. I praksis bruger mange organisationer skemaer til at adskille datasæt efter fagområde, projekt eller ansvar.
+
+Eksempler:
+
+- `forsyning` til ledningsdata
+- `plan` til planfaglige lag
+- `drift` til driftsdata og arbejdsregistre
+
+Undgå som hovedregel at bruge `public` til den daglige datamodellering, medmindre der er en konkret grund til det.
+
+## Konfigurationer
+
+I GC2 bruges konfigurationer til at styre hvordan Vidi starter op og opfører sig.
+
+En konfiguration kan blandt andet bestemme:
+
+- hvilke skemaer og lag der indlæses
+- hvilke udvidelser der er aktiveret
+- hvilke baggrundskort der kan vælges
+- hvilke printskabeloner der er tilgængelige
+- hvordan søgning, popups og tabeller fungerer
+
+Læs videre i [Kørselskonfiguration](/gc2/koerselskonfiguration/oversigt).
+
+## Administrationsmodulet
+
+Når du åbner et skema i administrationsmodulet, arbejder du typisk i faner eller paneler hvor du kan:
+
+- oprette nye lag og importere data
+- rette lagegenskaber og metadata
+- konfigurere filtre, labels og styling
+- gøre lag redigerbare
+- tildele privilegier
+
+De vigtigste faner er normalt:
+
+- `Kort` til visning, tematisering og forhåndsvisning af lag
+- `Database` til privilegier, tabelstruktur, tags, tjenester og metadata
+- `Workflow` hvis laget bruger versionering eller godkendelsesflow
+- `Log` hvis du skal følge ændringer eller hændelser på laget
+
+<figure class="centered-figure">
+  <img
+    src={adminWindowImg.src}
+    alt="Eksempel på administrationsmodul i GC2"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på administrationsmodulet med faner som Kort og Database.</figcaption>
+</figure>
+
+Den konkrete brugerflade kan variere mellem installationer og versioner, men arbejdsdelingen er som regel den samme.
+
+## Anbefalet arbejdsgang
+
+Hvis du skal sætte et nyt datasæt op til Vidi, er denne rækkefølge et godt udgangspunkt:
+
+1. Opret eller vælg skema
+2. Importer eller opret lag
+3. Ret titel, beskrivelse, grupper og authentication
+4. Sæt felter op med aliaser, søgbarhed og filtermuligheder
+5. Konfigurer styling og labels
+6. Aktiver de relevante lag i en konfiguration
+7. Tildel brugere og privilegier
+
+De næste sider gennemgår hvert trin mere detaljeret.
