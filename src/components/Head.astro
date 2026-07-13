@@ -1,0 +1,133 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import DefaultHead from '@astrojs/starlight/components/Head.astro';
+
+const props = Astro.props as Props;
+---
+
+<DefaultHead {...props} />
+
+<script>
+  type ImageZoomDialogElements = {
+    dialog: HTMLDialogElement;
+    image: HTMLImageElement;
+    caption: HTMLElement;
+    link: HTMLAnchorElement;
+  };
+
+  let imageZoomDialogElements: ImageZoomDialogElements | undefined;
+
+  const IMAGE_SELECTOR = '.sl-markdown-content img';
+  const DIALOG_ID = 'image-zoom-dialog';
+  const EXCLUDE_SELECTOR = 'a, button, [data-image-zoom-exclude]';
+
+  const getZoomableImage = (target: EventTarget | null) => {
+    if (!(target instanceof Element)) return null;
+
+    const image = target.closest<HTMLImageElement>(IMAGE_SELECTOR);
+
+    if (!image || image.closest(EXCLUDE_SELECTOR)) return null;
+    if (!image.currentSrc && !image.src) return null;
+
+    return image;
+  };
+
+  const getDialogElements = () => {
+    if (imageZoomDialogElements?.dialog.isConnected) return imageZoomDialogElements;
+
+    document.getElementById(DIALOG_ID)?.remove();
+
+    const dialog = document.createElement('dialog');
+    dialog.id = DIALOG_ID;
+    dialog.className = 'image-zoom-dialog';
+    dialog.innerHTML = `
+      <div class="image-zoom-dialog__content">
+        <button type="button" class="image-zoom-dialog__close" aria-label="Luk billedvisning"></button>
+        <img class="image-zoom-dialog__image" alt="" />
+        <div class="image-zoom-dialog__footer">
+          <p class="image-zoom-dialog__caption"></p>
+          <a class="image-zoom-dialog__link" target="_blank" rel="noopener">Åbn original</a>
+        </div>
+      </div>
+    `;
+
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.querySelector('.image-zoom-dialog__close')?.addEventListener('click', () => {
+      dialog.close();
+    });
+
+    document.body.append(dialog);
+
+    const image = dialog.querySelector<HTMLImageElement>('.image-zoom-dialog__image');
+    const caption = dialog.querySelector<HTMLElement>('.image-zoom-dialog__caption');
+    const link = dialog.querySelector<HTMLAnchorElement>('.image-zoom-dialog__link');
+
+    if (!image || !caption || !link) {
+      throw new Error('Image zoom dialog markup is missing expected elements.');
+    }
+
+    imageZoomDialogElements = { dialog, image, caption, link };
+    return imageZoomDialogElements;
+  };
+
+  const getImageCaption = (image: HTMLImageElement) => {
+    const figureCaption = image.closest('figure')?.querySelector('figcaption')?.textContent?.trim();
+    return figureCaption || image.title || image.alt || '';
+  };
+
+  const openImageZoom = (sourceImage: HTMLImageElement) => {
+    const { dialog, image, caption, link } = getDialogElements();
+    const imageUrl = sourceImage.currentSrc || sourceImage.src;
+    const imageCaption = getImageCaption(sourceImage);
+
+    image.src = imageUrl;
+    image.alt = sourceImage.alt || imageCaption;
+    caption.textContent = imageCaption;
+    caption.hidden = !imageCaption;
+    link.href = imageUrl;
+
+    if (!dialog.open) dialog.showModal();
+  };
+
+  const initializeImageZoom = () => {
+    document.querySelectorAll<HTMLImageElement>(IMAGE_SELECTOR).forEach((image) => {
+      if (image.closest(EXCLUDE_SELECTOR)) return;
+      if (!image.currentSrc && !image.src) return;
+
+      image.classList.add('image-zoomable');
+
+      if (!image.hasAttribute('tabindex')) image.tabIndex = 0;
+      if (!image.hasAttribute('role')) image.setAttribute('role', 'button');
+      if (!image.hasAttribute('aria-label')) {
+        const label = image.alt
+          ? `Vis billede i stor størrelse: ${image.alt}`
+          : 'Vis billede i stor størrelse';
+
+        image.setAttribute('aria-label', label);
+      }
+    });
+  };
+
+  document.addEventListener('click', (event) => {
+    const image = getZoomableImage(event.target);
+    if (!image) return;
+
+    event.preventDefault();
+    openImageZoom(image);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    const image = getZoomableImage(event.target);
+    if (!image) return;
+
+    event.preventDefault();
+    openImageZoom(image);
+  });
+
+  document.addEventListener('astro:page-load', initializeImageZoom);
+  initializeImageZoom();
+</script>

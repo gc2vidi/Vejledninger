@@ -227,6 +227,9 @@ export default defineConfig({
           link: "/bidrag",
         },
       ],
+      components: {
+        Head: './src/components/Head.astro',
+      },
     }),
     AutoImport({
       imports: [
@@ -235,6 +238,7 @@ export default defineConfig({
          './src/components/MenuPath.astro',
          './src/components/Key.astro',
          './src/components/MediaPlaceholder.astro',
+         './src/components/Figure.astro',
       ],
     }),
   ],
