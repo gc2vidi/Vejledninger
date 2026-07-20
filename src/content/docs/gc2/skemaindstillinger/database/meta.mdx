@@ -26,9 +26,22 @@ Du skal kunne ændre lagets metadata. Meta påvirker alle Vidi-løsninger, der b
 
 ### Layer type
 
-Vælg leveringsform efter datamængde og brugerbehov. Den konkrete Meta-form viser tilgængelige og valgte typer. Et lag, der skal redigeres eller have klientbaseret interaktion, har andre krav end et rent rasterkort.
+**Type** bestemmer, hvilke leveringsformer brugeren eller en Vidi-konfiguration må vælge for laget. **Default** bestemmer den foretrukne type, når konfigurationen eller URL'en ikke allerede har valgt en type med et præfiks.
 
-Test performance, feature-info, styling og redigering efter ændring af lagtype.
+| Valg | Det modtager browseren | Praktisk betydning |
+|---|---|---|
+| **Tile (`t`)** | Færdigtegnede kortbilleder fra WMS eller tile cache | MapServer anvender GC2-stylingen. Godt til ensartet serverstyling og komplekse lag; dette er standardtypen i den aktuelle GC2-kode. Tile cache aktiveres separat. |
+| **Vector (`v`)** | GeoJSON med geometrier og attributter | Leaflet tegner objekterne og kan gøre dem interaktive. Store lag kan belaste browseren. |
+| **MVT (`mvt`)** | Kompakte, tiledelte vektordata | Leaflet VectorGrid tegner de relevante felter. Velegnet til større datasæt, når styling og funktioner er tilpasset MVT. |
+| **WebGL (`w`)** | Vektordata til browserens WebGL-rendering | Grafikkortet hjælper med at tegne mange simple objekter; funktionaliteten afviger fra almindelige Leaflet-vektorer. |
+
+Et lag kan have flere valgte typer. Hvis både Tile og Vector er valgt, kan Vidi eksempelvis tilbyde begge visninger, mens **Default** angiver udgangspunktet. Vælg kun typer, som er testet med lagets datamængde, styling og funktioner.
+
+:::note[Vector er ikke WFS]
+Vidis Vector-type henter normalt GeoJSON gennem GC2s SQL API. WFS er en separat OGC-tjeneste til blandt andet QGIS og systemintegrationer.
+:::
+
+Test performance, feature-info, styling og redigering efter ændring af lagtype. Se [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning) for hele dataflowet mellem PostGIS, GC2, MapServer og Vidi.
 
 ### Layer tree
 
@@ -98,7 +111,7 @@ Omfatter blandt andet statisk/dynamisk load strategy, maksimalt antal features, 
 
 ### Tile settings
 
-Omfatter brug af tile cache, serviceadresse, valgt style og tiled adfærd. Den detaljerede cacheopsætning ligger under [Tile cache](/gc2/skemaindstillinger/kort/tile-cache).
+Omfatter brug af tile cache, serviceadresse, valgt style og tiled adfærd. **Use tile cache** er som udgangspunkt slået fra for et nyt lag, selv om Tile er standardtypen. Den detaljerede cacheopsætning ligger under [Tile cache](/gc2/skemaindstillinger/kort/tile-cache).
 
 ### Mouse over
 

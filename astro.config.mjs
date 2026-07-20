@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import AutoImport from 'astro-auto-import';
+import mermaid from 'astro-mermaid';
 
 const isProduction = process.env.NODE_ENV === "production";
 const basePath = isProduction ? "/Vejledninger" : "/";
@@ -47,6 +48,9 @@ export default defineConfig({
     rehypePlugins: [rewriteInternalRootLinks(basePath)],
   },
   integrations: [
+    mermaid({
+      autoTheme: true,
+    }),
     starlight({
       title: "GC2/Vidi",
       // Define language
@@ -213,12 +217,14 @@ export default defineConfig({
               ],
             },
             {
-              label: "QGIS og eksterne datakilder",
-              link: "/gc2/qgis-og-eksterne-datakilder",
-            },
-            {
-              label: "Admin-drift og fejlsøgning",
-              link: "/gc2/admin-drift-og-fejlsoegning",
+              label: "Teknik og drift",
+              collapsed: true,
+              items: [
+                { label: "Installation og opstart", link: "/gc2/installation-og-opstart" },
+                { label: "Teknisk arkitektur og lagvisning", link: "/gc2/teknisk-arkitektur-og-lagvisning" },
+                { label: "QGIS og eksterne datakilder", link: "/gc2/qgis-og-eksterne-datakilder" },
+                { label: "Admin-drift og fejlsøgning", link: "/gc2/admin-drift-og-fejlsoegning" },
+              ],
             },
           ],
         },

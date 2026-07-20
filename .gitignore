@@ -20,8 +20,5 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# Ignore automatically generated files (datasources)
-src/content/docs/dataprodukter/ejendomsbeliggenhed/struktur/*
-src/content/docs/dataprodukter/ejerfortegnelsen/struktur/*
-src/content/docs/dataprodukter/matriklen/struktur/*
-src/content/docs/dataprodukter/tingbogen/struktur/*
+# AI agent files
+AGENTS.md

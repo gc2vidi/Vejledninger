@@ -318,3 +318,16 @@ kbd.key {
 .media-placeholder__instructions > :last-child {
   margin-bottom: 0;
 }
+
+/* Let Mermaid diagrams blend into the documentation canvas. */
+html[data-theme="light"] .sl-markdown-content pre.mermaid,
+html[data-theme="light"] .sl-markdown-content pre.mermaid[data-processed] {
+  background: #fff !important;
+  border-radius: 0;
+}
+
+html[data-theme="dark"] .sl-markdown-content pre.mermaid,
+html[data-theme="dark"] .sl-markdown-content pre.mermaid[data-processed] {
+  background: var(--sl-color-bg) !important;
+  border-radius: 0;
+}

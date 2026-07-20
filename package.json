@@ -16,6 +16,8 @@
     "@astrojs/starlight": "^0.21.5",
     "astro": "^4.6.2",
     "astro-auto-import": "^0.4.4",
+    "astro-mermaid": "^2.1.0",
+    "mermaid": "^11.16.0",
     "node-fetch": "^3.3.2",
     "node-html-parser": "^6.1.13",
     "remark-deflist": "^1.0.0",

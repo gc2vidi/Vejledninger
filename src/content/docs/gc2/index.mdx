@@ -5,7 +5,7 @@ next: false
 prev: false
 ---
 
-import gc2VidiArkitekturImg from './resources/gc2-vidi-architecture.png';
+import gc2VidiArkitekturImg from './resources/index-vidi-GC2-arkitektur.svg';
 
 **Forfatter:** [Martin Høgh](mailto:mh@mapcentia.com), [Henrik Larsen](mailto:hbl@geopartner.dk), [Rene Giovanni](mailto:rgb@geopartner.dk)
 
@@ -22,16 +22,12 @@ I samspillet:
 
 <figure class="centered-figure">
   <img src={gc2VidiArkitekturImg.src} alt="Sammenhængen mellem Vidi, GC2, database og GIS-værktøjer" style={{ width: '820px', maxWidth: '100%' }} />
-  <figcaption>Det eksisterende diagram viser hoveddelene, men bør erstattes med den mere komplette SVG beskrevet nedenfor.</figcaption>
+  <figcaption>GC2 administrerer geodata og tjenester, mens Vidi samler dem i den kortløsning, brugeren åbner i browseren.</figcaption>
 </figure>
-
-<MediaPlaceholder title="GC2/Vidi-arkitektur" file="gc2-vidi-architecture.svg" format="SVG">
-  Vis database, GC2-dashboard, skemaindstillinger, Vidi-server, Vidi-browser, QGIS og eksterne tjenester. Tegn data-, service- og konfigurationsflow som navngivne pile.
-</MediaPlaceholder>
 
 ## Hvem er dokumentationen til?
 
-GC2-delen er skrevet til administratorer og GIS-fagpersoner, som:
+Den almindelige læringssti er skrevet til GC2-administratorer og GIS-fagpersoner, som:
 
 - opretter brugere og adgangsprofiler
 - opretter, importerer og organiserer lag
@@ -40,8 +36,10 @@ GC2-delen er skrevet til administratorer og GIS-fagpersoner, som:
 - publicerer Vidi-konfigurationer
 - arbejder med tjenester, QGIS, Workflow eller Scheduler
 
-:::tip[Afgrænsning]
-Vi forventer, at GC2 og Vidi allerede er installeret. Begrænset server- og buildkontekst findes under [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning), når den er nødvendig for administrationen.
+Serveroperatører og tekniske medarbejdere kan senere bruge siderne under **Teknik og drift** til installation, arkitektur og fejlsøgning. Begreberne forklares, så en ny læser kan forstå sammenhængen, men produktionsændringer kræver normalt erfaring med servere, databaser, netværk og sikkerhed.
+
+:::tip[Du behøver ikke begynde med installationen]
+Arbejder du i en eksisterende GC2-løsning, kan du følge læringsstien nedenfor. Brug kun [Installation og opstart](/gc2/installation-og-opstart), hvis du skal etablere et miljø, og [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning), hvis du vil forstå dataflowet i dybden.
 :::
 
 ## Anbefalet læringssti
@@ -54,8 +52,10 @@ Vi forventer, at GC2 og Vidi allerede er installeret. Begrænset server- og buil
 6. Brug kun [Workflow](/gc2/skemaindstillinger/workflow) og [Scheduler](/gc2/skemaindstillinger/scheduler), når arbejdsprocessen kræver det.
 7. Saml de færdige lag under [Konfigurationer](/gc2/konfigurationer).
 
-## Direkte tekniske emner
+## For teknisk personale
 
+- [Installation og opstart](/gc2/installation-og-opstart)
+- [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning)
 - [QGIS og eksterne datakilder](/gc2/qgis-og-eksterne-datakilder)
 - [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning)
 

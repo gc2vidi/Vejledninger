@@ -28,12 +28,23 @@ Et element kan være et helt skema, et bestemt `skema.lag` eller et tag. Tags fo
   "activeLayers": [
     "v:plan.lokalplan",
     "mvt:trafik.vejarbejde",
-    "w:ekstern.ortofoto"
+    "w:analyse.mange_punkter"
   ]
 }
 ```
 
-Brug det relevante typepræfiks. Et projekt, snapshot eller URL-state kan overstyre aktive lag, så test først en ren konfigurations-URL.
+Præfikset vælger, hvordan laget skal leveres og tegnes:
+
+| Præfiks | Layer type i Meta | Resultat i Vidi |
+|---|---|---|
+| `t:` | Tile | MapServer tegner kortbilleder, som Leaflet viser |
+| `v:` | Vector | GC2 leverer GeoJSON, som Leaflet tegner |
+| `mvt:` | MVT | GC2 leverer tiledelte vektordata, som Leaflet VectorGrid tegner |
+| `w:` | WebGL | GC2 leverer vektordata, som browseren tegner med WebGL |
+
+Typen skal være aktiveret for laget under [Meta – Layer type](/gc2/skemaindstillinger/database/meta#layer-type). Uden et typepræfiks bruges normalt lagets **Default**. Et projekt, snapshot eller URL-state kan overstyre aktive lag, så test først en ren konfigurations-URL.
+
+Se [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning) for forskellen mellem kortbilleder, GeoJSON, MVT, WebGL og WFS.
 
 ## Startudsnit og CRS
 
