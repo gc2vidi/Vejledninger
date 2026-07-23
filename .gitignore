@@ -22,3 +22,4 @@ pnpm-debug.log*
 
 # AI agent files
 AGENTS.md
+src/data/globalHeadingMap.ts

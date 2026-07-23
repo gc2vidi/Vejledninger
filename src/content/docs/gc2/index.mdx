@@ -13,6 +13,19 @@ import gc2VidiArkitekturImg from './resources/index-vidi-GC2-arkitektur.svg';
 
 GeoCloud2, forkortet GC2, er administrationsplatformen bag Vidi. Her organiserer administratoren data, lag, metadata, adgang, tjenester og de konfigurationer, som bestemmer Vidi-løsningens indhold og opstart.
 
+Med GC2 kan du:
+
+- oprette databaser, skemaer og brugere
+- importere og organisere geografiske data
+- styre adgang til data og tjenester
+- konfigurere felter, metadata og redigering
+- style lag og opbygge signaturforklaringer
+- samle lag og funktioner i konfigurationer, som åbnes i Vidi
+
+## Sammenhængen mellem GC2 og Vidi
+
+GC2 er kontrolpanelet, hvor data og indstillinger administreres. Vidi er kortapplikationen, hvor slutbrugeren ser og arbejder med resultatet.
+
 I samspillet:
 
 - PostgreSQL gemmer data og struktur
@@ -27,22 +40,15 @@ I samspillet:
 
 ## Hvem er dokumentationen til?
 
-Den almindelige læringssti er skrevet til GC2-administratorer og GIS-fagpersoner, som:
+Den almindelige læringssti er skrevet til **GC2-administratorer**, som opsætter brugere, data, lag og Vidi-konfigurationer, og **GIS-fagpersoner**, som arbejder med datamodeller, styling, metadata og redigering.
 
-- opretter brugere og adgangsprofiler
-- opretter, importerer og organiserer lag
-- konfigurerer felter, Meta, styling og labels
-- gør lag redigerbare
-- publicerer Vidi-konfigurationer
-- arbejder med tjenester, QGIS, Workflow eller Scheduler
-
-Serveroperatører og tekniske medarbejdere kan senere bruge siderne under **Teknik og drift** til installation, arkitektur og fejlsøgning. Begreberne forklares, så en ny læser kan forstå sammenhængen, men produktionsændringer kræver normalt erfaring med servere, databaser, netværk og sikkerhed.
+**Serveroperatører** og andre tekniske medarbejdere kan bruge siderne under **Teknik og drift** til installation, arkitektur og fejlsøgning. Begreberne forklares for nye læsere, men ændringer i et produktionsmiljø kræver normalt erfaring med servere, databaser, netværk og sikkerhed.
 
 :::tip[Du behøver ikke begynde med installationen]
 Arbejder du i en eksisterende GC2-løsning, kan du følge læringsstien nedenfor. Brug kun [Installation og opstart](/gc2/installation-og-opstart), hvis du skal etablere et miljø, og [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning), hvis du vil forstå dataflowet i dybden.
 :::
 
-## Anbefalet læringssti
+## Kom godt i gang
 
 1. [Log ind og forstå dashboardet](/gc2/log-ind-og-dashboard).
 2. [Opret brugere og adgangsprofiler](/gc2/brugere-og-adgang).
@@ -52,6 +58,18 @@ Arbejder du i en eksisterende GC2-løsning, kan du følge læringsstien nedenfor
 6. Brug kun [Workflow](/gc2/skemaindstillinger/workflow) og [Scheduler](/gc2/skemaindstillinger/scheduler), når arbejdsprocessen kræver det.
 7. Saml de færdige lag under [Konfigurationer](/gc2/konfigurationer).
 
+## Workshops og øvelser
+
+**Vidi/GC2-brugergruppen** har udarbejdet en række workshops, som viser, hvordan GC2 og Vidi kan bruges i konkrete arbejdsgange. Her kan du følge sammenhængende øvelser, afprøve funktionerne i praksis og arbejde med de tilhørende øvelsesdata.
+
+Workshopperne supplerer denne dokumentation: Dokumentationen fungerer som et opslagsværk for de enkelte funktioner, mens workshopperne samler flere funktioner i et praktisk forløb.
+
+På [workshopsiden](https://gc2vidi.github.io/workshops/) finder du blandt andet øvelser om GC2 CLI, baggrundskort, lag- og feltindstillinger, vektorlag og editering. Øvelsesdata og workshoppenes kildefiler findes i [workshop-repositoriet på GitHub](https://github.com/gc2vidi/workshops).
+
+Workshopmateriale kan være skrevet til en bestemt version af GC2 eller Vidi. Hvis en skærm eller indstilling ser anderledes ud, bør du bruge den aktuelle dokumentation som udgangspunkt.
+
+{/* Redaktionel note: Brugergruppen bør afklare eller etablere en vedligeholdt GC2-testindgang med afgrænsede testdata og klare regler for brugen. Adresser nævnt i ældre workshops, herunder swarm.gc2.io og test.admin.gc2.io, må ikke præsenteres som en officiel demo, før ansvar, sikkerhed og forventet levetid er bekræftet. Opret først en synlig "Prøv GC2"-sektion, når dette er på plads. */}
+
 ## For teknisk personale
 
 - [Installation og opstart](/gc2/installation-og-opstart)
@@ -59,4 +77,17 @@ Arbejder du i en eksisterende GC2-løsning, kan du følge læringsstien nedenfor
 - [QGIS og eksterne datakilder](/gc2/qgis-og-eksterne-datakilder)
 - [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning)
 
-Hvis du vil bidrage, kan du læse [bidragsguiden](/bidrag).
+## Om MapCentia
+
+GC2 er udviklet af [MapCentia](https://www.mapcentia.com/), et dansk firma specialiseret i open source GIS-løsninger. MapCentia står også bag Vidi, som er den webbaserede kortapplikation, hvor brugerne ser og arbejder med de data og korttjenester, der administreres gennem GC2.
+
+MapCentias løsninger bruges af kommuner, forsyninger, regioner og private virksomheder til at håndtere og dele geografiske data på en effektiv og sikker måde.
+
+## For udviklere og teknisk interesserede
+
+GC2 er open source og udvikles aktivt på GitHub:
+
+- **GitHub-repository**: [https://github.com/mapcentia/geocloud2](https://github.com/mapcentia/geocloud2)
+- **Changelog**: [https://github.com/mapcentia/geocloud2/blob/master/CHANGELOG.md](https://github.com/mapcentia/geocloud2/blob/master/CHANGELOG.md)
+
+Hvis du vil hjælpe med at forbedre denne dokumentation, kan du læse [bidragsguiden](/bidrag).
