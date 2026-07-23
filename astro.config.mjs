@@ -146,7 +146,7 @@ export default defineConfig({
               link: "/gc2",
             },
             {
-              label: "Log ind og dashboard",
+              label: "Log ind og kontrolcenter",
               link: "/gc2/log-ind-og-dashboard",
             },
             {

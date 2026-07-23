@@ -76,7 +76,7 @@ http://localhost:3000/app/<database>/public
 http://localhost:3000/app/demo/public
 ```
 
-Fortsæt med [Log ind og dashboard](/gc2/log-ind-og-dashboard) og [Opret, importer og organiser lag](/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag).
+Fortsæt med [Log ind og kontrolcenter](/gc2/log-ind-og-dashboard) og [Opret, importer og organiser lag](/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag).
 
 :::caution[Miljøet er kun til test]
 Compose-repositoryet er dokumenteret som et testmiljø og har blandt andet brugt databaseadgangskoden `1234`. Eksponér det ikke på internettet, og brug ikke produktionsdata i det.
@@ -306,7 +306,7 @@ Konfigurér også GC2s offentlige Vidi-adresse, så knapper og genererede links 
 2. Placér en reverse proxy eller load balancer foran containerne.
 3. Opret TLS-certifikater, og viderestil HTTP til HTTPS.
 4. Publicér kun de nødvendige endpoints. PostgreSQL, Redis og interne containerporte skal ikke være åbne for hele internettet.
-5. Begræns GC2-dashboard og `/install` yderligere, hvis organisationens sikkerhedsmodel kræver det.
+5. Begræns adgangen til GC2-kontrolcenteret (`/dashboard/`) og `/install` yderligere, hvis organisationens sikkerhedsmodel kræver det.
 
 **Eksempel:** Reverse proxyen sender `https://kort.example.dk` videre til Vidi på den interne port `3000`, mens `https://admin.kort.example.dk` sendes videre til GC2. Brugerne ser aldrig de interne porte eller containernavne.
 
@@ -382,7 +382,7 @@ Denne model kræver særskilt validering af sessionsdata, genererede filer, cach
 ## Næste skridt
 
 - [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning)
-- [Log ind og dashboard](/gc2/log-ind-og-dashboard)
+- [Log ind og kontrolcenter](/gc2/log-ind-og-dashboard)
 - [Opret, importer og organiser lag](/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag)
 - <a href="https://github.com/mapcentia/geocloud2#how-to-install-gc2-and-vidi" target="_blank" rel="noopener noreferrer">GC2-repositoryets installationsafsnit</a>
 - <a href="https://mapcentia.github.io/GC2-Vidi-workshop/" target="_blank" rel="noopener noreferrer">GC2/Vidi-workshop</a>

@@ -21,13 +21,17 @@
   max-width: calc(100% - 1.5em - 2px);
 }
 
-/* Reduce size of all h2 and h3 in docs content */
+/* Keep content heading levels in a clear descending hierarchy. */
 .sl-markdown-content h2 {
   font-size: 1.75rem;   /* default is ~2rem */
 }
 
 .sl-markdown-content h3 {
   font-size: 1.25rem;  /* default is ~1.5rem */
+}
+
+.sl-markdown-content h4 {
+  font-size: 1.1rem;
 }
 
 /* --- IMAGE CENTERING --- */

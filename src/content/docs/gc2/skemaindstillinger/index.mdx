@@ -3,6 +3,8 @@ title: Skemaindstillinger
 description: Få overblik over administrationen af et skema i GC2 og den anbefalede arbejdsrækkefølge
 ---
 
+import adminWindowImg from '../resources/gc2-admin-window.png';
+
 Skemaindstillinger er GC2s administrationsmodul for et valgt skema. Her arbejder du med lag, felter, adgang, styling, workflow, planlagte jobs og logning.
 
 :::note[Krævet adgang]
@@ -11,15 +13,28 @@ Du skal være logget ind og have adgang til skemaet. Hvilke faner og handlinger 
 
 ## Åbn skemaindstillinger
 
-Fra dashboardet udvider du et skema og åbner dets indstillinger. Læs [Log ind og dashboard](/gc2/log-ind-og-dashboard), hvis du ikke er kommet hertil endnu.
+Fra kontrolcenteret udvider du et skema og åbner dets indstillinger. Læs [Log ind og kontrolcenter](/gc2/log-ind-og-dashboard), hvis du ikke er kommet hertil endnu.
 
-<MediaPlaceholder
-  title="Overblik over skemaindstillinger"
-  file="gc2-skemaindstillinger-overview.png"
-  format="PNG"
->
-  Vis hele administrationsvinduet fra den aktuelle installation med fanerne Kort, Database, Workflow, Scheduler og Log. Brug et ufarligt testskema, og markér hovedfanerne uden at skjule værktøjslinjerne.
-</MediaPlaceholder>
+<figure class="centered-figure">
+  <img
+    src={adminWindowImg.src}
+    alt="Skemaadministrationen i GC2"
+    style={{ width: '820px', maxWidth: '100%' }}
+  />
+  <figcaption>Eksempel på skemaadministrationen med faner som Kort, Database, Workflow og Log.</figcaption>
+</figure>
+
+Den konkrete brugerflade og de tilgængelige faner kan variere mellem installationer og versioner.
+
+## Skemaet som ramme
+
+Et skema er en logisk beholder for tabeller, views og lag. Mange organisationer bruger skemaer til at adskille data efter fagområde, projekt eller ansvar, for eksempel:
+
+- `forsyning` til ledningsdata
+- `plan` til planfaglige lag
+- `drift` til driftsdata og arbejdsregistre
+
+Undgå som hovedregel at bruge `public` til den daglige datamodellering, medmindre der er en konkret grund til det.
 
 ## Fanerne
 
