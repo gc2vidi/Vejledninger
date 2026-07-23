@@ -101,6 +101,9 @@ export default defineConfig({
         src: './src/assets/logo-gc2-vidi.svg',
         alt: 'GC2/Vidi Brugergruppen',
       },
+      social: {
+        github: 'https://github.com/gc2vidi',
+      },
       // Set custom style
       customCss: ["./src/styles/style.css"],
       // Define sidebar
