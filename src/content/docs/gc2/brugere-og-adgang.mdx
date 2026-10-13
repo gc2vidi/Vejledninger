@@ -33,7 +33,9 @@ Sub-brugerne vises i området **Sub-brugere** til højre i kontrolcenteret.
   <figcaption>Sub-brugerne vises til højre. Hver sub-bruger har også sit eget skema i listen til venstre.</figcaption>
 </figure>
 
-## Opret sub-bruger
+## Administrer sub-brugere
+
+### Opret en sub-bruger
 
 1. Klik på **Tilføj** ved **Sub-brugere** i kontrolcenteret.
 2. Skriv et **Navn**. Navnet er sub-brugerens brugernavn og kan ikke ændres bagefter.
@@ -54,7 +56,14 @@ Sub-brugerne vises i området **Sub-brugere** til højre i kontrolcenteret.
 
 GC2 opretter samtidig et skema med samme navn som sub-brugeren. Sub-brugeren har alle rettigheder i sit eget skema og kan oprette lag der. Adgang til andre skemaer og lag styres via privilegier.
 
-## Nedarvning
+### Ret eller slet en sub-bruger
+
+- Klik på blyanten ved en sub-bruger for at ændre adgangskode eller nedarvning. Lad adgangskodefelterne være tomme, hvis adgangskoden skal være uændret. Navn og e-mail kan ikke ændres.
+- Klik på skraldespanden for at slette en sub-bruger.
+
+## Adgangsprofiler og nedarvning
+
+### Nedarvning
 
 En sub-bruger kan nedarve privilegierne fra én eller flere andre sub-brugere. Vælg dem i listen **Nedarv ikke** nederst i formularen ved at sætte flueben.
 
@@ -62,12 +71,7 @@ Den sub-bruger, der nedarves fra, fungerer i praksis som en rolle eller brugergr
 
 Du kan ikke give privilegier direkte til en sub-bruger, der nedarver. Skal adgangsmønsteret ændres, sker det på den sub-bruger, der nedarves fra.
 
-## Ret eller slet en sub-bruger
-
-- Klik på blyanten ved en sub-bruger for at ændre adgangskode eller nedarvning. Lad adgangskodefelterne være tomme, hvis adgangskoden skal være uændret. Navn og e-mail kan ikke ændres.
-- Klik på skraldespanden for at slette en sub-bruger.
-
-## Brug grupper eller arketyper
+### Brug grupper som adgangsprofiler
 
 En god praksis er at oprette få, tydelige adgangsprofiler som andre sub-brugere kan nedarve fra. Eksempler kan være:
 
@@ -78,11 +82,13 @@ En god praksis er at oprette få, tydelige adgangsprofiler som andre sub-brugere
 
 Det gør det langt lettere at vedligeholde rettigheder over tid.
 
-## Giv adgang til lag
+## Adgang til data
+
+### Giv adgang til lag
 
 Når sub-brugerne er oprettet, giver du dem adgang til lagene med privilegier. Laget skal samtidig have den rigtige authentication, ellers kan det stadig læses anonymt, selv om kun udvalgte brugere har fået adgang. Begge dele beskrives i [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
 
-## WMS/WFS-password og API-nøgle
+### WMS/WFS-password og API-nøgle
 
 Sub-brugere kan også have behov for selvstændige adgangsoplysninger til tjenester og integrationer, fx:
 
@@ -95,7 +101,7 @@ Hvis et lag er låst med `Read/write`, skal du altså ikke kun tænke på Vidi-l
 
 Læs videre i [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api).
 
-## Hvad bruger Vidi dette til?
+### Hvad bruger Vidi adgangen til?
 
 Flere funktioner i Vidi afhænger direkte af denne opsætning, blandt andet:
 
