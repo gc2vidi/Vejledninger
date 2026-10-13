@@ -53,6 +53,13 @@ Serveroperatøren kan også sætte GC2-adressen med miljøvariablen `GC2_HOST` o
 Hvis `enabledExtensions` indeholder `symbols`, men `symbols` ikke findes i `extensions.browser`, er JSON-dokumentet korrekt uden at funktionen kan starte. Det kræver en ændring og normalt en genstart eller rebuild af Vidi-installationen.
 :::
 
+## Login og OAuth-klienter
+
+Kontrolcenteret logger ind via GC2's indbyggede OpenID Connect-login med OAuth-klienten `gc2-cli`. Klienterne ligger i tabellen `settings.clients` i hver database og kan kun ændres via GC2's API (`/api/v4/client`), ikke i kontrolcenteret eller administrationsmodulet. To indstillinger er nyttige at kende:
+
+- **Redirect-adresser:** Klienten skal have kontrolcenterets adresse som redirect-adresse. Mangler den, stopper login med fejlen `invalid_client` og teksten “is not registered with redirect uri”.
+- **To-faktor-login:** Er `two_factor` slået til på klienten, sender GC2 en engangskode på e-mail efter adgangskoden. Koden gælder i 10 minutter og skrives i feltet **One-time code from e-mail**. Det kræver, at serveroperatøren har sat mailafsendelse op i GC2 (`notification` i `App.php`), og at brugeren har en e-mailadresse. Indstillingen er slået fra som standard.
+
 ## En enkel fejlmodel
 
 ### Konfigurationen kan ikke hentes

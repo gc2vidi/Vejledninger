@@ -5,8 +5,9 @@ sidebar:
   order: 1
 ---
 
-import dashboardLoginImg from './resources/gc2-dashboard-login.png';
+import loginGif from './resources/gc2-login.gif?url';
 import dashboardImg from './resources/gc2-dashboard.png';
+import konfigurationerImg from './resources/gc2-kontrolcenter-konfigurationer-overview.png';
 import adminOpenGif from './resources/gc2-open-settings.gif?url';
 import subuserOverviewImg from './resources/gc2-subuser-overview.png';
 
@@ -31,18 +32,32 @@ Du logger ind på den GC2-installation jeres organisation bruger. Afhængigt af 
 
 Som administrator arbejder du som regel med databasebrugeren eller en sub-bruger med udvidede rettigheder. Forskellen forklares nærmere under [Brugere og adgang](/gc2/brugere-og-adgang).
 
+### Sådan logger du ind
+
+1. Åbn kontrolcenteret, fx `https://<jeres-gc2>/dashboard/`.
+2. Klik på **Login**. Du sendes videre til GC2's loginside.
+3. Skriv dit brugernavn eller din e-mail, og tryk <Key items="Enter" /> eller klik på pilen ved siden af feltet.
+4. Har du adgang til flere databaser, vælger du den database, du vil arbejde i.
+5. Skriv din adgangskode, og klik på **Sign in**.
+
+Når du er logget ind, sendes du tilbage til kontrolcenteret.
+
 <figure class="centered-figure">
   <img
-    src={dashboardLoginImg.src}
-    alt="Login til GC2"
-    style={{ width: '360px', maxWidth: '100%' }}
+    src={loginGif}
+    alt="Login til GC2: Login i kontrolcenteret, brugernavn, adgangskode og Sign in"
+    style={{ width: '100%' }}
   />
-  <figcaption>Eksempel på login til GC2.</figcaption>
+  <figcaption>Login går via GC2's egen loginside og ender i kontrolcenteret.</figcaption>
 </figure>
 
-<MediaPlaceholder title="Aktuelt login til GC2" file="gc2-login.png" format="PNG">
-  Erstat det eksisterende loginbillede med den aktuelle installations loginflow. Vis ingen brugernavne, browserhistorik eller organisationens loginoplysninger.
-</MediaPlaceholder>
+:::note[Engelske tekster]
+Nogle tekster på loginsiderne er endnu ikke oversat til dansk, fx **Login**, **Please sign in** og **Sign in**.
+:::
+
+### Log ind på en anden database
+
+Kontrolcenteret husker i browseren, hvilken database du sidst loggede ind på. Vil du skifte, så klik på **Reset selected database** på kontrolcenterets loginside, før du klikker på **Login**.
 
 :::tip[God praksis]
 Brug helst en navngivet administrationsbruger til daglig drift og undgå at dele login mellem flere personer.
@@ -80,13 +95,16 @@ Her kan du blandt andet arbejde med felter, adgang, metadata og styling. Læs [S
 
 En Vidi-konfiguration samler de færdige lag og bestemmer blandt andet, hvilke data, baggrundskort og funktioner der er tilgængelige, når Vidi åbner. Vælg fanen **Konfigurationer** i kontrolcenteret for at se, oprette eller ændre dem.
 
-<MediaPlaceholder
-  title="Konfigurationer i kontrolcenteret"
-  file="gc2-kontrolcenter-konfigurationer-overview.png"
-  format="PNG"
->
-  Vis kontrolcenteret med fanen Konfigurationer aktiv. Medtag en ufarlig testkonfiguration og de vigtigste handlinger i oversigten. Skjul tokens, produktionsnavne, følsomme URL'er og andre interne oplysninger.
-</MediaPlaceholder>
+<figure class="centered-figure">
+  <img
+    src={konfigurationerImg.src}
+    alt="Fanen Konfigurationer i kontrolcenteret med en udfoldet konfiguration"
+    style={{ width: '100%' }}
+  />
+  <figcaption>Fanen Konfigurationer med en udfoldet konfiguration.</figcaption>
+</figure>
+
+Klik på **Tilføj** for at oprette en ny konfiguration. Fold en konfiguration ud for at se dens link og knapperne **Vidi** (åbn i Vidi), **Kopier link**, **Ændre** og **Slet**.
 
 Læs [Konfigurationer](/gc2/konfigurationer) for at oprette, udgive og teste en konfiguration.
 
