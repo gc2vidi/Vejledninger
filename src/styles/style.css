@@ -229,6 +229,16 @@ p:has(> img:only-child) + p:has(> em:only-child) {
   background: color-mix(in srgb, var(--sl-color-accent), transparent 90%);
 }
 
+/* Dark mode: light pill with dark text (like Key), so the dark Leaflet.draw sprite icons stay visible */
+:root[data-theme='dark'] .sl-markdown-content .menupath{
+  border-color: var(--sl-color-accent);
+  background: color-mix(in srgb, var(--sl-color-accent), white 75%);
+  color: var(--sl-color-accent-low);
+}
+:root[data-theme='dark'] .sl-markdown-content .menupath kbd.menu{
+  color: var(--sl-color-accent-low);
+}
+
 /* Menu items */
 .sl-markdown-content .menupath kbd.menu{
   font: inherit;

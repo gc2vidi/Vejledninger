@@ -44,10 +44,12 @@ if (set === 'draw') {
   if (!fs.existsSync(file)) {
     throw new Error(`UiIcon: unknown icon "${name}" in set "${set}" (${file})`);
   }
+  // Normalise attributes on the opening <svg> tag only; child fills (e.g. fill="none") stay intact
   svg = fs
     .readFileSync(file, 'utf8')
-    .replace(/\s(width|height|class|fill)="[^"]*"/g, '')
-    .replace('<svg', '<svg width="1.15em" height="1.15em" fill="currentColor" aria-hidden="true" focusable="false"');
+    .replace(/<svg\b[^>]*>/, tag => tag
+      .replace(/\s(width|height|class|fill)="[^"]*"/g, '')
+      .replace('<svg', '<svg width="1.15em" height="1.15em" fill="currentColor" aria-hidden="true" focusable="false"'));
 }
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
