@@ -55,7 +55,7 @@ const drawStyle = set === 'draw'
   ? `background-image:url(${base}/icons/leaflet-draw-spritesheet.svg);--x:${drawIcons[name]}`
   : undefined;
 ---
-<span class="menupath ui-icon" title={title ?? label ?? name} aria-label={title ?? label ?? name}>
+<span class="menupath ui-icon" role="img" title={title ?? label ?? name} aria-label={title ?? label ?? name}>
   <kbd class="menu">
     {set === 'draw' ? <span class="ui-icon-draw" style={drawStyle} aria-hidden="true" /> : <Fragment set:html={svg} />}
     {label && <span class="ui-icon-label">{label}</span>}
