@@ -1,82 +1,316 @@
 ---
 title: Tabelstruktur, data og felter
-description: Gør felter forståelige, søgbare, filtrerbare og egnede til visning og redigering
+description: Tilføj og ret kolonner, og bestem hvordan felterne vises, søges, filtreres og redigeres i Vidi
+tableOfContents:
+  maxHeadingLevel: 4
 ---
 
-import tableStructureImg from '../../resources/gc2-table-structure.png';
+import structureGridSvg from '../../resources/gc2-database-structure-grid.svg?url';
+import dataGridSvg from '../../resources/gc2-database-data-grid.svg?url';
+import filterRelationImg from '../../resources/vidi-filter-relation-liste.png';
 
 :::note[Krævet adgang]
-Visning kræver lagadgang. Ændring af struktur, kolonner og feltindstillinger kræver administrative privilegier. Ændring af poster kræver skriveadgang og en brugbar primærnøgle.
+Du skal kunne administrere skemaet. Vil du rette poster under <MenuPath items="Data" />, skal tabellen desuden have en primærnøgle.
 :::
 
-## Structure og Data
+## Find tabelstrukturen
 
-`Structure` styrer tabellens kolonner og den metadata, som GC2 og Vidi bruger om felterne. `Data` viser posterne og kan redigere dem, når relationen har en primærnøgle.
+1. Åbn skemaindstillingerne, og vælg fanen <MenuPath items="Database" />.
+2. Klik på et lag i listen.
+3. Under listen ser du fanerne <MenuPath items="Struktur" />, <MenuPath items="Data" /> og <MenuPath items="Elasticsearch" />.
+
+<MenuPath items="Struktur" /> viser lagets kolonner med én række pr. felt. Her tilføjer og retter du kolonner, og her bestemmer du, hvordan Vidi bruger felterne. <MenuPath items="Data" /> viser selve posterne. <MenuPath items="Elasticsearch" /> bruges kun, når installationen har et søgeindeks; læs mere under [Database](/gc2/skemaindstillinger/database#elasticsearch).
 
 <figure class="centered-figure">
-  <img src={tableStructureImg.src} alt="Tabelstruktur og feltegenskaber i GC2" style={{ width: '820px', maxWidth: '100%' }} />
-  <figcaption>Billedet er strukturelt genkendeligt, men bør erstattes med et aktuelt udsnit, hvor alle kolonneoverskrifter kan læses.</figcaption>
+  <img
+    src={structureGridSvg}
+    alt="Database-fanen med laget beskyttede_naturtyper valgt og fanen Struktur åben med feltindstillingerne"
+    style={{ width: '100%' }}
+  />
+  <figcaption>Fanen Struktur med én række pr. felt. Naturtype og Status har en værdiliste (<code>*</code>) i Egenskaber (markeret).</figcaption>
 </figure>
 
-## Feltindstillinger i UI-rækkefølge
+Der er ingen gem-knap. En ændring gemmes, så snart du forlader cellen eller klikker i et afkrydsningsfelt.
 
-| Indstilling | Formål |
+## Kolonner
+
+### Tilføj en kolonne
+
+1. Skriv navnet i feltet **Ny kolonne navn** over tabellen.
+2. Vælg typen i **Ny kolonne type**, fx `String`, `Integer`, `Decimal`, `Date`, `Boolean` eller `Json`.
+3. Klik på <MenuPath items="Tilføj ny kolonne" />.
+
+Brug et kort, teknisk navn med små bogstaver og uden mellemrum og æ, ø og å, fx `besig_dato`. Det læsevenlige navn sætter du bagefter i **Alias**.
+
+### Omdøb eller slet en kolonne
+
+Dobbeltklik på navnet i **Kolonne** for at omdøbe kolonnen. Det omdøber kolonnen i databasen, ikke kun i GC2.
+
+For at slette en kolonne markerer du rækken og klikker på <MenuPath items="Slet kolonne" />. Kolonnen og alle dens værdier slettes fra tabellen.
+
+:::caution[Navnet bruges andre steder]
+Views, QGIS-projekter, templates, filtre og Vidi-konfigurationer kan henvise til kolonnenavnet. De holder op med at virke, når kolonnen omdøbes eller slettes. Brug **Alias**, hvis du kun vil ændre det navn, brugerne ser.
+:::
+
+### Type og Allow null
+
+**Type** viser kolonnens datatype i databasen. Den kan ikke ændres her.
+
+**Allow null** bestemmer, om feltet må være tomt:
+
+- På en tabel ændrer GC2 kolonnen i databasen. Fjerner du fluebenet, og der allerede findes tomme værdier, afviser databasen ændringen.
+- På et view gemmes valget kun som en indstilling.
+
+I begge tilfælde gør Vidis redigeringsformular feltet obligatorisk, når fluebenet er fjernet.
+
+### Versionering
+
+<MenuPath items="Start versionering" /> og <MenuPath items="Stop versionering" /> slår historik til og fra for tabellen. Læs mere under [Versionering, roller og opsætning](/gc2/skemaindstillinger/workflow/versionering-roller-og-opsaetning).
+
+## Feltindstillinger
+
+De øvrige kolonner i <MenuPath items="Struktur" /> ændrer ikke tabellen. De bestemmer, hvordan GC2 og Vidi viser og bruger feltet. Klik i et afkrydsningsfelt for at slå en indstilling til eller fra, og dobbeltklik på en tekstcelle for at skrive i den.
+
+### Navn og rækkefølge
+
+| Indstilling | Virkning |
 |---|---|
-| `Sort id` | Rækkefølge i info, formularer og andre feltlister |
-| `Column` | Det tekniske feltnavn; ændres ikke som brugerlabel |
-| `Type` | Databasetype og dermed mulige editorer og operatorer |
-| `Allow null` | Om feltet må være tomt |
-| `Alias` | Brugervenlig titel, fx `Dato etableret` for `datoetableret` |
-| `Description` | Hjælp eller uddybning af feltets betydning |
-| `Show in click info` | Medtag feltet i almindelig feature-info |
-| `Show in mouse-over` | Medtag feltet ved mouse-over, når funktionen bruges |
-| `Searchable` | Gør feltet tilgængeligt for lagets søgning |
-| `Disable filtering` | UI-label i den medfølgende kilde. Kontrollér den konkrete installations effekt, før du dokumenterer eller ændrer mange felter |
-| `Autocomplete` | Tilbyd værdiforslag i relevante søge- eller filterfelter |
-| `Show in conflict` | Installationsafhængig visning i konfliktsøgning |
-| `Make link` | Rendér værdien som link |
-| `Ignore` | Udelad feltet fra relevante automatiske visninger |
-| `Content` | Fortolk indhold som `Plain`, `Image` eller `Video` |
-| `Link prefix` | Tekst foran værdien, fx `https://` |
-| `Link suffix` | Tekst efter værdien eller ekstra URL-del |
-| `Template` | Felt- eller visningstemplate, når funktionen understøtter den |
-| `Properties` | Valgmuligheder eller egenskaber til editoren; skal være gyldig JSON, når JSON forventes |
+| **Sort id** | Feltets plads i klik-info, attributtabel, download og WFS. Lave tal kommer først. |
+| **Alias** | Navnet brugerne ser i stedet for det tekniske kolonnenavn, fx **Besigtiget** for `besig_dato`. |
+| **Beskrivelse** | Gemmes som kommentar på kolonnen i databasen. I Vidi vises den som hjælpetekst i redigeringsformularen. |
 
-<MediaPlaceholder
-  title="Aktuel Structure-fane"
-  file="gc2-database-structure-grid.png"
-  format="PNG"
->
-  Vis den aktuelle Structure-fane med kolonner fra Sort id til Properties. Brug syntetiske felter, hvor Alias, click info, Searchable, Content og Properties har tydeligt forskellige værdier.
-</MediaPlaceholder>
+### Visning i klik-info og mouse-over
 
-## En god minimumsopsætning
+| Indstilling | Virkning |
+|---|---|
+| **Vis i klik-info** | Feltet vises, når brugeren klikker på et objekt, og som kolonne i attributtabellen. Kun disse felter kommer med, når et klikresultat eksporteres til Excel. |
+| **Vis i mouse-over** | Feltet vises i boksen, når musen holdes over et objekt. Det virker kun, når mouse-over er slået til for laget under [Meta](/gc2/skemaindstillinger/database/meta). |
+| **Gør til link** | Værdien vises som et link i klik-info. |
+| **Link prefix** og **Link suffix** | Tekst før og efter værdien i linket, fx `https://example.dk/sag/` foran et sagsnummer. Bruges kun i klik-info; attributtabellen linker til værdien, som den er. |
+| **Indhold** | `Plain` viser værdien som tekst. `Image` viser en billedadresse som billede, og `Video` viser en videoadresse som afspiller. |
+| **Template** | Bestemmer, hvordan værdien vises i klik-info og i Info-panelets tabel. Se [Template](#template) nedenfor. |
 
-1. Bevar stabile tekniske feltnavne.
-2. Giv brugerfelter forståelige aliaser.
-3. Vis kun relevante felter i click info.
-4. Markér få, præcise søgefelter.
-5. Brug autocomplete på kontrollerede værdimængder.
-6. Brug link og medieindhold kun til betroede adresser.
-7. Dokumentér `Properties`, templates og andre avancerede valg.
+Har et felt både **Template**, **Gør til link** og **Indhold**, bruger klik-info kun **Template**.
+
+### Template
+
+En template bestemmer, hvordan et felt vises i klik-info og i Info-panelets tabel. Den skrives i **Template** under <MenuPath items="Struktur" /> og er tekst og HTML med pladsholdere i dobbelte krøllede parenteser. En pladsholder kan være et hvilket som helst felt på laget, ikke kun feltet selv:
+
+```handlebars
+<b>{{navn}}</b> ({{status}})
+```
+
+Templaten bruges kun, når feltet har en værdi. Er feltet tomt, vises det ikke i klik-info, medmindre templaten bruger `replaceNull`.
+
+Skal hele klik-info for laget have et andet layout, så brug lagets egen template under [Meta](/gc2/skemaindstillinger/database/meta).
+
+#### Hjælpefunktioner
+
+Vidi har fire hjælpefunktioner til templates.
+
+**formatDate** formaterer en dato. Den er nyttig, når datoen er gemt som tekst eller tal i et format, der er svært at læse, fx `20250204`. Angiv det ønskede format først og datoens nuværende format som det sidste:
+
+```handlebars
+{{formatDate dato "DD-MM-YYYY" "YYYYMMDD"}}
+```
+
+Det viser 04-02-2025. Er feltet allerede af typen `date`, kan du udelade det sidste format. Se de mulige formater hos [Day.js](https://day.js.org/docs/en/display/format).
+
+:::caution[Kendt fejl med tidsstempler]
+Bruger du `formatDate` på et felt af typen `timestamptz`, viser Vidi klokkeslættet en eller to timer for sent. Sent på aftenen bliver datoen derfor den næste dag. Skal datoen være korrekt, så lav feltet om til en dato i et view, fx `tidspunkt::date AS dato`.
+:::
+
+**formatDecimalNumber** viser decimaltal med komma, når Vidi kører på dansk:
+
+```handlebars
+{{formatDecimalNumber areal}} ha
+```
+
+**breakLines** viser linjeskift i en længere tekst som nye linjer i klik-info:
+
+```handlebars
+{{breakLines beskrivelse}}
+```
+
+**replaceNull** viser en tekst, når feltet er tomt, og ellers ingenting. Sæt den derfor foran en pladsholder for selve værdien:
+
+```handlebars
+{{replaceNull dato "Ingen dato"}}{{formatDate dato "DD-MM-YYYY" "YYYYMMDD"}}
+```
+
+:::caution[Kendt fejl i Info-panelets tabel]
+Tabellen i Info-panelet læser templates på en anden måde end klik-info. Indtil fejlen er rettet:
+
+- Brug ikke blokke som `{{#if}}` og `{{#each}}`. Så viser Info-panelet **Ingen poster fundet** for hele laget.
+- Regn med, at hjælpefunktionerne kun virker i klik-info. I tabellen bliver de tomme, så `{{formatDecimalNumber areal}} ha` vises som "ha".
+:::
+
+### Søgning og filtrering
+
+| Indstilling | Virkning |
+|---|---|
+| **Søgbar** | Feltet indgår, når brugeren [søger i laget](/vidi/vidi-menuen/lagstyring#søgning-i-lag). Er ingen felter søgbare, kan laget ikke søges. |
+| **Deaktiver filtrering** | Feltet fjernes fra feltlisten, når brugeren laver et [filter på laget](/vidi/vidi-menuen/lagstyring#filtre). |
+| **Autocomplete** | Når brugeren filtrerer på et tekstfelt, foreslår Vidi de værdier, feltet allerede har. |
+
+:::caution[Deaktiver filtrering skjuler også feltet ved redigering]
+Et felt med **Deaktiver filtrering** vises ikke i Vidis redigeringsformular, og det gemmes ikke, når brugeren retter et objekt. Brug det derfor ikke på felter, der skal kunne redigeres i Vidi.
+:::
+
+### Egenskaber
+
+I **Egenskaber** giver du et felt en fast liste af værdier. Vidi viser listen som rulleliste:
+
+- i redigeringsformularen
+- når brugeren filtrerer på feltet
+
+Klik-info og attributtabellen viser den værdi, der er gemt i feltet.
+
+#### Formater
+
+**Liste.** Værdien gemmes og vises, som den står:
+
+```json
+["Sø", "Mose", "Eng"]
+```
+
+**Tekst og værdi.** Brugeren vælger teksten, og tallet gemmes:
+
+```json
+{"I drift": 1, "Nedlagt": 2}
+```
+
+**Relation.** Listen hentes fra en opslagstabel. Se [Relation til en opslagstabel](#relation-til-en-opslagstabel).
+
+```json
+{"_rel": "natur.d_naturtype", "_value": "navn", "_text": "navn"}
+```
+
+**Eksisterende værdier.** Listen bygges af de værdier, feltet allerede har:
+
+```
+*
+```
+
+:::tip[Skriv gyldig JSON]
+GC2 tjekker ikke, om indholdet i **Egenskaber** er gyldigt. Brug dobbelte anførselstegn om navne og tekster, og test listen i Vidi bagefter. Er der fejl, får feltet ingen liste.
+:::
+
+Har tabellen en fremmednøgle, laver GC2 selv en rulleliste ud fra den. Det sker dog kun, når intet felt på laget har noget i **Egenskaber**. Har feltet **Autocomplete**, bruger filteret autocomplete i stedet for listen.
+
+#### Relation til en opslagstabel
+
+Med en relation ligger listen i en opslagstabel i databasen i stedet for i **Egenskaber**. Så kan I tilføje, omdøbe og udfase værdier ved at rette i tabellen uden at ændre lagets opsætning.
+
+##### Eksempel
+
+Opslagstabellen `natur.d_naturtype` indeholder naturtyperne, en kolonne til at udfase en type og en kolonne til rækkefølgen:
+
+| kode | navn | aktiv | sortering |
+|---|---|---|---|
+| 1 | Sø | true | 1 |
+| 2 | Mose | true | 2 |
+| 3 | Eng | true | 3 |
+| 4 | Overdrev | true | 4 |
+| 5 | Hede | true | 5 |
+| 6 | Kær (udgået) | false | 6 |
+
+Feltet **Naturtype** (`natyp_navn`) på laget `beskyttede_naturtyper` får denne relation i **Egenskaber**:
+
+```json
+{"_rel": "natur.d_naturtype", "_value": "navn", "_text": "navn", "_where": "aktiv", "_order": "sortering"}
+```
+
+Listen i Vidi bliver **Sø, Mose, Eng, Overdrev, Hede**:
+
+- **Kær (udgået)** er ikke med, fordi `aktiv` er `false`. Eksisterende objekter med værdien bevarer den.
+- Rækkefølgen følger `sortering` og ikke alfabetet.
+
+<figure class="centered-figure">
+  <img
+    src={filterRelationImg.src}
+    alt="Lagfilteret i Vidi for Beskyttede naturtyper (§3), hvor værdilisten for Naturtype viser Sø, Mose, Eng, Overdrev og Hede"
+    style={{ width: '400px', maxWidth: '100%' }}
+  />
+  <figcaption>Værdilisten for Naturtype i Vidis lagfilter kommer fra opslagstabellen.</figcaption>
+</figure>
+
+##### Nøgler
+
+| Nøgle | Krævet | Indhold |
+|---|---|---|
+| `_rel` | Ja | Opslagstabellen med skema, fx `natur.d_naturtype`. |
+| `_value` | Ja | Kolonnen med den værdi, der gemmes i feltet. |
+| `_text` | Ja | Kolonnen med den tekst, brugeren ser i listen. |
+| `_where` | Nej | En betingelse, der afgrænser listen, fx `aktiv` eller `aktiv = true`. |
+| `_order` | Nej | Kolonnen, listen sorteres efter. Uden `_order` sorteres efter `_value`. |
+
+Skal feltet gemme en kode og vise et navn, så sæt `_value` til kodekolonnen og `_text` til navnekolonnen. Husk, at klik-info og attributtabellen viser koden.
+
+##### SQL-udtryk
+
+GC2 sætter `_value`, `_text`, `_where` og `_order` direkte ind i en SQL-forespørgsel mod opslagstabellen. Du kan derfor også bruge SQL-udtryk. Tekst i et udtryk skrives med enkelte anførselstegn:
+
+```json
+{"_rel": "natur.d_naturtype", "_value": "kode", "_text": "kode || ' - ' || navn", "_where": "navn <> 'Hede'"}
+```
+
+Her viser listen fx **1 - Sø** og **2 - Mose**, og **Hede** er udeladt.
+
+:::caution[Ændringer i opslagstabellen vises ikke med det samme]
+GC2 gemmer listen i sin cache. Retter du i opslagstabellen, vises ændringen først i Vidi, når du gemmer en ændring under <MenuPath items="Struktur" /> på laget, eller når cachen udløber. Hvor længe den gemmes, afhænger af installationen.
+:::
+
+Får feltet ingen liste, så kontrollér navnene på opslagstabellen og kolonnerne. GC2 viser ingen fejl, hvis forespørgslen fejler.
+
+### Eksport og skjulte felter
+
+| Indstilling | Virkning |
+|---|---|
+| **Deaktiver eksport** | Feltet udelades, når laget downloades fra lagstyringen i Vidi. Det påvirker ikke Excel-eksport af klikresultater, WFS eller SQL-API. |
+| **Ignorere** | Feltet fjernes fra lagets metadata, så Vidi slet ikke viser det: hverken i klik-info, attributtabel, filter eller redigering. Det fjernes også fra WFS og fra WMS-klik-info. |
+
+:::danger[Ignorere er ikke adgangskontrol]
+Et ignoreret felt kan stadig hentes gennem SQL-API'et. Følsomme oplysninger skal holdes ude af laget, fx med et view, og adgangen styres med [privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
+:::
+
+### Vis i konflikt
+
+Kolonnen **Vis i konflikt** vises kun, når installationen er sat op til konfliktsøgning. Felter med fluebenet kommer med i resultatet og rapporten fra [konfliktsøgningen](/vidi/vidi-menuen/konfliksoegning).
 
 ## Data-fanen
 
-GC2 stopper redigering af relationer uden primærnøgle. Hvis data kan ses, men ikke opdateres:
+<MenuPath items="Data" /> viser lagets poster 100 ad gangen. Klik på en kolonneoverskrift for at sortere.
 
-- kontrollér primærnøglen
-- kontrollér Authentication og privilegier
-- kontrollér datatype og null-krav
-- kontrollér Log og netværkssvar
+- **Ret en værdi:** Dobbeltklik på cellen, skriv den nye værdi, og tryk <Key items="Enter" />. Ændringen gemmes med det samme.
+- **Tilføj en post:** Klik på <MenuPath items="Add record" />. Posten oprettes uden geometri.
+- **Slet poster:** Markér en eller flere rækker, klik på <MenuPath items="Delete records" />, og bekræft.
 
-<MediaPlaceholder
-  title="Data-fanen med redigerbare poster"
-  file="gc2-database-data-grid.png"
-  format="PNG"
->
-  Vis Data-fanen med en tydelig primærnøgle, nogle få syntetiske poster samt knapperne til at tilføje og slette poster. Ingen personoplysninger.
-</MediaPlaceholder>
+Geometrien kan ikke redigeres her. Brug Vidis [tegneværktøj](/vidi/vidi-menuen/tegnevaerktoj) eller QGIS.
 
-## Test i Vidi
+<figure class="centered-figure">
+  <img
+    src={dataGridSvg}
+    alt="Fanen Data med knapperne Add record og Delete records, lagets poster og sidevælgeren nederst"
+    style={{ width: '100%' }}
+  />
+  <figcaption>Fanen Data med knapperne til at tilføje og slette poster og sidevælgeren, der viser 100 poster ad gangen.</figcaption>
+</figure>
 
-Kontrollér aliaser, click info, lagets søgning, filtre og eventuelle formularer. Et felt kan være teknisk korrekt uden at være relevant eller forståeligt for brugeren.
+### Hvis du ikke kan gemme
+
+GC2 tillader ikke redigering af en tabel uden primærnøgle. Viser GC2 en fejl, når du retter, så kontrollér:
+
+- at tabellen har en primærnøgle
+- lagets [authentication og privilegier](/gc2/skemaindstillinger/database/privilegier-og-authentication)
+- at værdien passer til kolonnens **Type**, og at et obligatorisk felt ikke er tomt
+- fejlbeskeden i dialogen og i <MenuPath items="Log" />
+
+## Anbefalet opsætning
+
+1. Behold stabile tekniske kolonnenavne, og giv alle felter, brugerne ser, et **Alias**.
+2. Vis kun de felter i klik-info, der giver mening for brugeren, og sæt dem i en fornuftig rækkefølge med **Sort id**.
+3. Gør få, præcise felter **Søgbar**.
+4. Brug **Egenskaber** eller **Autocomplete** på felter med et kendt sæt af værdier.
+5. Brug kun links, billeder og videoer fra adresser, I stoler på.
+6. Åbn laget i Vidi bagefter, og test klik-info, søgning, filtre og eventuelle redigeringsformularer.

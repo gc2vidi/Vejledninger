@@ -34,6 +34,10 @@
   font-size: 1.1rem;
 }
 
+.sl-markdown-content h5 {
+  font-size: 1rem;
+}
+
 /* --- IMAGE CENTERING --- */
 
 /* 1. Center images that are the only element in a paragraph */
