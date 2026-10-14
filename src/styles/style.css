@@ -350,3 +350,14 @@ html[data-theme="dark"] .sl-markdown-content pre.mermaid[data-processed] {
 .sl-markdown-content .ui-icon svg{
   flex: none;
 }
+/* Leaflet.draw sprite icons: the sprite is 300x30 for a 30px button, so scale everything by --s/30 */
+.sl-markdown-content .ui-icon-draw{
+  --s: 1.5em;
+  display: inline-block;
+  width: calc(var(--s) * 26 / 30);   /* Leaflet.draw buttons are 26px wide in a 30px sprite cell */
+  height: calc(var(--s) * 26 / 30);
+  margin: -0.15em 0;
+  background-repeat: no-repeat;
+  background-size: calc(var(--s) * 10) var(--s);
+  background-position: calc(var(--s) * var(--x) / -30) calc(var(--s) * 2 / -30);
+}

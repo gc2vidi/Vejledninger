@@ -1,14 +1,16 @@
 ---
 // Shows a real UI icon in the same pill as MenuPath.
 // The icons come from the libraries GC2 and Vidi themselves use:
-//   set="bi"  Bootstrap Icons  (Vidi, GC2 login page)       name = file name, e.g. "trash"
-//   set="mui" Material Icons   (GC2 Kontrolcenter)          name = file name, e.g. "edit", "delete"
+//   set="bi"   Bootstrap Icons  (Vidi, GC2 login page)       name = file name, e.g. "trash"
+//   set="mui"  Material Icons   (GC2 Kontrolcenter)          name = file name, e.g. "edit", "delete"
+//   set="draw" Leaflet.draw     (Vidi drawing and measuring) name = polyline, polygon, rectangle,
+//                                                            circle, marker, edit, remove
 // Optional `label` adds text after the icon, e.g. <UiIcon set="mui" name="launch" label="Vidi" />.
 import fs from 'node:fs';
 import path from 'node:path';
 
 interface Props {
-  set: 'bi' | 'mui';
+  set: 'bi' | 'mui' | 'draw';
   name: string;
   label?: string;
   title?: string;
@@ -16,21 +18,46 @@ interface Props {
 
 const { set, name, label, title } = Astro.props as Props;
 
-const dirs = {
-  bi: 'node_modules/bootstrap-icons/icons',
-  mui: 'node_modules/@material-design-icons/svg/filled',
+// Leaflet.draw sprite (public/icons/leaflet-draw-spritesheet.svg): x offset of each icon in a
+// 300x30 sprite, as in leaflet.draw.css (.leaflet-draw-toolbar .leaflet-draw-draw-* etc.)
+const drawIcons: Record<string, number> = {
+  polyline: 2,
+  polygon: 31,
+  rectangle: 62,
+  circle: 92,
+  marker: 122,
+  edit: 152,
+  remove: 182,
 };
 
-const file = path.join(process.cwd(), dirs[set], `${name}.svg`);
-if (!fs.existsSync(file)) {
-  throw new Error(`UiIcon: unknown icon "${name}" in set "${set}" (${file})`);
+let svg = '';
+if (set === 'draw') {
+  if (!(name in drawIcons)) {
+    throw new Error(`UiIcon: unknown Leaflet.draw icon "${name}" (use ${Object.keys(drawIcons).join(', ')})`);
+  }
+} else {
+  const dirs = {
+    bi: 'node_modules/bootstrap-icons/icons',
+    mui: 'node_modules/@material-design-icons/svg/filled',
+  };
+  const file = path.join(process.cwd(), dirs[set], `${name}.svg`);
+  if (!fs.existsSync(file)) {
+    throw new Error(`UiIcon: unknown icon "${name}" in set "${set}" (${file})`);
+  }
+  svg = fs
+    .readFileSync(file, 'utf8')
+    .replace(/\s(width|height|class|fill)="[^"]*"/g, '')
+    .replace('<svg', '<svg width="1.15em" height="1.15em" fill="currentColor" aria-hidden="true" focusable="false"');
 }
 
-const svg = fs
-  .readFileSync(file, 'utf8')
-  .replace(/\s(width|height|class|fill)="[^"]*"/g, '')
-  .replace('<svg', '<svg width="1.15em" height="1.15em" fill="currentColor" aria-hidden="true" focusable="false"');
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const drawStyle = set === 'draw'
+  ? `background-image:url(${base}/icons/leaflet-draw-spritesheet.svg);--x:${drawIcons[name]}`
+  : undefined;
 ---
 <span class="menupath ui-icon" title={title ?? label ?? name} aria-label={title ?? label ?? name}>
-  <kbd class="menu"><Fragment set:html={svg} />{label && <span class="ui-icon-label">{label}</span>}</kbd>
+  <kbd class="menu">
+    {set === 'draw' ? <span class="ui-icon-draw" style={drawStyle} aria-hidden="true" /> : <Fragment set:html={svg} />}
+    {label && <span class="ui-icon-label">{label}</span>}
+  </kbd>
 </span>

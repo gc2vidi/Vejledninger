@@ -114,8 +114,9 @@ Viser et rigtigt ikon fra GC2's eller Vidis brugerflade i samme blå boks som `M
 |---|---|---|
 | `mui` | Material Icons (`@material-design-icons/svg`) | GC2-kontrolcenteret |
 | `bi` | Bootstrap Icons (`bootstrap-icons`) | Vidi og GC2's loginside |
+| `draw` | Leaflet.draw-sprite (`public/icons/leaflet-draw-spritesheet.svg`) | Vidis tegne- og måleværktøj |
 
-`name` er filnavnet uden `.svg` i bibliotekets mappe (`node_modules/@material-design-icons/svg/filled` eller `node_modules/bootstrap-icons/icons`).
+`name` er filnavnet uden `.svg` i bibliotekets mappe (`node_modules/@material-design-icons/svg/filled` eller `node_modules/bootstrap-icons/icons`). For `draw` er `name` en af: `polyline`, `polygon`, `rectangle`, `circle`, `marker`, `edit`, `remove`.
 
 ### Brug (MDX)
 
