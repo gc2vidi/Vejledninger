@@ -335,3 +335,18 @@ html[data-theme="dark"] .sl-markdown-content pre.mermaid[data-processed] {
   background: var(--sl-color-bg) !important;
   border-radius: 0;
 }
+
+/* Tables: keep code values in the first column (e.g. `Read/write`) on one line */
+.sl-markdown-content td:first-child code {
+  white-space: nowrap;
+}
+
+/* --------------- UiIcon (real GC2/Vidi icons in a MenuPath pill) ------------------- */
+.sl-markdown-content .ui-icon kbd.menu{
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+}
+.sl-markdown-content .ui-icon svg{
+  flex: none;
+}

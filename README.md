@@ -105,3 +105,24 @@ Eksempel: **Ctrl** + **Shift** + **G**.
 ```mdx
 <Key items="Enter" />
 ```
+
+## UiIcon-komponenten
+
+Viser et rigtigt ikon fra GC2's eller Vidis brugerflade i samme blå boks som `MenuPath`. Ikonerne hentes fra de samme biblioteker, som programmerne selv bruger:
+
+| `set` | Bibliotek | Bruges i |
+|---|---|---|
+| `mui` | Material Icons (`@material-design-icons/svg`) | GC2-kontrolcenteret |
+| `bi` | Bootstrap Icons (`bootstrap-icons`) | Vidi og GC2's loginside |
+
+`name` er filnavnet uden `.svg` i bibliotekets mappe (`node_modules/@material-design-icons/svg/filled` eller `node_modules/bootstrap-icons/icons`).
+
+### Brug (MDX)
+
+```mdx
+Klik på blyanten <UiIcon set="mui" name="edit" title="Ret" />
+Klik på <UiIcon set="mui" name="launch" label="Vidi" /> for at åbne kortet
+<UiIcon set="bi" name="trash" title="Slet" />
+```
+
+`label` tilføjer tekst efter ikonet. `title` vises som tooltip og læses af skærmlæsere.

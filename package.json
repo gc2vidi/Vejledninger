@@ -14,9 +14,11 @@
   "dependencies": {
     "@astrojs/check": "^0.5.10",
     "@astrojs/starlight": "^0.21.5",
+    "@material-design-icons/svg": "^0.14.15",
     "astro": "^4.6.2",
     "astro-auto-import": "^0.4.4",
     "astro-mermaid": "^2.1.0",
+    "bootstrap-icons": "^1.13.2",
     "mermaid": "^11.16.0",
     "node-fetch": "^3.3.2",
     "node-html-parser": "^6.1.13",

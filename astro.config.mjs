@@ -248,6 +248,7 @@ export default defineConfig({
          './src/components/Key.astro',
          './src/components/MediaPlaceholder.astro',
          './src/components/Figure.astro',
+         './src/components/UiIcon.astro',
       ],
     }),
   ],

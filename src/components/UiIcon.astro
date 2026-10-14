@@ -1,0 +1,36 @@
+---
+// Shows a real UI icon in the same pill as MenuPath.
+// The icons come from the libraries GC2 and Vidi themselves use:
+//   set="bi"  Bootstrap Icons  (Vidi, GC2 login page)       name = file name, e.g. "trash"
+//   set="mui" Material Icons   (GC2 Kontrolcenter)          name = file name, e.g. "edit", "delete"
+// Optional `label` adds text after the icon, e.g. <UiIcon set="mui" name="launch" label="Vidi" />.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  set: 'bi' | 'mui';
+  name: string;
+  label?: string;
+  title?: string;
+}
+
+const { set, name, label, title } = Astro.props as Props;
+
+const dirs = {
+  bi: 'node_modules/bootstrap-icons/icons',
+  mui: 'node_modules/@material-design-icons/svg/filled',
+};
+
+const file = path.join(process.cwd(), dirs[set], `${name}.svg`);
+if (!fs.existsSync(file)) {
+  throw new Error(`UiIcon: unknown icon "${name}" in set "${set}" (${file})`);
+}
+
+const svg = fs
+  .readFileSync(file, 'utf8')
+  .replace(/\s(width|height|class|fill)="[^"]*"/g, '')
+  .replace('<svg', '<svg width="1.15em" height="1.15em" fill="currentColor" aria-hidden="true" focusable="false"');
+---
+<span class="menupath ui-icon" title={title ?? label ?? name} aria-label={title ?? label ?? name}>
+  <kbd class="menu"><Fragment set:html={svg} />{label && <span class="ui-icon-label">{label}</span>}</kbd>
+</span>
