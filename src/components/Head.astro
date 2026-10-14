@@ -1,11 +1,118 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import DefaultHead from '@astrojs/starlight/components/Head.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 const props = Astro.props as Props;
 ---
 
 <DefaultHead {...props} />
+<ViewTransitions fallback="swap" />
+
+<style is:global>
+  /*
+    View Transitions are used for their client-side navigation hooks, not for
+    animation: page changes look like normal navigation, but the sidebar can be
+    patched before the new page is painted.
+  */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+</style>
+
+<script>
+  // Keep the sidebar stable when moving between articles:
+  // - the sidebar keeps its scroll position and the groups the user opened or closed
+  // - coming from the front page, the chosen product (Vidi or GC2) is opened and the other collapsed
+  interface AstroBeforeSwapEvent extends Event {
+    from: URL;
+    to: URL;
+    newDocument: Document;
+    swap: () => void;
+  }
+
+  const SIDEBAR_SELECTOR = '#starlight__sidebar';
+  const DETAILS_SELECTOR = `${SIDEBAR_SELECTOR} details`;
+  const PRODUCT_LABELS: Record<string, string> = { vidi: 'Vidi', gc2: 'GC2' };
+
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+  const getSection = (pathname: string) => {
+    const path = base && pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
+    return path.split('/').filter(Boolean)[0] ?? '';
+  };
+
+  const getProductGroups = (doc: Document) =>
+    Array.from(
+      doc.querySelectorAll<HTMLDetailsElement>(`${SIDEBAR_SELECTOR} ul.top-level > li > details`),
+      (details) => ({
+        label: details.querySelector(':scope > summary .group-label span')?.textContent?.trim(),
+        details,
+      })
+    );
+
+  // Open the chosen product and collapse everything in the others
+  const focusProduct = (doc: Document, section: string) => {
+    getProductGroups(doc).forEach(({ label, details }) => {
+      if (label === PRODUCT_LABELS[section]) {
+        details.open = true;
+      } else if (Object.values(PRODUCT_LABELS).includes(label ?? '')) {
+        details.open = false;
+        details.querySelectorAll('details').forEach((nested) => (nested.open = false));
+      }
+    });
+  };
+
+  // The sidebar has the same structure on every page, so the open state can be copied by index
+  const applyDetailsState = (doc: Document, state: boolean[]) => {
+    doc.querySelectorAll<HTMLDetailsElement>(DETAILS_SELECTOR).forEach((details, index) => {
+      details.open = state[index] ?? details.open;
+    });
+  };
+
+  // Always show the current page, even if its group was collapsed
+  const openCurrentPage = (doc: Document) => {
+    let element = doc.querySelector(`${SIDEBAR_SELECTOR} [aria-current="page"]`)?.parentElement;
+    while (element) {
+      if (element instanceof HTMLDetailsElement) element.open = true;
+      element = element.parentElement;
+    }
+  };
+
+  document.addEventListener('astro:before-swap', (event) => {
+    const transition = event as AstroBeforeSwapEvent;
+    const sidebar = document.querySelector<HTMLElement>(SIDEBAR_SELECTOR);
+    const fromSection = getSection(transition.from.pathname);
+    const toSection = getSection(transition.to.pathname);
+    const fromFrontPage = !sidebar && fromSection === '';
+
+    if (!sidebar && !(fromFrontPage && toSection in PRODUCT_LABELS)) return;
+
+    const scrollTop = sidebar?.scrollTop ?? 0;
+    const detailsState = Array.from(
+      document.querySelectorAll<HTMLDetailsElement>(DETAILS_SELECTOR),
+      (details) => details.open
+    );
+    const defaultSwap = transition.swap;
+
+    transition.swap = () => {
+      if (fromFrontPage) {
+        focusProduct(transition.newDocument, toSection);
+      } else {
+        applyDetailsState(transition.newDocument, detailsState);
+        openCurrentPage(transition.newDocument);
+      }
+
+      defaultSwap();
+
+      if (!fromFrontPage) {
+        const newSidebar = document.querySelector<HTMLElement>(SIDEBAR_SELECTOR);
+        if (newSidebar) newSidebar.scrollTop = scrollTop;
+      }
+    };
+  });
+</script>
 
 <script>
   type ImageZoomDialogElements = {
