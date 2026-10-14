@@ -1,10 +1,10 @@
 ---
 title: Privilegier og authentication
-description: Beskyt lag og tildel subusers præcis den læse- og skriveadgang de behøver
+description: Beskyt lag og tildel sub-brugere præcis den læse- og skriveadgang de behøver
 ---
 
-import subuserPrivilegesImg from '../../resources/gc2-subuser-privileges.png';
-import authLayerImg from '../../resources/add_read_write_on_layer.png';
+import authGif from '../../resources/gc2-database-layer-authentication.gif?url';
+import privilegesGif from '../../resources/gc2-database-layer-privileges.gif?url';
 
 :::note[Krævet adgang]
 Du skal være databaseejer eller have rettigheder til at administrere lagets adgang. Opret først de relevante konti under [Brugere og adgang](/gc2/brugere-og-adgang).
@@ -14,50 +14,90 @@ Du skal være databaseejer eller have rettigheder til at administrere lagets adg
 
 **Authentication** er en egenskab på laget. Den bestemmer, om læsning og/eller skrivning kræver en godkendt bruger.
 
-**Privilegier** tildeles den konkrete subuser. De bestemmer, om brugeren må læse, skrive eller administrere laget.
+**Privilegier** tildeles den konkrete sub-bruger. De bestemmer, om brugeren må læse, skrive eller administrere laget.
 
 Begge skal være korrekte. Et privilegium beskytter ikke et lag, som fortsat tillader anonym læsning.
 
 ## Authentication
 
-Den medfølgende UI-kilde har disse værdier:
+Authentication kan have tre værdier. Nye lag får `Write`.
 
 | Værdi | Praktisk betydning |
 |---|---|
-| `None` | Læsning er offentlig; skrivning afhænger fortsat af øvrig adgangskontrol |
+| `None` | Ingen adgangskontrol. Alle kan læse og skrive i laget, også uden login, og privilegier har ingen effekt |
 | `Write` | Skrivning kræver authentication, mens læsning kan være offentlig |
 | `Read/write` | Både læsning og skrivning kræver authentication |
 
-Brug `Read/write` til data, som ikke må kunne læses anonymt. Brug `Write`, når offentlig visning skal kombineres med beskyttet redigering.
+Brug `Read/write` til data, som ikke må kunne læses anonymt. Brug `Write` til lag, som alle må se, men kun udvalgte brugere må redigere.
+
+:::caution[Brug kun None i særlige tilfælde]
+Nye lag får `Write`, og det bør være standarden. `None` slår adgangskontrollen helt fra, så alle kan redigere laget, også anonymt via WFS-T. Brug det kun i de sjældne tilfælde, hvor et lag netop skal kunne redigeres af alle.
+:::
+
+### Sæt authentication på et lag
+
+1. Åbn fanen <MenuPath items="Database" /> i administrationsmodulet.
+2. Dobbeltklik i kolonnen **Authentication** på det lag, du vil ændre.
+3. Vælg værdien i listen, og klik et andet sted i oversigten. Ændringen gemmes med det samme.
 
 <figure class="centered-figure">
-  <img src={authLayerImg.src} alt="Authentication på et lag i GC2" style={{ width: '760px', maxWidth: '100%' }} />
-  <figcaption>Det eksisterende billede kan bruges som midlertidig reference, men bør erstattes med et aktuelt og tættere udsnit.</figcaption>
+  <img src={authGif} alt="Authentication ændres fra Write til Read/write på laget sten_og_jorddiger" style={{ width: '100%' }} />
+  <figcaption>Laget sten_og_jorddiger låses med Read/write, så det ikke kan læses anonymt.</figcaption>
 </figure>
 
 ## Privilegier
 
-Åbn `Privilegier`, vælg et eller flere lag og tildel den relevante subuser mindst mulig nødvendig adgang. UI og API arbejder med læse-, skrive- og fuld administrationsadgang.
+Der er fire niveauer:
+
+| Niveau | Betydning |
+|---|---|
+| **Ingen** | Laget findes ikke for sub-brugeren |
+| **Kun læse** | Sub-brugeren kan se og forespørge laget |
+| **Læse og skrive** | Sub-brugeren kan også redigere data i laget |
+| **Alle** | Sub-brugeren kan også ændre lagets egenskaber, fx udseende og tabelstruktur |
+
+Privilegierne gælder både i GC2 og i eksterne tjenester som WMS og WFS.
+
+### Tildel privilegier
+
+1. Vælg et eller flere lag på fanen <MenuPath items="Database" />.
+2. Klik på <MenuPath items="Privilegier" /> i værktøjslinjen.
+3. Vælg niveauet for hver sub-bruger. Hver ændring gemmes med det samme.
+4. Luk dialogen.
+
+Kolonnen **Inherit privileges from** viser, hvilke sub-brugere en bruger nedarver fra, fx `["intern_edit"]`.
 
 <figure class="centered-figure">
-  <img src={subuserPrivilegesImg.src} alt="Lagprivilegier for subusers i GC2" style={{ width: '760px', maxWidth: '100%' }} />
-  <figcaption>Privilegier bør tildeles gennem få, forståelige adgangsprofiler, når mange brugere deler samme behov.</figcaption>
+  <img src={privilegesGif} alt="Privilegier på sten_og_jorddiger tildeles grupperne intern_read og intern_edit samt sub-brugeren bo_natur" style={{ width: '100%' }} />
+  <figcaption>Grupperne intern_read og intern_edit får læse- og skriveadgang, og bo_natur får sin egen skriveadgang oven i gruppens læseadgang.</figcaption>
 </figure>
 
-<MediaPlaceholder
-  title="Aktuel authentication og privilegier"
-  file="gc2-database-layer-privileges.png"
-  format="PNG"
->
-  Vis privilegiedialogen med syntetiske subusers og ét valgt testlag. Medtag ingen rigtige brugernavne. Supplér eventuelt med `gc2-database-layer-authentication.png`, som viser dropdown-værdierne None, Write og Read/write.
-</MediaPlaceholder>
+## Nedarvning og effektive privilegier
+
+En sub-bruger kan nedarve fra én eller flere andre sub-brugere (se [Nedarvning](/gc2/brugere-og-adgang#nedarvning)). GC2 beregner den adgang, brugeren faktisk får på et lag, sådan:
+
+- GC2 samler brugerens **egne** privilegier og privilegierne fra **alle** de sub-brugere, der nedarves fra. Det **højeste** niveau gælder.
+- Rækkefølgen af de sub-brugere, der nedarves fra, er ligegyldig.
+- Egne privilegier kan kun give mere adgang end gruppen, aldrig mindre. Har gruppen **Læse og skrive**, kan du ikke begrænse en bruger til **Kun læse** med et eget privilegium.
+- Nedarvningen følger kæder. Nedarver en gruppe selv fra en anden gruppe, tæller den også med.
+
+Eksemplet fra animationen ovenfor giver denne adgang til laget `sten_og_jorddiger`:
+
+| Sub-bruger | Eget privilegium | Nedarvet | Effektiv adgang |
+|---|---|---|---|
+| `anna_plan` | Ingen | Læse og skrive fra `intern_edit` | **Læse og skrive** |
+| `bo_natur` | Læse og skrive | Kun læse fra `intern_read` | **Læse og skrive** |
+| `carl_ekstern` | Ingen | Ingen fra `ekstern_read` | **Ingen** |
+
+Fordi laget er låst med `Read/write`, kan `carl_ekstern` hverken se laget eller læse det anonymt.
+
 
 ## Anbefalede mønstre
 
 ### Offentligt læselag
 
-- Authentication: `None`
-- Ingen almindelige brugere får skriveadgang
+- Authentication: `Write`, så alle kan se laget, men kun brugere med privilegier kan redigere
+- Ingen almindelige brugere får skriveprivilegium
 - Administrative brugere får kun den nødvendige vedligeholdelsesadgang
 
 ### Offentligt lag med kontrolleret redigering
@@ -73,17 +113,6 @@ Brug `Read/write` til data, som ikke må kunne læses anonymt. Brug `Write`, nå
 - Redaktører får læse- og skriveprivilegium
 - Få administratorer får fuld adgang
 
-## Testmatrix
-
-| Testbruger | Skal kunne læse | Skal kunne skrive | Skal kunne administrere |
-|---|---:|---:|---:|
-| Anonym | Efter løsningens krav | Nej | Nej |
-| Læser | Ja | Nej | Nej |
-| Redaktør | Ja | Ja | Nej |
-| Administrator | Ja | Efter behov | Ja |
-
-Test både Vidi og relevante WMS/WFS-kald. Servicepassword og API-nøgle forklares under [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api).
-
-:::caution[Test før publicering]
-En fejl i adgangsopsætningen kan enten eksponere data eller afskære alle brugere. Test med separate realistiske roller, ikke kun som databaseejer.
+:::tip[Test som den rigtige bruger]
+Som databaseejer kan du se alle lag, uanset authentication og privilegier. Log derfor ind som en af de berørte sub-brugere, og åbn kortet i et privat browservindue som anonym bruger, for at se den adgang, de faktisk får. Husk også eventuelle WMS/WFS-klienter. Servicepassword og API-nøgle forklares under [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api).
 :::

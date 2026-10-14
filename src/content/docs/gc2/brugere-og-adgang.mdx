@@ -7,6 +7,7 @@ sidebar:
 
 import subuserOverviewSvg from './resources/gc2-subuser-overview.svg?url';
 import subuserCreateGif from './resources/gc2-subuser-create.gif?url';
+import inheritMultipleImg from './resources/gc2-subuser-inherit-multiple.png';
 
 ## Databasebruger og sub-brugere
 
@@ -37,13 +38,13 @@ Sub-brugerne vises i området **Sub-brugere** til højre i kontrolcenteret.
 
 ### Opret en sub-bruger
 
-1. Klik på **Tilføj** ved **Sub-brugere** i kontrolcenteret.
+1. Klik på <MenuPath items="Tilføj" /> ved **Sub-brugere** i kontrolcenteret.
 2. Skriv et **Navn**. Navnet er sub-brugerens brugernavn og kan ikke ændres bagefter.
 3. Skriv eventuelt en **E-mail**. Feltet er ikke påkrævet.
 4. Skriv en **Adgangskode**, og gentag den i **Gentag adgangskode**. Adgangskoden skal være mindst 8 tegn og indeholde mindst ét stort bogstav og ét ciffer.
 5. Vælg eventuelt, hvilke sub-brugere den nye bruger skal nedarve privilegier fra. Se [Nedarvning](#nedarvning).
-6. Klik på **Gem**. Knappen bliver først aktiv, når felterne er udfyldt korrekt.
-7. Når GC2 viser **Bruger oprettet**, klikker du på **Dashboard** for at komme tilbage til kontrolcenteret.
+6. Klik på <MenuPath items="Gem" />. Knappen bliver først aktiv, når felterne er udfyldt korrekt.
+7. Når GC2 viser **Bruger oprettet**, klikker du på <MenuPath items="Dashboard" /> for at komme tilbage til kontrolcenteret.
 
 <figure class="centered-figure">
   <img
@@ -58,8 +59,8 @@ GC2 opretter samtidig et skema med samme navn som sub-brugeren. Sub-brugeren har
 
 ### Ret eller slet en sub-bruger
 
-- Klik på blyanten ved en sub-bruger for at ændre adgangskode eller nedarvning. Lad adgangskodefelterne være tomme, hvis adgangskoden skal være uændret. Navn og e-mail kan ikke ændres.
-- Klik på skraldespanden for at slette en sub-bruger.
+- Klik på blyanten <UiIcon set="mui" name="edit" title="Ret" /> ved en sub-bruger for at ændre adgangskode eller nedarvning. Lad adgangskodefelterne være tomme, hvis adgangskoden skal være uændret. Navn og e-mail kan ikke ændres.
+- Klik på skraldespanden <UiIcon set="mui" name="delete" title="Slet" /> for at slette en sub-bruger.
 
 ## Adgangsprofiler og nedarvning
 
@@ -69,7 +70,17 @@ En sub-bruger kan nedarve privilegierne fra én eller flere andre sub-brugere. V
 
 Den sub-bruger, der nedarves fra, fungerer i praksis som en rolle eller brugergruppe. Det gør administrationen enklere, men betyder også, at adgangen skal vedligeholdes ét centralt sted.
 
-Du kan ikke give privilegier direkte til en sub-bruger, der nedarver. Skal adgangsmønsteret ændres, sker det på den sub-bruger, der nedarves fra.
+<figure class="centered-figure">
+  <img
+    src={inheritMultipleImg.src}
+    alt="Ny sub-bruger bo_konsulent_extern, der nedarver fra både ekstern_konsulent_edit og intern_read"
+    style={{ width: '100%' }}
+  />
+  <figcaption>En ekstern konsulent skal kunne se det samme som de interne læsere (intern_read) og desuden redigere de lag, der er åbnet for eksterne konsulenter (ekstern_konsulent_edit). Derfor nedarver konsulenten fra begge.</figcaption>
+</figure>
+
+En sub-bruger, der nedarver, kan også få sine egne privilegier på et lag. Det højeste niveau gælder, så egne privilegier kan give mere adgang end gruppen, men aldrig mindre. Se reglerne og et eksempel under [Nedarvning og effektive privilegier](/gc2/skemaindstillinger/database/privilegier-og-authentication#nedarvning-og-effektive-privilegier). Skal hele adgangsmønsteret ændres, gør du det på den sub-bruger, der nedarves fra.
+
 
 ### Brug grupper som adgangsprofiler
 
