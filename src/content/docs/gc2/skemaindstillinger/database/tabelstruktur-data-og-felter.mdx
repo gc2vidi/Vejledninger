@@ -37,10 +37,10 @@ Der er ingen gem-knap. En ændring gemmes, så snart du forlader cellen eller kl
 ### Tilføj en kolonne
 
 1. Skriv navnet i feltet **Ny kolonne navn** over tabellen.
-2. Vælg typen i **Ny kolonne type**, fx `String`, `Integer`, `Decimal`, `Date`, `Boolean` eller `Json`.
+2. Vælg typen i **Ny kolonne type**, f.eks. `String`, `Integer`, `Decimal`, `Date`, `Boolean` eller `Json`.
 3. Klik på <MenuPath items="Tilføj ny kolonne" />.
 
-Brug et kort, teknisk navn med små bogstaver og uden mellemrum og æ, ø og å, fx `besig_dato`. Det læsevenlige navn sætter du bagefter i **Alias**.
+Brug et kort, teknisk navn med små bogstaver og uden mellemrum og æ, ø og å, f.eks. `besig_dato`. Det læsevenlige navn sætter du bagefter i **Alias**.
 
 ### Omdøb eller slet en kolonne
 
@@ -65,15 +65,30 @@ I begge tilfælde gør Vidis redigeringsformular feltet obligatorisk, når flueb
 
 ### Standardværdier
 
-GC2 og Vidi har ingen indstilling for en standardværdi. Skal et felt have en værdi, når brugeren opretter et nyt objekt i Vidi, så sæt en standardværdi på kolonnen i databasen, fx i pgAdmin:
+Et felt kan få en standardværdi, når brugeren opretter et nyt objekt i Vidi. Det kan gøres to steder.
+
+**I Vidi-konfigurationen.** Under `extensionConfig.editor.defaultValues` angiver du en værdi pr. feltnavn. Værdien står allerede i feltet, når formularen åbner, og brugeren kan rette den:
+
+```json
+"extensionConfig": {
+  "editor": {
+    "defaultValues": {
+      "status": "Aktiv",
+      "oprettet_af": "$user.name"
+    }
+  }
+}
+```
+
+`$user.name` udfyldes med den indloggede brugers navn, og `$user.properties.<navn>` med en egenskab fra brugerens profil. Standardværdierne gælder alle redigerbare lag i konfigurationen, som har et felt med det navn. Læs mere under [`extensionConfig`](/gc2/konfigurationer/alle-indstillinger#extensionconfig).
+
+**I databasen.** En standardværdi på kolonnen gælder uanset hvilken klient, der opretter objektet, f.eks. Vidi eller QGIS:
 
 ```sql
 ALTER TABLE skema.tabel ALTER COLUMN status SET DEFAULT 'Aktiv';
 ```
 
-Har feltet en værdiliste i [Egenskaber](#egenskaber), skal standardværdien være en af værdierne i listen.
-
-Standardværdien bruges kun, når feltet ikke bliver udfyldt:
+Databasens standardværdi bruges kun, når feltet ikke bliver udfyldt:
 
 - Rører brugeren ikke feltet, gemmes standardværdien.
 - Vælger brugeren en værdi og sletter den igen, gemmes et tomt felt.
@@ -93,6 +108,8 @@ CREATE TRIGGER saet_status BEFORE INSERT ON skema.tabel
   FOR EACH ROW EXECUTE FUNCTION skema.saet_status();
 ```
 
+Har feltet en værdiliste i [Egenskaber](#egenskaber), skal standardværdien være en af værdierne i listen.
+
 ### Versionering
 
 <MenuPath items="Start versionering" /> og <MenuPath items="Stop versionering" /> slår historik til og fra for tabellen. Læs mere under [Versionering, roller og opsætning](/gc2/skemaindstillinger/workflow/versionering-roller-og-opsaetning).
@@ -106,8 +123,8 @@ De øvrige kolonner i <MenuPath items="Struktur" /> ændrer ikke tabellen. De be
 | Indstilling | Virkning |
 |---|---|
 | **Sort id** | Feltets plads i klik-info, attributtabel, download og WFS. Lave tal kommer først. |
-| **Alias** | Navnet brugerne ser i stedet for det tekniske kolonnenavn, fx **Besigtiget** for `besig_dato`. |
-| **Beskrivelse** | Gemmes som kommentar på kolonnen i databasen. I Vidi vises den som hjælpetekst i redigeringsformularen. |
+| **Alias** | Navnet brugerne ser i stedet for det tekniske kolonnenavn, f.eks. **Besigtiget** for `besig_dato`. |
+| **Beskrivelse** | Gemmes som kommentar på kolonnen i databasen. I Vidi vises den som hjælpetekst inde i feltet i redigeringsformularen, så hold den kort. |
 
 ### Visning i klik-info og mouse-over
 
@@ -116,7 +133,7 @@ De øvrige kolonner i <MenuPath items="Struktur" /> ændrer ikke tabellen. De be
 | **Vis i klik-info** | Feltet vises, når brugeren klikker på et objekt, og som kolonne i attributtabellen. Kun disse felter kommer med, når et klikresultat eksporteres til Excel. |
 | **Vis i mouse-over** | Feltet vises i boksen, når musen holdes over et objekt. Det virker kun, når mouse-over er slået til for laget under [Meta](/gc2/skemaindstillinger/database/meta). |
 | **Gør til link** | Værdien vises som et link i klik-info. |
-| **Link prefix** og **Link suffix** | Tekst før og efter værdien i linket, fx `https://example.dk/sag/` foran et sagsnummer. Bruges kun i klik-info; attributtabellen linker til værdien, som den er. |
+| **Link prefix** og **Link suffix** | Tekst før og efter værdien i linket, f.eks. `https://example.dk/sag/` foran et sagsnummer. Bruges kun i klik-info; attributtabellen linker til værdien, som den er. |
 | **Indhold** | `Plain` viser værdien som tekst. `Image` viser en billedadresse som billede, og `Video` viser en videoadresse som afspiller. |
 | **Template** | Bestemmer, hvordan værdien vises i klik-info og i Info-panelets tabel. Se [Template](#template) nedenfor. |
 
@@ -138,7 +155,7 @@ Skal hele klik-info for laget have et andet layout, så brug lagets egen templat
 
 Vidi har fire hjælpefunktioner til templates.
 
-**formatDate** formaterer en dato. Den er nyttig, når datoen er gemt som tekst eller tal i et format, der er svært at læse, fx `20250204`. Angiv det ønskede format først og datoens nuværende format som det sidste:
+**formatDate** formaterer en dato. Den er nyttig, når datoen er gemt som tekst eller tal i et format, der er svært at læse, f.eks. `20250204`. Angiv det ønskede format først og datoens nuværende format som det sidste:
 
 ```handlebars
 {{formatDate dato "DD-MM-YYYY" "YYYYMMDD"}}
@@ -147,7 +164,7 @@ Vidi har fire hjælpefunktioner til templates.
 Det viser 04-02-2025. Er feltet allerede af typen `date`, kan du udelade det sidste format. Se de mulige formater hos [Day.js](https://day.js.org/docs/en/display/format).
 
 :::caution[Kendt fejl med tidsstempler]
-Bruger du `formatDate` på et felt af typen `timestamptz`, viser Vidi klokkeslættet en eller to timer for sent. Sent på aftenen bliver datoen derfor den næste dag. Skal datoen være korrekt, så lav feltet om til en dato i et view, fx `tidspunkt::date AS dato`.
+Bruger du `formatDate` på et felt af typen `timestamptz`, viser Vidi klokkeslættet en eller to timer for sent. Sent på aftenen bliver datoen derfor den næste dag. Skal datoen være korrekt, så lav feltet om til en dato i et view, f.eks. `tidspunkt::date AS dato`.
 :::
 
 **formatDecimalNumber** viser decimaltal med komma, når Vidi kører på dansk:
@@ -222,6 +239,10 @@ Klik-info og attributtabellen viser den værdi, der er gemt i feltet.
 *
 ```
 
+:::caution[Kendt fejl med tomme værdier]
+Har feltet tomme værdier, får listen en tom linje nederst. Vælger brugeren den i lagets filter, filtreres der slet ikke, og alle objekter vises.
+:::
+
 :::tip[Skriv gyldig JSON]
 GC2 tjekker ikke, om indholdet i **Egenskaber** er gyldigt. Brug dobbelte anførselstegn om navne og tekster, og test listen i Vidi bagefter. Er der fejl, får feltet ingen liste.
 :::
@@ -269,10 +290,10 @@ Listen i Vidi bliver **Sø, Mose, Eng, Overdrev, Hede**:
 
 | Nøgle | Krævet | Indhold |
 |---|---|---|
-| `_rel` | Ja | Opslagstabellen med skema, fx `natur.d_naturtype`. |
+| `_rel` | Ja | Opslagstabellen med skema, f.eks. `natur.d_naturtype`. |
 | `_value` | Ja | Kolonnen med den værdi, der gemmes i feltet. |
 | `_text` | Ja | Kolonnen med den tekst, brugeren ser i listen. |
-| `_where` | Nej | En betingelse, der afgrænser listen, fx `aktiv` eller `aktiv = true`. |
+| `_where` | Nej | En betingelse, der afgrænser listen, f.eks. `aktiv` eller `aktiv = true`. |
 | `_order` | Nej | Kolonnen, listen sorteres efter. Uden `_order` sorteres efter `_value`. |
 
 Skal feltet gemme en kode og vise et navn, så sæt `_value` til kodekolonnen og `_text` til navnekolonnen. Husk, at klik-info og attributtabellen viser koden.
@@ -285,7 +306,7 @@ GC2 sætter `_value`, `_text`, `_where` og `_order` direkte ind i en SQL-foresp�
 {"_rel": "natur.d_naturtype", "_value": "kode", "_text": "kode || ' - ' || navn", "_where": "navn <> 'Hede'"}
 ```
 
-Her viser listen fx **1 - Sø** og **2 - Mose**, og **Hede** er udeladt.
+Her viser listen f.eks. **1 - Sø** og **2 - Mose**, og **Hede** er udeladt.
 
 :::caution[Ændringer i opslagstabellen vises ikke med det samme]
 GC2 gemmer listen i sin cache. Retter du i opslagstabellen, vises ændringen først i Vidi, når du gemmer en ændring under <MenuPath items="Struktur" /> på laget, eller når cachen udløber. Hvor længe den gemmes, afhænger af installationen.
@@ -301,7 +322,7 @@ Får feltet ingen liste, så kontrollér navnene på opslagstabellen og kolonner
 | **Ignorere** | Feltet fjernes fra lagets metadata, så Vidi slet ikke viser det: hverken i klik-info, attributtabel, filter eller redigering. Det fjernes også fra WFS og fra WMS-klik-info. |
 
 :::danger[Ignorere er ikke adgangskontrol]
-Et ignoreret felt kan stadig hentes gennem SQL-API'et. Følsomme oplysninger skal holdes ude af laget, fx med et view, og adgangen styres med [privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
+Et ignoreret felt kan stadig hentes gennem SQL-API'et. Følsomme oplysninger skal holdes ude af laget, f.eks. med et view, og adgangen styres med [privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
 :::
 
 ### Vis i konflikt

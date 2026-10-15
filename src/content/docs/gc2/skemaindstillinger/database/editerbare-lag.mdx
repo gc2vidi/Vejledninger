@@ -1,52 +1,134 @@
 ---
 title: Editerbare lag
-description: Klargør et lag til sikker redigering i GC2, Vidi og eksterne klienter
+description: Gør et lag redigerbart i Vidi, og styr hvem der må oprette, rette og slette objekter
 ---
 
+import metaEditorSvg from '../../resources/gc2-database-meta-editor.svg?url';
+import editorGif from '../../resources/vidi-editor-opret-objekt.gif?url';
+import snapGif from '../../resources/vidi-editor-snap.gif?url';
+
 :::note[Krævet adgang]
-Opsætning kræver administrative lagrettigheder. Den bruger, der redigerer, skal have skriveprivilegium og kunne godkendes efter lagets Authentication.
+Du skal kunne administrere skemaet. De brugere, der skal redigere, skal have privilegiet **Læse og skrive** på laget.
 :::
 
-`Editable` er kun ét af flere krav. Et lag er først klar til redigering, når datamodel, adgang, Meta og den valgte klient passer sammen.
+Før et lag kan redigeres i Vidi, skal tre ting passe sammen:
 
-## Krav
+- **GC2 tillader skrivning** til laget.
+- **Brugeren har ret** til at skrive i laget.
+- **Vidi viser redigeringsværktøjerne** for laget.
 
-1. Tabellen har en stabil primærnøgle.
-2. Geometritypen er kendt og understøttet.
-3. Obligatoriske felter kan udfyldes af brugeren eller har standardværdier.
-4. Laget er markeret `Editable`.
-5. Authentication og skriveprivilegier er korrekte.
-6. Meta-indstillingen for Vidi-editor er aktiveret, hvis laget skal redigeres i Vidi.
-7. Vidi-installationen indeholder og aktiverer `editor`-udvidelsen.
+## Gør et lag redigerbart
 
-## Felter og formularer
+### Tabellen
 
-Gennemgå [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter):
+Tabellen skal have en primærnøgle. Uden den kan GC2 ikke rette eller slette objekter. Lag, der importeres via GC2, får automatisk en primærnøgle (`gid`).
 
-- Giv felter forståelige aliaser og beskrivelser.
-- Undgå at vise tekniske systemfelter uden behov.
-- Brug `Allow null`, standardværdier og `Properties` bevidst.
-- Kontrollér links, billeder og templates som visning, ikke som rå brugerinput.
+### Skrivebar
 
-## Meta og Vidi
+**Skrivebar** i lagoversigten under <MenuPath items="Database" /> afgør, om GC2 tager imod ændringer i laget, både fra Vidi og fra eksterne klienter via WFS-T. Lag, der oprettes eller importeres i GC2, har fluebenet fra starten. Fjern det på lag, der aldrig må ændres.
 
-Meta har indstillingen `vidi_layer_editable`. Derefter skal Vidi-konfigurationen aktivere `editor`, og udvidelsen skal være kompileret i Vidi-installationen. Se [Meta](/gc2/skemaindstillinger/database/meta) og [Søgning, funktioner og udseende](/gc2/konfigurationer/soegning-funktioner-og-udseende).
+:::caution[Kendt fejl: ændringer forsvinder uden advarsel]
+Er **Skrivebar** slået fra, gemmer GC2 ikke ændringen, men melder den alligevel som gennemført. Vidi viser derfor **Feature added**, selv om objektet ikke er gemt. Kontrollér altid, at **Skrivebar** er slået til på lag, der skal redigeres i Vidi.
+:::
+
+### Adgang
+
+Lagets **Authentication** og brugernes privilegier afgør, hvem der må gemme:
+
+| Authentication | Hvem må gemme |
+|---|---|
+| `Write` eller `Read/write` | Databaseejeren og sub-brugere med **Læse og skrive**. Brugere med **Kun læse** eller uden privilegium får en fejl. |
+| `None` | Alle, også uden login. Brug det kun i helt særlige tilfælde. |
+
+Læs mere under [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication).
+
+### Redigering i Vidi
+
+Åbn <MenuPath items="Meta" /> for laget, sæt flueben i **Editable** under **Editor**, og klik på <MenuPath items="Opdater" />. Så viser Vidi værktøjerne til at oprette, rette og slette objekter i laget, f.eks. knappen <UiIcon set="bi" name="plus-square" title="Tilføj nyt objekt til lag" /> ved laget i lagstyringen.
+
+<figure class="centered-figure">
+  <img
+    src={metaEditorSvg}
+    alt="Meta-dialogen for et lag, hvor Editable under Editor er markeret med flueben"
+    style={{ width: '536px', maxWidth: '100%' }}
+  />
+  <figcaption>Meta-dialogen er en lang formular. Editable ligger i gruppen Editor.</figcaption>
+</figure>
+
+**Editable** og **Skrivebar** er to forskellige indstillinger:
+
+- **Skrivebar** afgør, om GC2 tager imod ændringer fra alle klienter, f.eks. Vidi og QGIS.
+- **Editable** afgør kun, om Vidi viser redigeringsværktøjerne.
+
+Skal laget redigeres i Vidi, skal begge være slået til. Skal det kun redigeres i f.eks. QGIS, er **Skrivebar** nok.
+
+Værktøjerne kræver desuden, at udvidelsen `editor` er slået til i Vidi-konfigurationen. Se [`enabledExtensions`](/gc2/konfigurationer/alle-indstillinger#enabledextensions).
+
+## Felterne i redigeringsformularen
+
+Når en bruger opretter eller retter et objekt, viser Vidi lagets felter i en formular.
+
+<figure class="centered-figure">
+  <img
+    src={editorGif}
+    alt="I Vidi klikker brugeren på plus ved laget, tegner en polygon og udfylder formularen med Naturtype, Status og Besigtiget"
+    style={{ width: '100%' }}
+  />
+  <figcaption>Et nyt objekt oprettes i Vidi. Naturtype er en rulleliste fra en opslagstabel, og felter med Deaktiver filtrering er skjult.</figcaption>
+</figure>
+
+Formularen bygger på indstillingerne under [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter):
+
+- **Alias** er feltets navn i formularen, og **Beskrivelse** vises som hjælpetekst inde i feltet. Hold beskrivelsen kort, ellers bliver den skåret af.
+- Felter uden flueben i [**Allow null**](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#type-og-allow-null) skal udfyldes.
+- Felter med en værdiliste i [**Egenskaber**](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#egenskaber) vises som rulleliste.
+- Skal et felt have en værdi, når brugeren ikke udfylder det, så brug en [standardværdi](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#standardværdier).
+
+:::caution[Deaktiver filtrering skjuler feltet]
+Felter med **Deaktiver filtrering** vises ikke i formularen og bliver ikke gemt. Læs mere under [Søgning og filtrering](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#søgning-og-filtrering).
+:::
 
 ## Snap
 
-Snap bruges i redigeringsklienten, men datakvaliteten afhænger stadig af de valgte snaplag, tolerancen og geometrien. Test oprettelse og ændring tæt på eksisterende objekter, og kontrollér den gemte geometri efterfølgende.
+Når brugeren tegner eller retter et objekt i Vidi, snapper punkterne automatisk til de lag, der er tændt og vises som vektor. Lag, der vises som tiles, kan man ikke snappe til.
 
-## Test
+<figure class="centered-figure">
+  <img
+    src={snapGif}
+    alt="I Vidi tegnes en ny polygon langs kanten af et fredet område, og punkterne snapper til kanten"
+    style={{ width: '100%' }}
+  />
+  <figcaption>Punkterne snapper til kanten af Fredede områder, som vises som vektorlag.</figcaption>
+</figure>
 
-1. Opret et objekt med alle obligatoriske felter.
-2. Ret attributter uden at ændre geometrien.
-3. Ret geometrien med og uden snap.
-4. Slet et testobjekt, hvis brugerne skal kunne slette.
-5. Gentag med en bruger, som kun må læse.
-6. Kontrollér resultatet via Vidi og eventuel WFS-T.
+Skal brugerne kunne snappe til et andet lag, f.eks. jordstykker eller ledninger, så åbn <MenuPath items="Meta" /> for det lag. Under **Layer type** tilføjer du **Vector** i **Type** og vælger **Vector** i **Default**. Brugerne skal have laget tændt, mens de tegner.
 
-Redigering direkte i GC2s Kort-fane beskrives under [Redigering i kortet](/gc2/skemaindstillinger/kort/redigering-i-kortet). Slutbrugerens Vidi-flow beskrives under [Editor](/vidi/extensions/editor).
+Vektorlag hentes ind i browseren, så brug det kun til lag af en rimelig størrelse.
 
-:::caution[Start ikke versionering ved et uheld]
-Versionering og Workflow ændrer datamodellen og redigeringsforløbet. Brug [Workflow](/gc2/skemaindstillinger/workflow), hvis historik eller godkendelse er et reelt krav.
+:::note[Vektorlag har deres egen styling]
+Et vektorlag bruger ikke lagets styling fra fanen <MenuPath items="Kort" />. Uden en **Style function** under **Vector settings** i Meta tegner Vidi laget med en standard blå farve. En style function, der svarer til en lilla flade med mørkere kant, ser sådan ud:
+
+```js
+function (feature) {
+  return { color: '#6A1B9A', weight: 2, fillColor: '#AB47BC', fillOpacity: 0.35 };
+}
+```
+
+Læs mere under [Meta](/gc2/skemaindstillinger/database/meta).
+:::
+
+## Test før brugerne får adgang
+
+1. Log ind i Vidi som en bruger med **Læse og skrive**.
+2. Opret et objekt, og udfyld de obligatoriske felter.
+3. Genindlæs siden, og kontrollér, at objektet stadig er der.
+4. Ret objektets felter og geometri, og slet det igen.
+5. Log ind som en bruger med **Kun læse**, og kontrollér, at det ikke er muligt at gemme.
+
+Du kan også se de gemte objekter under <MenuPath items="Data" /> i GC2.
+
+Slutbrugerens arbejdsgang i Vidi er beskrevet under [Editor](/vidi/extensions/editor). Redigering direkte i GC2's kort er beskrevet under [Redigering i kortet](/gc2/skemaindstillinger/kort/redigering-i-kortet).
+
+:::caution[Versionering og workflow]
+Skal I have historik eller godkendelse af redigeringer, så se [Workflow](/gc2/skemaindstillinger/workflow), før laget tages i brug. Det ændrer datamodellen og redigeringsforløbet.
 :::

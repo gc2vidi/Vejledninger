@@ -54,7 +54,7 @@ Der er fire niveauer:
 | **Ingen** | Laget findes ikke for sub-brugeren |
 | **Kun læse** | Sub-brugeren kan se og forespørge laget |
 | **Læse og skrive** | Sub-brugeren kan også redigere data i laget |
-| **Alle** | Sub-brugeren kan også ændre lagets egenskaber, fx udseende og tabelstruktur |
+| **Alle** | Sub-brugeren kan også ændre lagets egenskaber, f.eks. udseende og tabelstruktur |
 
 :::caution[Kendt fejl med Alle]
 I den nuværende version giver **Alle** ingen adgang til laget. Sub-brugeren kan hverken se laget i Vidi, hente det via WMS og WFS eller se det i GC2. Brug **Læse og skrive**, indtil fejlen er rettet. Det betyder, at en sub-bruger indtil da ikke kan få lov til at ændre lagets udseende og tabelstruktur.
@@ -69,7 +69,7 @@ Privilegierne gælder både i GC2 og i eksterne tjenester som WMS og WFS.
 3. Vælg niveauet for hver sub-bruger. Hver ændring gemmes med det samme.
 4. Luk dialogen.
 
-Kolonnen **Inherit privileges from** viser, hvilke sub-brugere en bruger nedarver fra, fx `["intern_edit"]`.
+Kolonnen **Inherit privileges from** viser, hvilke sub-brugere en bruger nedarver fra, f.eks. `["intern_edit"]`.
 
 <figure class="centered-figure">
   <img src={privilegesGif} alt="Privilegier på sten_og_jorddiger tildeles grupperne intern_read og intern_edit samt sub-brugeren bo_natur" style={{ width: '100%' }} />
