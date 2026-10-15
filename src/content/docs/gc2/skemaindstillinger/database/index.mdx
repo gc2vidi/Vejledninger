@@ -1,89 +1,103 @@
 ---
 title: Database
-description: Få overblik over lag, struktur, data og administrationsværktøjer i Database-fanen
+description: Få overblik over Database-fanen med lagoversigt, værktøjslinje, underfaner og detaljepanel
 ---
 
-Fanen `Database` er udgangspunktet for lagets datamodel og administrative egenskaber. Her vælger du lag i oversigten, retter felter i gridet og åbner værktøjer for adgang, tjenester, tags og Meta.
+import databaseTabSvg from '../../resources/gc2-database-tab-overview.svg?url';
+
+Fanen <MenuPath items="Database" /> i skemaindstillingerne er stedet, hvor du arbejder med skemaets lag: deres grundindstillinger, felter, data, adgang og tjenester.
 
 :::note[Krævet adgang]
-Du skal have adgang til skemaet. Oprettelse, sletning og ændring af lagegenskaber kræver databaseejer eller en subuser med de nødvendige administrative privilegier.
+Du skal have adgang til skemaet. En sub-bruger kan ikke omdøbe eller slette skemaet, og nogle værktøjer kræver, at sub-brugeren har de nødvendige privilegier på laget.
 :::
 
 ## Arbejdsfladen
 
-Database-fanen består af:
+<figure class="centered-figure">
+  <img
+    src={databaseTabSvg}
+    alt="Database-fanen med værktøjslinjen, lagoversigten, underfanerne og detaljepanelet markeret med tallene 1 til 4"
+    style={{ width: '100%' }}
+  />
+  <figcaption>Database-fanen med et valgt lag. Her er underfanen Data åben.</figcaption>
+</figure>
 
-- en lagoversigt øverst
-- en værktøjslinje for det valgte lag
-- et detaljepanel
-- underfanerne `Structure`, `Data` og `Elasticsearch`
+1. **Værktøjslinjen** med værktøjer til det valgte lag og til skemaet.
+2. **Lagoversigten** med skemaets lag og deres grundindstillinger.
+3. **Underfanerne** <MenuPath items="Struktur" />, <MenuPath items="Data" /> og <MenuPath items="Elasticsearch" /> for det valgte lag.
+4. **Detaljepanelet** med fakta om det valgte lag: koordinatsystem (**Srid**), lagets nøgle (**Key**), tags, geometrifelt, dimensioner og **Guid**.
 
-<MediaPlaceholder
-  title="Database-fanens lagoversigt og værktøjslinje"
-  file="gc2-database-layer-grid.png"
-  format="PNG"
->
-  Vis hele Database-fanen med ét valgt testlag. Kolonner, værktøjslinje og underfanerne Structure, Data og Elasticsearch skal kunne læses. Brug syntetiske lag- og brugernavne.
-</MediaPlaceholder>
+Klik på et lag i lagoversigten for at vælge det. Hold <Key items="Ctrl" /> eller <Key items="Shift" /> nede for at vælge flere lag, fx når du vil flytte eller slette dem.
 
-## Kolonner i lagoversigten
+## Lagoversigten
 
-Den medfølgende GC2-kilde viser dem i denne rækkefølge:
+Lagoversigten har én række pr. lag. Du retter de fleste værdier direkte i oversigten ved at dobbeltklikke i cellen. Kolonnerne er:
 
-1. `Relation`
-2. `Type`
-3. `Name`
-4. `Title`
-5. `Description`
-6. `Note`
-7. `Group`
-8. `Extra`, på installationer hvor feltet er aktiveret
-9. `OWS`
-10. `Sort id`
-11. `Authentication`
-12. `Editable`
-13. `Skip conflict`, på installationer hvor feltet er aktiveret
+- **Relation** og **Type**: om laget er en tabel, et view, et materialized view eller en foreign table, og hvilken geometritype det har.
+- **Navn**: lagets tekniske navn i databasen.
+- **Titel**, **Beskrivelse** og **Notat**: tekster, som brugerne ser i Vidi, og en intern note.
+- **Gruppe**: gruppen i lagtræet i Vidi.
+- **OWS**: om laget udstilles som WMS og WFS.
+- **Sort id**: lagets rækkefølge.
+- **Authentication**: hvilken adgangskontrol laget har.
+- **Skrivebar**: om laget må redigeres. Redigering kræver også de rette privilegier.
 
-Læs [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger) for betydning, eksempler og konsekvenser i Vidi.
+Nogle installationer har desuden kolonnerne **Extra** (eller et andet navn, som installationen har valgt) og **Skip conflict**.
+
+Læs mere om hver kolonne under [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger).
 
 ## Værktøjslinjen
 
-Efter valg af lag vises værktøjerne i denne rækkefølge:
+### Værktøjer til det valgte lag
+
+Værktøjerne i venstre side bliver aktive, når du har valgt et lag:
 
 | Værktøj | Brug |
 |---|---|
-| `Privilegier` | Tildel lagadgang til subusers |
-| `Workflow` | Start eller administrér workflow, hvis funktionen er aktiveret |
-| `Avanceret` | Tekniske kilder, SQL-filter, feature-id, QML og viewdefinition |
-| `Tjenester` | Servicepassword, API-nøgle og adresser til WMS, WFS, tiles og API |
-| `Tags` | Organisér og vælg lag på tværs af skemaer |
-| `Meta` | Styr lagtype, info, filtre, lagtræ, editor og Vidi-adfærd |
-| `Ryd tile cache` | Ryd hele skemaets cache efter bekræftelse |
-| `Nyt lag` | Importér data eller opret en ny relation |
-| `Flyt lag` | Flyt laget til et andet skema |
-| `Omdøb lag` | Skift relationens tekniske navn |
-| `Slet lag` | Slet relationen efter bekræftelse |
-| `Kopiér egenskaber` | Genbrug udvalgte egenskaber fra et andet lag |
+| <MenuPath items="Privilegier" /> | Giv sub-brugere adgang til laget. Se [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication). |
+| <MenuPath items="Workflow" /> | Styr godkendelse af redigeringer. Vises kun, når workflow er slået til på installationen. Se [Workflow](/gc2/skemaindstillinger/workflow). |
+| <MenuPath items="Avanceret" /> | Tekniske indstillinger som SQL-filter, feature-id, QML og view-definition. Se [Avancerede lagindstillinger](/gc2/skemaindstillinger/database/avancerede-lagindstillinger). |
+| <MenuPath items="Tjenester" /> | Adresser til WMS, WFS, tiles og API samt password og API-nøgle. Se [Tjenester og API](/gc2/skemaindstillinger/database/tjenester-og-api). |
+| <MenuPath items="Tags" /> | Giv laget tags. Se [Tags](/gc2/skemaindstillinger/database/tags). |
+| <MenuPath items="Meta" /> | Styr hvordan laget opfører sig i Vidi, fx klik-info, filtre og redigering. Se [Meta](/gc2/skemaindstillinger/database/meta). |
+| <MenuPath items="Ryd tile cache" /> | Slet tile cachen for **hele skemaet** efter bekræftelse. Se [Tile cache](/gc2/skemaindstillinger/kort/tile-cache). |
 
-## Structure, Data og Elasticsearch
+### Lag og skema
 
-### Structure
+Værktøjerne i højre side arbejder med lagene og skemaet:
 
-Her konfigurerer du kolonner, datatyper, aliaser, synlighed, søgning, filtre, links, indhold og formularvalg. Du kan også tilføje og slette kolonner samt starte versionering.
+| Værktøj | Brug |
+|---|---|
+| <MenuPath items="Nyt lag" /> | Importér data eller opret en ny tabel. Se [Opret, importér og organisér lag](/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag). |
+| <MenuPath items="Flyt lag" /> | Flyt de valgte lag til et andet skema. |
+| <MenuPath items="Omdøb layer" /> | Skift lagets tekniske navn i databasen. |
+| <MenuPath items="Slet lag" /> | Slet de valgte lag og deres data efter bekræftelse. |
+| <MenuPath items="Kopier egenskaber" /> | Kopiér alle egenskaber fra et andet lag til det valgte lag. |
+| <MenuPath items="Schema" /> | Menu med <MenuPath items="Omdøb schema" /> og <MenuPath items="Slet schema" />. |
 
-### Data
+Til sidst i værktøjslinjen vælger du, hvilket skema du arbejder i. I feltet **Nyt schema** kan du oprette et nyt skema ved at skrive navnet og klikke på plusset.
 
-Her kan du se og i nogle tilfælde redigere poster. Redigering kræver en brugbar primærnøgle og de nødvendige rettigheder. Datagridets sideinddeling viser som udgangspunkt 100 poster ad gangen.
+:::caution[Omdøbning og sletning rammer mere end GC2]
+<MenuPath items="Omdøb layer" />, <MenuPath items="Flyt lag" /> og <MenuPath items="Slet lag" /> ændrer lagene i databasen. Vidi-konfigurationer, QGIS-projekter, views og links, der bruger det gamle navn eller skema, holder op med at virke.
+:::
 
-### Elasticsearch
+## Underfanerne
 
-Denne fane bruges til søgeindeksets mapping, når Elasticsearch er en del af installationen. Behandl den som en teknisk funktion, og ændr den ikke uden et konkret søgebehov.
+<MenuPath items="Struktur" /> viser lagets felter. Her tilføjer og retter du kolonner og bestemmer, hvordan Vidi viser, søger, filtrerer og redigerer felterne.
+
+<MenuPath items="Data" /> viser lagets poster 100 ad gangen, og her kan du rette, tilføje og slette poster.
+
+Begge faner er beskrevet under [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter).
+
+<MenuPath items="Elasticsearch" /> bruges kun, når installationen har et Elasticsearch-søgeindeks. Ret kun her, hvis I har et konkret søgebehov.
 
 ## Anbefalet rækkefølge
 
-1. Opret eller importér laget.
-2. Ret grundindstillingerne i lagoversigten.
-3. Gennemgå Structure og kontrollér Data.
-4. Indstil adgang før offentlig test.
-5. Tilføj Tags og Meta.
-6. Gå til Kort og opbyg præsentationen.
+Når du opretter et nyt lag, er denne rækkefølge en god tommelfingerregel:
+
+1. Opret eller importér laget med <MenuPath items="Nyt lag" />.
+2. Ret titel, gruppe og de andre grundindstillinger i lagoversigten.
+3. Gennemgå felterne under <MenuPath items="Struktur" />, og kontrollér posterne under <MenuPath items="Data" />.
+4. Sæt adgang med **Authentication** og <MenuPath items="Privilegier" />, før laget testes offentligt.
+5. Tilføj tags og indstillinger under <MenuPath items="Meta" />.
+6. Gå til fanen <MenuPath items="Kort" />, og giv laget sin styling.

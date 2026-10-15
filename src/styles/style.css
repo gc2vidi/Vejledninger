@@ -350,8 +350,9 @@ html[data-theme="dark"] .sl-markdown-content pre.mermaid[data-processed] {
   border-radius: 0;
 }
 
-/* Tables: keep code values in the first column (e.g. `Read/write`) on one line */
-.sl-markdown-content td:first-child code {
+/* Tables: keep code values and MenuPath pills in the first column (e.g. `Read/write`, Ryd tile cache) on one line */
+.sl-markdown-content td:first-child code,
+.sl-markdown-content td:first-child .menupath {
   white-space: nowrap;
 }
 

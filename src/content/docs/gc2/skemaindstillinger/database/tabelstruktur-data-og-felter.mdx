@@ -63,6 +63,36 @@ Views, QGIS-projekter, templates, filtre og Vidi-konfigurationer kan henvise til
 
 I begge tilfælde gør Vidis redigeringsformular feltet obligatorisk, når fluebenet er fjernet.
 
+### Standardværdier
+
+GC2 og Vidi har ingen indstilling for en standardværdi. Skal et felt have en værdi, når brugeren opretter et nyt objekt i Vidi, så sæt en standardværdi på kolonnen i databasen, fx i pgAdmin:
+
+```sql
+ALTER TABLE skema.tabel ALTER COLUMN status SET DEFAULT 'Aktiv';
+```
+
+Har feltet en værdiliste i [Egenskaber](#egenskaber), skal standardværdien være en af værdierne i listen.
+
+Standardværdien bruges kun, når feltet ikke bliver udfyldt:
+
+- Rører brugeren ikke feltet, gemmes standardværdien.
+- Vælger brugeren en værdi og sletter den igen, gemmes et tomt felt.
+- Redigeringsformularen viser ikke standardværdien. Den ses først, når objektet er gemt.
+- Standardværdien gælder kun nye objekter, ikke ændringer af eksisterende.
+
+Skal feltet altid have en værdi, også når det sendes tomt, så brug i stedet en trigger:
+
+```sql
+CREATE FUNCTION skema.saet_status() RETURNS trigger AS $$
+BEGIN
+  NEW.status := coalesce(NEW.status, 'Aktiv');
+  RETURN NEW;
+END $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER saet_status BEFORE INSERT ON skema.tabel
+  FOR EACH ROW EXECUTE FUNCTION skema.saet_status();
+```
+
 ### Versionering
 
 <MenuPath items="Start versionering" /> og <MenuPath items="Stop versionering" /> slår historik til og fra for tabellen. Læs mere under [Versionering, roller og opsætning](/gc2/skemaindstillinger/workflow/versionering-roller-og-opsaetning).
