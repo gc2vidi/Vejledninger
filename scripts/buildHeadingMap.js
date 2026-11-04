@@ -181,6 +181,8 @@ export function getHeading(key: HeadingKey): { url: string; text: string } {
 }
 `;
   
+  // src/data only holds this generated (gitignored) file, so it is missing in a fresh clone
+  fs.mkdirSync(path.dirname(mapFilePath), { recursive: true });
   fs.writeFileSync(mapFilePath, content, 'utf-8');
   console.log(`\nUpdated ${mapFilePath} with ${Object.keys(headingMap).length} headings`);
 }
