@@ -3,133 +3,691 @@ title: Meta
 description: Styr hvordan et lag indlæses, vises, filtreres og opfører sig i Vidi
 ---
 
-import subgroupMetaImg from '../../resources/gc2-layer-meta-subgroup.png';
-import subgroupResultImg from '../../resources/gc2-layer-subgroup-example.png';
-import filterConfigImg from '../../resources/vidi-menu-lagstyring-filter-config.png';
-import filterPredefinedImg from '../../resources/vidi-menu-lagstyring-filter-predefined.png';
+import subgroupMetaSvg from '../../resources/gc2-meta-subgroup.svg?url';
+import subgroupResultImg from '../../resources/vidi-meta-subgroup.png';
+import vektorstylingImg from '../../resources/vidi-meta-vektorstyling.png';
+import referencesGif from '../../resources/vidi-meta-references.gif?url';
+import popupGif from '../../resources/vidi-meta-popup-template.gif?url';
+import functionGif from '../../resources/vidi-meta-function.gif?url';
+import selectFunctionGif from '../../resources/vidi-meta-select-function.gif?url';
+import accordionGif from '../../resources/vidi-meta-accordion.gif?url';
+import mouseoverImg from '../../resources/vidi-meta-mouseover.png';
+import mouseoverGif from '../../resources/vidi-meta-mouseover-template.gif?url';
+import lineHighlightImg from '../../resources/vidi-meta-line-highlight.png';
+import metaDialogSvg from '../../resources/gc2-meta-dialog.svg?url';
+import metaLayerTypeSvg from '../../resources/gc2-meta-layer-type.svg?url';
+import metaOpenToolsSvg from '../../resources/gc2-meta-open-tools.svg?url';
+import metaInfoPopupSvg from '../../resources/gc2-meta-info-popup.svg?url';
+import metaFunctionSvg from '../../resources/gc2-meta-function.svg?url';
+import metaAccordionSvg from '../../resources/gc2-meta-accordion.svg?url';
+import metaSelectedStyleSvg from '../../resources/gc2-meta-selected-style.svg?url';
+import metaStyleFunctionSvg from '../../resources/gc2-meta-style-function.svg?url';
+import metaLineHighlightSvg from '../../resources/gc2-meta-line-highlight.svg?url';
+import metaMouseoverSvg from '../../resources/gc2-meta-mouseover.svg?url';
+import descriptionGif from '../../resources/vidi-meta-description.gif?url';
+import metaCkanSvg from '../../resources/gc2-meta-ckan.svg?url';
+import vidiFilterConfigImg from '../../resources/vidi-meta-filter-config.png';
+import vidiFilterPredefinedImg from '../../resources/vidi-meta-filter-predefined.png';
+import vidiFilterHtmlSvg from '../../resources/vidi-meta-filter-html.svg?url';
+import metaFilterHtmlSvg from '../../resources/gc2-meta-filter-html.svg?url';
+import metaEgneSvg from '../../resources/gc2-meta-egne.svg?url';
+import metaKonfliktSvg from '../../resources/gc2-meta-konflikt.svg?url';
+import konfliktGif from '../../resources/vidi-meta-konflikt.gif?url';
+import metaTablesSvg from '../../resources/gc2-meta-tables.svg?url';
+import metaEditorSvg from '../../resources/gc2-meta-editor.svg?url';
+import metaVectorSvg from '../../resources/gc2-meta-vector-settings.svg?url';
+import metaFiltersSvg from '../../resources/gc2-meta-filters.svg?url';
+import metaReferencesSvg from '../../resources/gc2-meta-references.svg?url';
 
 :::note[Krævet adgang]
-Du skal kunne ændre lagets metadata. Meta påvirker alle Vidi-løsninger, der bruger laget. Gem og test én gruppe indstillinger ad gangen.
+Du skal kunne ændre lagets egenskaber. Meta gælder i alle Vidi-konfigurationer, der viser laget.
 :::
 
-`Meta` er lagets udvidede adfærdskonfiguration. Formularen bygges dynamisk, så en installation kan have ekstra felter ud over standardfelterne i GC2-kilden.
+Meta er lagets indstillinger til Vidi. Her bestemmer du f.eks., om laget vises som tiles eller vektor, hvordan klik-info ser ud, og hvilke filtre brugeren får.
 
-<MediaPlaceholder
-  title="Meta-dialogens standardgrupper"
-  file="gc2-database-meta-dialog.png"
-  format="PNG"
->
-  Vis hele Meta-dialogens navigation eller grupper fra den aktuelle installation. Brug et testlag og sørg for, at Layer type, Info pop-up, Tables, Editor, Tile settings, Vector settings, Filters, Mouse over, References og Layer tree kan identificeres.
-</MediaPlaceholder>
+## Åbn Meta
 
-## Begynd med disse indstillinger
-
-### Layer type
-
-**Type** bestemmer, hvilke leveringsformer brugeren eller en Vidi-konfiguration må vælge for laget. **Default** bestemmer den foretrukne type, når konfigurationen eller URL'en ikke allerede har valgt en type med et præfiks.
-
-| Valg | Det modtager browseren | Praktisk betydning |
-|---|---|---|
-| **Tile (`t`)** | Færdigtegnede kortbilleder fra WMS eller tile cache | MapServer anvender GC2-stylingen. Godt til ensartet serverstyling og komplekse lag; dette er standardtypen i den aktuelle GC2-kode. Tile cache aktiveres separat. |
-| **Vector (`v`)** | GeoJSON med geometrier og attributter | Leaflet tegner objekterne og kan gøre dem interaktive. Store lag kan belaste browseren. |
-| **MVT (`mvt`)** | Kompakte, tiledelte vektordata | Leaflet VectorGrid tegner de relevante felter. Velegnet til større datasæt, når styling og funktioner er tilpasset MVT. |
-| **WebGL (`w`)** | Vektordata til browserens WebGL-rendering | Grafikkortet hjælper med at tegne mange simple objekter; funktionaliteten afviger fra almindelige Leaflet-vektorer. |
-
-Et lag kan have flere valgte typer. Hvis både Tile og Vector er valgt, kan Vidi eksempelvis tilbyde begge visninger, mens **Default** angiver udgangspunktet. Vælg kun typer, som er testet med lagets datamængde, styling og funktioner.
-
-:::note[Vector er ikke WFS]
-Vidis Vector-type henter normalt GeoJSON gennem GC2s SQL API. WFS er en separat OGC-tjeneste til blandt andet QGIS og systemintegrationer.
-:::
-
-Test performance, feature-info, styling og redigering efter ændring af lagtype. Se [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning) for hele dataflowet mellem PostGIS, GC2, MapServer og Vidi.
-
-### Layer tree
-
-Her kan du blandt andet vælge undergruppe, åbne lagværktøjer fra start og deaktivere lagets checkbox.
+1. Vælg laget i lagoversigten under <MenuPath items="Database" />.
+2. Klik på <MenuPath items="Meta" /> i værktøjslinjen.
+3. Ret felterne, og klik på <MenuPath items="Opdater" />.
 
 <figure class="centered-figure">
-  <img src={subgroupMetaImg.src} alt="Meta-felt til undergruppe i Vidi-lagtræet" style={{ width: '760px', maxWidth: '100%' }} />
-  <figcaption>Det eksisterende billede viser princippet; brug den aktuelle installation ved næste optagelse.</figcaption>
+  <img src={metaDialogSvg} alt="Meta-dialogen med grupperne CKAN, Konflikt og Info pop-up øverst og knappen Opdater markeret nederst" style={{ width: '470px', maxWidth: '100%' }} />
+  <figcaption>Meta-dialogen er en lang formular med en gruppe pr. emne.</figcaption>
+</figure>
+
+Vælger du flere lag, er alle grupper lukket. Sæt flueben ved de grupper, du vil ændre. Kun felterne i de grupper gemmes på lagene, og lagenes øvrige indstillinger bevares.
+
+Genindlæs Vidi for at se ændringen.
+
+:::caution[JSON og JavaScript]
+Flere felter tager JSON eller JavaScript. GC2 kontrollerer ikke indholdet. Er der en fejl, ignorerer Vidi indstillingen og skriver kun fejlen i browserens konsol (F12). Test derfor hver ændring i Vidi.
+:::
+
+:::tip[Skriv koden i en editor]
+Felterne i Meta-dialogen er små. Skriv templates og funktioner i en editor som Notepad++ eller Visual Studio Code, og kopier dem ind i feltet bagefter. Gem gerne koden i en fil, så du har en kopi. Du kan også trække Meta-dialogen større i hjørnet.
+:::
+
+### Dokumentation til templates og JavaScript
+
+Felterne bruger biblioteker, som Vidi indeholder. Deres egen dokumentation viser, hvad der er muligt:
+
+| Bruges i | Dokumentation |
+|---|---|
+| Pop-up template, Tooltip template og mouse-over | [Handlebars](https://handlebarsjs.com/guide/) |
+| Style function, Point to layer, Function og Selected style | [Leaflet 1.9](https://leafletjs.com/reference.html), f.eks. [styling](https://leafletjs.com/reference.html#path-option) og [kortets metoder](https://leafletjs.com/reference.html#map-methods-for-modifying-map-state) |
+| Klasser og ikoner i templates | [Bootstrap 5.3](https://getbootstrap.com/docs/5.3/getting-started/introduction/) og [Bootstrap Icons](https://icons.getbootstrap.com/) |
+| Function, Select function og Pop-up template | Vidis `api` til at tænde, slukke og filtrere lag: [Vidis JavaScript-API](/gc2/skemaindstillinger/database/vidi-api) |
+
+## Oversigt
+
+| Gruppe | Bruges til |
+|---|---|
+| [Layer type](#layer-type) | Om laget vises som tiles, vektor, MVT eller WebGL |
+| [Layer tree](#layer-tree) | Undergrupper, værktøjer, der er åbne fra start, og låst afkrydsningsfelt |
+| [Info pop-up](#info-pop-up) | Klik-info for hele laget og funktioner ved klik |
+| [Tables](#tables) | Zoom, når brugeren vælger en række i tabellen |
+| [Editor](#editor) | Redigering i Vidi |
+| [Tile settings](#tile-settings) | Tile cache og markering af valgte objekter i tile-lag |
+| [Vector settings](#vector-settings) | Styling, etiketter og indlæsning af vektorlag |
+| [Filters](#filters) | Faste og foruddefinerede filtre i lagstyringen |
+| [Mouse over](#mouse-over) | Boksen, der vises, når musen holdes over et objekt |
+| [References](#references) | Filtrering af et lag ud fra et andet |
+| [CKAN](#ckan) | Lagets beskrivelse i Vidi |
+| [Konflikt](#konflikt) | Tekster og analyser i konfliktsøgningen |
+
+## Layer type
+
+**Type** bestemmer, hvilke visninger laget kan have i Vidi. **Default** er den visning, laget starter med. Vælger du flere typer, kan brugeren skifte mellem dem ved laget i lagstyringen.
+
+<figure class="centered-figure">
+  <img src={metaLayerTypeSvg} alt="Gruppen Layer type i Meta-dialogen, hvor Tile og Vector er valgt under Type, og Default er Vector" style={{ width: '484px', maxWidth: '100%' }} />
+  <figcaption>Laget kan vises som Tile og Vector og starter som Vector.</figcaption>
+</figure>
+
+| Type | Visning |
+|---|---|
+| **Tile** | Færdigtegnede kortbilleder fra GC2 med lagets styling fra fanen <MenuPath items="Kort" />. Standard for nye lag. |
+| **Vector** | Objekterne hentes ind i browseren og tegnes der. Kræves for at kunne snappe til laget og bruge tabellen ved siden af kortet. Brug det kun til lag af en rimelig størrelse. |
+| **MVT** | Vektordata hentet i tiles. Kan bruges til større lag end **Vector**. |
+| **WebGL** | Tegnes af grafikkortet. Til mange simple objekter, men med færre funktioner i lagstyringen. |
+
+Vector bruger ikke lagets styling fra fanen <MenuPath items="Kort" />, men sin egen [Style function](#style-function).
+
+Se [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning) for, hvordan data går fra databasen til kortet.
+
+## Layer tree
+
+### Sub group
+
+Placerer laget i en undergruppe i lagets gruppe i Vidis lagstyring. Brug `|` til flere niveauer, f.eks. `Vand|Søer`.
+
+<figure class="centered-figure">
+  <img src={subgroupMetaSvg} alt="Gruppen Layer tree i Meta-dialogen, hvor Sub group er sat til Vand og markeret" style={{ width: '472px', maxWidth: '100%' }} />
+  <figcaption>Sub group sat til Vand. Det samme er gjort på tre lag i gruppen Beskyttelseslinjer.</figcaption>
 </figure>
 
 <figure class="centered-figure">
-  <img src={subgroupResultImg.src} alt="Undergruppe vist i Vidi-lagtræet" style={{ width: '520px', maxWidth: '100%' }} />
-  <figcaption>Kontrollér resultatet i den Vidi-konfiguration, som brugerne åbner.</figcaption>
+  <img src={subgroupResultImg.src} alt="Gruppen Beskyttelseslinjer i Vidi med laget Skovbyggelinjer og undergruppen Vand, der indeholder Beskyttede vandløb, Søbeskyttelseslinjer og Åbeskyttelseslinjer" style={{ width: '477px', maxWidth: '100%' }} />
+  <figcaption>De tre lag vises samlet i undergruppen Vand.</figcaption>
 </figure>
 
-### Info pop-up
+### Open tools
 
-Standard-Meta omfatter popup-template, elementselector, funktioner ved visning og valg samt accordion-felter. Start med almindelig click info fra feltopsætningen. Brug templates og JavaScript-relaterede funktioner kun, når den simple visning ikke er tilstrækkelig.
-
-### Tables
-
-Styrer blandt andet zoom ved valg og maksimalt zoomniveau for tabelinteraktion. Kontrollér samspillet med Vidi-attributtabellen og `vectorTable` i Vidi-konfigurationen.
-
-### Editor
-
-`vidi_layer_editable` markerer laget som redigerbart i Vidi. Det erstatter ikke `Editable`, skriveprivilegier, authentication eller den installerede `editor`-udvidelse. Se [Editerbare lag](/gc2/skemaindstillinger/database/editerbare-lag).
-
-## Filtre
-
-Meta kan definere almindelig filterkonfiguration, foruddefinerede filtre, standardmatch, låste filtre, HTML-template og krav om aktivt filter.
+Værktøjer, der er åbne, når brugeren tænder laget. Skriv dem som en JSON-liste:
 
 ```json
-[
-  {"field": "type", "operator": "="},
-  {"field": "datoetableret", "operator": ">="}
-]
+["filters"]
 ```
 
+Mulige værdier er `filters`, `opacity`, `labels`, `search`, `style`, `load-strategy` og `download`. Værktøjet åbnes kun, hvis det findes for lagets type.
+
 <figure class="centered-figure">
-  <img src={filterConfigImg.src} alt="Almindeligt lagfilter i Vidi" style={{ width: '520px', maxWidth: '100%' }} />
-  <figcaption>Resultatet af en filterkonfiguration i Vidi.</figcaption>
+  <img src={metaOpenToolsSvg} alt="Gruppen Layer tree i Meta-dialogen, hvor Open tools er sat til filters og markeret" style={{ width: '478px', maxWidth: '100%' }} />
+  <figcaption>Filterværktøjet er åbent, når brugeren tænder laget.</figcaption>
 </figure>
 
-Et foruddefineret filter kan give brugeren navngivne faglige valg:
+### Disable check box
 
-```json
-{
-  "Åbne ventiler": "aabningsgrad = 100",
-  "Lukkede ventiler": "aabningsgrad = 0"
+Brugeren kan ikke tænde laget selv. Bruges sammen med [References](#references): laget kan først tændes, når brugeren har filtreret det lag, der henviser til det.
+
+## Info pop-up
+
+Felterne i klik-info vælges under [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#visning-i-klik-info-og-mouse-over). Indstillingerne her er til, når den almindelige visning ikke er nok. **Element selector** bruges ikke af Vidi.
+
+<figure class="centered-figure">
+  <img src={metaInfoPopupSvg} alt="Gruppen Info pop-up i Meta-dialogen, hvor Pop-up template og Select function er udfyldt og markeret" style={{ width: '470px', maxWidth: '100%' }} />
+  <figcaption>Pop-up template og Select function fra eksemplerne nedenfor, udfyldt på laget med naturtyper.</figcaption>
+</figure>
+
+### Pop-up template
+
+Erstatter hele klik-info for laget. Templaten er HTML med lagets felter i dobbelte krøllede parenteser:
+
+```handlebars
+<h3>{{naturtype}}</h3>
+<p>Areal: {{areal_ha}} ha</p>
+<p>Status: {{status}}</p>
+```
+
+Hjælpefunktionerne fra feltets [Template](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#template) virker også her, f.eks. `{{formatDate dato "DD-MM-YYYY"}}`. Er laget redigerbart, tilføjer Vidi selv knapperne til at rette og slette over templaten.
+
+Uden en Pop-up template bruger Vidi denne, som viser felterne med **Vis i klik-info** og deres alias. Den er et godt udgangspunkt, hvis du vil beholde felterne og tilføje noget:
+
+```handlebars
+<div class="vidi-popup-content">
+  <h3 class="popup-title">{{_vidi_content.title}}</h3>
+  {{#_vidi_content.fields}}
+    {{#if value}}
+      <h4>{{title}}</h4>
+      <p {{#if type}}class="{{type}}"{{/if}}>{{{value}}}</p>
+    {{/if}}
+  {{/_vidi_content.fields}}
+</div>
+```
+
+#### Eksempel med faneblade
+
+Vidi indeholder Bootstrap og Bootstrap Icons, så templaten kan bruge deres klasser, f.eks. kort, badges og faneblade. Giv fanebladenes `id` objektets `gid`, så de ikke blandes sammen, når flere objekter er åbne:
+
+```handlebars
+<div class="card border-0 shadow-sm">
+  <div class="card-header text-white d-flex align-items-center gap-2" style="background: #2E7D32">
+    <i class="bi bi-tree-fill"></i>
+    <strong>{{naturtype}}</strong>
+    <span class="badge bg-light text-success ms-auto">{{status}}</span>
+  </div>
+  <ul class="nav nav-tabs nav-fill small">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#oversigt-{{gid}}">Oversigt</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#registrering-{{gid}}">Registrering</button></li>
+  </ul>
+  <div class="tab-content card-body p-2">
+    <div class="tab-pane active" id="oversigt-{{gid}}">
+      <div class="text-center py-2">
+        <div class="fs-4 fw-bold">{{formatDecimalNumber areal_ha}} ha</div>
+        <div class="small text-muted">Areal</div>
+      </div>
+      <a class="btn btn-sm btn-outline-success w-100" href="https://arealinformation.miljoeportal.dk" target="_blank">
+        <i class="bi bi-box-arrow-up-right"></i> Danmarks Arealinformation
+      </a>
+    </div>
+    <div class="tab-pane" id="registrering-{{gid}}">
+      <dl class="row small mb-0">
+        <dt class="col-5">Besigtiget</dt>
+        <dd class="col-7">{{#if dato}}{{formatDate dato "DD-MM-YYYY"}}{{else}}<span class="text-danger">Ikke besigtiget</span>{{/if}}</dd>
+        <dt class="col-5">Datagrundlag</dt>
+        <dd class="col-7">{{kilde}}</dd>
+        <dt class="col-5">Myndighed</dt>
+        <dd class="col-7">{{myndighed}}</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+```
+
+Linjen med `{{#if dato}}` viser datoen, hvis feltet har en værdi. Er feltet tomt, vises teksten efter `{{else}}`, her "Ikke besigtiget".
+
+<figure class="centered-figure">
+  <img src={popupGif} alt="I Vidi klikker brugeren på en mose. Klik-info vises som et kort med grøn overskrift, arealet på fanen Oversigt og registreringen på fanen Registrering" style={{ width: '100%' }} />
+  <figcaption>Klik-info med templaten ovenfor. Besigtigelsesdatoen er tom, så fanen Registrering viser "Ikke besigtiget".</figcaption>
+</figure>
+
+### Function
+
+JavaScript, der køres, når brugeren klikker på et objekt i laget. Denne funktion zoomer kortet ind til objektet:
+
+```js
+function (feature, layer, layerKey, sqlQuery, store, map) {
+  map.flyToBounds(L.geoJSON(feature).getBounds(), { maxZoom: 14, padding: [80, 80] });
 }
 ```
 
+`feature` er objektet som GeoJSON, og `feature.properties` indeholder dets felter. `map` er Leaflet-kortet. `maxZoom` forhindrer, at kortet zoomer helt ind på små objekter, og `padding` giver plads til klik-info.
+
 <figure class="centered-figure">
-  <img src={filterPredefinedImg.src} alt="Foruddefinerede filtre i Vidi" style={{ width: '520px', maxWidth: '100%' }} />
-  <figcaption>Brug faglige navne, og test udtrykkene mod null-værdier og adgangsfiltre.</figcaption>
+  <img src={metaFunctionSvg} alt="Gruppen Info pop-up i Meta-dialogen, hvor Function er udfyldt med zoom-funktionen og markeret" style={{ width: '470px', maxWidth: '100%' }} />
+  <figcaption>Funktionen udfyldt under Function.</figcaption>
 </figure>
 
-:::caution[Filtre er ikke adgangskontrol]
-Et brugerfilter skjuler data i brugeroplevelsen, men erstatter ikke Authentication, privilegier eller en sikker serverforespørgsel.
+<figure class="centered-figure">
+  <img src={functionGif} alt="I Vidi klikker brugeren på et fredet område. Kortet zoomer ind til området, og klik-info vises over det" style={{ width: '100%' }} />
+  <figcaption>Funktionen zoomer ind til det område, brugeren klikker på.</figcaption>
+</figure>
+
+Du kan også nøjes med at skrive funktionens indhold, f.eks. kun linjen med `map.flyToBounds`. Vidi pakker det selv ind i en funktion med de samme argumenter. Med [Vidis JavaScript-API](/gc2/skemaindstillinger/database/vidi-api) kan funktionen også tænde, slukke og filtrere lag.
+
+### Select function
+
+JavaScript, der køres, når et objekt bliver valgt i klik-info. Det sker, når brugeren klikker på objektet i kortet, og når brugeren vælger en anden række i tabellen under **Info**. Denne funktion filtrerer laget, så det kun viser objekter med samme naturtype som det valgte:
+
+```js
+function (id, layer, key, sqlQuery) {
+  api.filter(key, {
+    match: 'any',
+    columns: [{ fieldname: 'naturtype', expression: '=', value: layer.feature.properties.naturtype, restriction: false }]
+  });
+}
+```
+
+`layer.feature.properties` indeholder det valgte objekts felter, og `key` er lagets navn. Filteret sættes med [Vidis JavaScript-API](/gc2/skemaindstillinger/database/vidi-api#filtrer-lag).
+
+<figure class="centered-figure">
+  <img src={selectFunctionGif} alt="Brugeren klikker på en mose med Info. Bagefter viser lagets filterværktøj filteret Naturtype = Mose på fanen Vilkårlig" style={{ width: '100%' }} />
+  <figcaption>Brugeren klikker på en mose. Select function sætter filteret Naturtype = Mose, som ses i lagets filterværktøj.</figcaption>
+</figure>
+
+### Accordion summery
+
+:::tip[Kræver crossMultiSelect]
+Felterne virker kun, når [`crossMultiSelect`](/gc2/konfigurationer/alle-indstillinger#autopanpopup-crossmultiselect-featureinfotableonmap-og-popupdraggable) er slået til i Vidis konfiguration med `"crossMultiSelect": true`. Den er slået fra som standard.
 :::
 
-## Avancerede Meta-grupper
+Med `crossMultiSelect` viser klik-info alle de objekter, klikket rammer, også på tværs af lag. Hvert objekt har en overskrift, som brugeren folder ud, og overskriften er som standard lagets navn. Skriv et feltnavn i **Accordion summery** for at bruge feltets værdi i stedet. **Accordion summery prefix** er en grå tekst foran værdien.
 
-### Vector settings
+I eksemplet har de fredede områder **Accordion summery** `fred_navn` og **Accordion summery prefix** `Fredning`, og udsigtspunkterne har **Accordion summery** `navn`:
 
-Omfatter blandt andet statisk/dynamisk load strategy, maksimalt antal features, clustering, punkt- og stylefunktioner, tabel, genindlæsning, feature-info, zoom, tooltip og highlight-styling. Ændr kun værdier, som løser et målbart performance- eller interaktionsbehov.
+<figure class="centered-figure">
+  <img src={metaAccordionSvg} alt="Gruppen Info pop-up i Meta-dialogen for de fredede områder, hvor Accordion summery prefix og Accordion summery er udfyldt og markeret" style={{ width: '470px', maxWidth: '100%' }} />
+  <figcaption>Overskriften for de fredede områder er sat under Accordion summery.</figcaption>
+</figure>
 
-### Tile settings
+<figure class="centered-figure">
+  <img src={accordionGif} alt="Brugeren klikker på et udsigtspunkt i et fredet område. Klik-info viser overskrifterne Udsigtspunkt 25 og Fredning Stoubjerg, som foldes ud en ad gangen" style={{ width: '100%' }} />
+  <figcaption>Klikket rammer både et udsigtspunkt og et fredet område. Overskrifterne viser objekternes navne i stedet for lagenes.</figcaption>
+</figure>
 
-Omfatter brug af tile cache, serviceadresse, valgt style og tiled adfærd. **Use tile cache** er som udgangspunkt slået fra for et nyt lag, selv om Tile er standardtypen. Den detaljerede cacheopsætning ligger under [Tile cache](/gc2/skemaindstillinger/kort/tile-cache).
+## Tables
 
-### Mouse over
+| Felt | Virkning |
+|---|---|
+| **Zoom on select** | Kortet zoomer til objektet, når brugeren vælger en række i tabellen. |
+| **Max zoom level** | Kortet zoomer ikke længere ind end dette niveau. Standard er 17. |
 
-Aktivering, template og UTF-grid-cache. Mouse-over kan sende mange forespørgsler og vise for meget information; brug korte templates og test performance.
+<figure class="centered-figure">
+  <img src={metaTablesSvg} alt="Grupperne Tables og Editor i Meta-dialogen, hvor Zoom on select og Max zoom level under Tables er markeret" style={{ width: '472px', maxWidth: '100%' }} />
+  <figcaption>Zoom on select slået til under Tables.</figcaption>
+</figure>
 
-### References
+## Editor
 
-`referenced_by` beskriver relationer til andre lag. Dokumentér nøglefelter og forventet filteradfærd, og test hvad der sker, når den relaterede feature mangler.
+**Editable** viser Vidis redigeringsværktøjer for laget. Værktøjerne kræver, at udvidelsen `editor` er slået til i Vidis konfiguration under [`enabledExtensions`](/gc2/konfigurationer/alle-indstillinger#enabledextensions). Se [Editerbare lag](/gc2/skemaindstillinger/database/editerbare-lag).
 
-### Konflikt
+<figure class="centered-figure">
+  <img src={metaEditorSvg} alt="Grupperne Tables og Editor i Meta-dialogen, hvor Editable under Editor er slået til og markeret" style={{ width: '472px', maxWidth: '100%' }} />
+  <figcaption>Editable slået til under Editor.</figcaption>
+</figure>
 
-Standardfelterne omfatter korte/lange beskrivelser, buffer, analyse-SQL og overskrift. De er kun relevante for en konkret opsætning af konfliktsøgning.
+## Tile settings
 
-## Test efter ændring
+| Felt | Virkning |
+|---|---|
+| **Use tile cache** | Laget hentes fra tile cachen. Når brugeren filtrerer laget, hentes det uden cache. Se [Tile cache](/gc2/skemaindstillinger/kort/tile-cache). |
+| **Tiled** | Laget hentes i små kortbilleder i stedet for ét billede for hele kortet. |
+| **Selected style** | Stylingen af det objekt, brugeren har valgt i klik-info. Standard er en rød kant. |
 
-1. Genåbn Meta og kontrollér, at værdien er gemt.
-2. Åbn en ren Vidi-URL uden projekt/state.
-3. Kontrollér lagtræ, feature-info, tabel og filtre.
-4. Test performance med en realistisk datamængde.
-5. Test anonym og beskyttet adgang separat.
-6. Notér eventuelle installationsspecifikke Meta-felter i konfigurationens beskrivelse.
+**Selected style** er JSON med Leaflet-stylingens navne:
+
+```json
+{"color": "#FF6F00", "weight": 4, "fillOpacity": 0.1}
+```
+
+<figure class="centered-figure">
+  <img src={metaSelectedStyleSvg} alt="Gruppen Tile settings i Meta-dialogen, hvor Selected style er udfyldt og markeret" style={{ width: '492px', maxWidth: '100%' }} />
+  <figcaption>Selected style udfyldt under Tile settings.</figcaption>
+</figure>
+
+**Tiles service uri** bruges ikke af Vidi.
+
+## Vector settings
+
+Gælder kun, når laget vises som **Vector**.
+
+| Felt | Virkning |
+|---|---|
+| **Load strategy** | `Static` henter alle objekter én gang. `Dynamic` henter kun objekterne i kortudsnittet og henter igen, når brugeren flytter kortet. |
+| **Max features** | Det største antal objekter, laget må have. Formularen foreslår 500. Står feltet tomt, bruger Vidi 100. Se boksen nedenfor. |
+| **Use clustering** | Punkter tæt på hinanden samles i én klynge med et tal. |
+| **Show table** | Lagets tabel vises ved siden af kortet. Placering og størrelse sættes med [`vectorTable`](/gc2/konfigurationer/alle-indstillinger#vectortable) i Vidi-konfigurationen. |
+| **Reload interval** | Laget hentes igen med dette interval i millisekunder, f.eks. `60000` for hvert minut. **Reload callback** er en funktion, der køres efter hver indlæsning. |
+| **Disable feature info** | Klik på laget viser ikke klik-info. |
+| **Min zoom** og **Max zoom** | Laget vises kun mellem disse zoomniveauer. |
+| **Line highlight style** | En ekstra streg, der altid tegnes under hver linje. Den giver linjen en kant, som en Style function ikke kan lave alene, så linjerne står tydeligere frem på kortet. Skrives som JSON, f.eks. `{"color": "#FFEB3B", "weight": 8}`. |
+
+:::caution[Har laget flere objekter end Max features, vises ingen]
+Vidi viser ikke de første objekter op til grænsen, men slet ingen. Brugeren får i stedet beskeden "Det maksimale antal objekter blev nået. Brug filtrer til at reducere antallet." Sæt **Max features** højere end antallet af objekter i laget, eller brug `Dynamic`, så grænsen kun gælder objekterne i kortudsnittet.
+:::
+
+<figure class="centered-figure">
+  <img src={lineHighlightImg.src} alt="Vidi med laget Beskyttede vandløb tændt i lagstyringen og blå vandløb, som hver har en bred gul streg under sig" style={{ width: '100%' }} />
+  <figcaption>Vandløbene har en blå Style function og en gul Line highlight style med <code>{'{"color": "#FFEB3B", "weight": 8}'}</code>.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={metaLineHighlightSvg} alt="Nederst i gruppen Vector settings i Meta-dialogen er Line highlight style udfyldt og markeret" style={{ width: '476px', maxWidth: '100%' }} />
+  <figcaption>Line highlight style udfyldt nederst under Vector settings.</figcaption>
+</figure>
+
+### Style function
+
+Uden en style function tegner Vidi laget med en standard blå farve. Funktionen får hvert objekt og returnerer Leaflet-styling. Den kan bruge objektets felter:
+
+```js
+function (feature) {
+  if (feature.properties.type === 'Kirkefredning') {
+    return { color: '#B71C1C', weight: 3, fillOpacity: 0.1 };
+  }
+  return { color: '#6A1B9A', weight: 2, fillColor: '#AB47BC', fillOpacity: 0.35 };
+}
+```
+
+`color` og `weight` er kanten, og `fillColor` og `fillOpacity` er fladen.
+
+<figure class="centered-figure">
+  <img src={metaStyleFunctionSvg} alt="Gruppen Vector settings i Meta-dialogen, hvor Style function er udfyldt og markeret" style={{ width: '498px', maxWidth: '100%' }} />
+  <figcaption>Style function udfyldt under Vector settings.</figcaption>
+</figure>
+
+### Point to layer
+
+Bestemmer, hvordan punkter tegnes. Uden en funktion vises punkterne som Leaflets standardmarkør. Denne funktion tegner dem som grønne cirkler:
+
+```js
+function (feature, latlng) {
+  return L.circleMarker(latlng, { radius: 6, color: '#1B5E20', weight: 2, fillColor: '#66BB6A', fillOpacity: 0.9 });
+}
+```
+
+Punkterne kan også vises som et ikon, f.eks. en SVG- eller PNG-fil:
+
+```js
+function (feature, latlng) {
+  return L.marker(latlng, {
+    pane: 'natur-udsigtspunkter',
+    icon: L.icon({ iconUrl: 'https://example.dk/ikoner/udsigt.svg', iconSize: [24, 24], iconAnchor: [12, 12] })
+  });
+}
+```
+
+Uden `pane` lægger Leaflet ikonerne øverst over alle andre lag. Med `pane` sat til `skema-tabel` følger de lagets plads i lagstyringen.
+
+### Tooltip template
+
+En fast etiket ved hvert objekt, skrevet som en template:
+
+```handlebars
+{{navn}}
+```
+
+Etiketten vises hele tiden, ikke kun når musen holdes over objektet. Brug den kun på lag med få objekter, eller sæt **Min zoom**, så etiketterne først vises tæt på.
+
+<figure class="centered-figure">
+  <img src={metaVectorSvg} alt="Gruppen Vector settings i Meta-dialogen, hvor Point to layer og Tooltip template er udfyldt og markeret" style={{ width: '502px', maxWidth: '100%' }} />
+  <figcaption>Point to layer og Tooltip template udfyldt under Vector settings.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={vektorstylingImg.src} alt="Vidi-kort med grønne punkter, der hver har en etiket som Udsigtspunkt 30" style={{ width: '100%' }} />
+  <figcaption>Udsigtspunkterne (vist i grøn) er tegnet med Point to layer og har etiketter fra Tooltip template.</figcaption>
+</figure>
+
+## Filters
+
+Her sættes filtrene op, som brugeren finder under filterværktøjet ved laget. Hvordan brugeren bruger dem, er beskrevet under [Lagstyring](/vidi/vidi-menuen/lagstyring).
+
+### Filter config
+
+Rækker, der er klar på fanen **Vilkårlig**, så brugeren kun skal udfylde værdien. Brugen er beskrevet under [Standardfiltre](/vidi/vidi-menuen/lagstyring#standardfiltre).
+
+```json
+[
+  {"field": "naturtype", "operator": "="},
+  {"field": "besigtiget", "operator": ">="}
+]
+```
+
+Felterne skal kunne filtreres. Har et felt **Deaktiver filtrering** under [Struktur](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#søgning-og-filtrering), vises rækken uden felt.
+
+Har feltet en værdiliste i [Egenskaber](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#egenskaber), vælger brugeren værdien i en rulleliste.
+
+<figure class="centered-figure">
+  <img src={vidiFilterConfigImg.src} alt="Fanen Vilkårlig i Vidi med de forudindstillede rækker Naturtype lig med og Besigtiget større end eller lig med" style={{ width: '450px', maxWidth: '100%' }} />
+  <figcaption>Filter config fra eksemplet i Vidi. Naturtype har en værdiliste i Egenskaber og vises derfor som rulleliste.</figcaption>
+</figure>
+
+### Predefined filters
+
+Navngivne filtre, som brugeren slår til og fra på fanen **Foruddefineret**, se [Foruddefinerede filtre](/vidi/vidi-menuen/lagstyring#foruddefinerede-filtre). Navnet er det, brugeren ser, og værdien er en SQL-betingelse:
+
+```json
+{
+  "Sø": "naturtype = 'Sø'",
+  "Mose": "naturtype = 'Mose'"
+}
+```
+
+Alle filtrene er slået til, når laget tændes, og de kombineres med OR. Laget viser altså kun søer og moser fra start. Slår brugeren alle filtrene fra, vises hele laget.
+
+<figure class="centered-figure">
+  <img src={metaFiltersSvg} alt="Gruppen Filters i Meta-dialogen, hvor Filter config og Predefined filters er udfyldt og markeret" style={{ width: '480px', maxWidth: '100%' }} />
+  <figcaption>Filter config og Predefined filters udfyldt under Filters.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={vidiFilterPredefinedImg.src} alt="Fanen Foruddefineret i Vidi med fluebenene Sø og Mose" style={{ width: '450px', maxWidth: '100%' }} />
+  <figcaption>Predefined filters fra eksemplet i Vidi. Begge filtre er slået til, så laget kun viser søer og moser.</figcaption>
+</figure>
+
+### Øvrige felter
+
+| Felt | Virkning |
+|---|---|
+| **Default match** | Om rækkerne på fanen **Vilkårlig** kombineres med `All` (AND) eller `Any` (OR) fra start. Standard er `Any`. |
+| **Immutable** | Brugeren kan kun udfylde rækkerne fra **Filter config**. Brugeren kan ikke tilføje eller fjerne rækker, skifte mellem AND og OR eller bruge **Filter editor**. |
+| **Required** | Laget vises først, når brugeren har sat et filter. Godt til store lag, der kun giver mening i udsnit. |
+
+:::caution[Filtre er ikke adgangskontrol]
+Et filter skjuler kun data i Vidi. Data, som brugerne ikke må se, skal beskyttes med [authentication og privilegier](/gc2/skemaindstillinger/database/privilegier-og-authentication).
+:::
+
+### HTML template
+
+HTML, der vises under lagets filtre, f.eks. en kort vejledning eller et link:
+
+```html
+<div class="small text-muted border-top pt-2">
+  <i class="bi bi-info-circle"></i> Vælg en naturtype på fanen Vilkårlig, og klik på Anvend.
+  Registreringen er vejledende. Se <a href="https://arealinformation.miljoeportal.dk" target="_blank">Danmarks Arealinformation</a>.
+</div>
+```
+
+<figure class="centered-figure">
+  <img src={metaFilterHtmlSvg} alt="Gruppen Filters i Meta-dialogen, hvor HTML template er udfyldt og markeret" style={{ width: '480px', maxWidth: '100%' }} />
+  <figcaption>HTML template udfyldt under Filters.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={vidiFilterHtmlSvg} alt="Filterværktøjet for Beskyttede naturtyper i Vidi med en hjælpetekst og et link til Danmarks Arealinformation under filtrene" style={{ width: '100%' }} />
+  <figcaption>Templaten vises nederst i lagets filterværktøj.</figcaption>
+</figure>
+
+## Mouse over
+
+Sæt flueben i **Activate mouse over** for at vise en boks med felterne, når musen holdes over et objekt. Felterne vælges med **Vis i mouse-over** under [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#visning-i-klik-info-og-mouse-over).
+
+Uden en template viser boksen felterne med deres alias. Standardtemplaten løber listen `data` igennem:
+
+```handlebars
+{{#each data}}
+  {{this.title}}: {{this.value}}<br>
+{{/each}}
+```
+
+<figure class="centered-figure">
+  <img src={mouseoverImg.src} alt="Vidi-kort, hvor musen holdes over en sø, og en hvid boks viser Status, Areal (ha) og Naturtype" style={{ width: '100%' }} />
+  <figcaption>Standardtemplaten med de tre felter, der har Vis i mouse-over.</figcaption>
+</figure>
+
+**Template** ændrer boksens indhold og kan bruge felterne direkte ligesom en Pop-up template. På et tile-lag findes kun felterne med **Vis i mouse-over** i templaten. Denne template viser naturtypen i en grøn overskrift og arealet og status under den:
+
+```handlebars
+<div style="margin: -5px; min-width: 200px">
+  <div class="text-white px-2 py-1 d-flex align-items-center gap-2 rounded-top" style="background: #2E7D32">
+    <i class="bi bi-tree-fill"></i>
+    <strong>{{naturtype}}</strong>
+  </div>
+  <div class="px-2 py-1 small border border-top-0 rounded-bottom">
+    <div><span class="text-muted">Areal</span> {{formatDecimalNumber areal_ha}} ha</div>
+    <div><span class="text-muted">Status</span> {{status}}</div>
+  </div>
+</div>
+```
+
+`margin: -5px` fjerner boksens hvide kant, så overskriften går helt ud til kanten.
+
+<figure class="centered-figure">
+  <img src={metaMouseoverSvg} alt="Gruppen Mouse over i Meta-dialogen, hvor Activate mouse over er slået til og Template er udfyldt, begge markeret" style={{ width: '476px', maxWidth: '100%' }} />
+  <figcaption>Activate mouse over og Template udfyldt under Mouse over.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={mouseoverGif} alt="Musen flyttes over flere naturområder, og en boks med grøn overskrift skifter mellem Sø og Mose og viser areal og status" style={{ width: '100%' }} />
+  <figcaption>Boksen følger musen og viser naturtypen for det område, den peger på.</figcaption>
+</figure>
+
+:::caution[Kendt fejl med QGIS-styling]
+Mouse-over virker ikke på tile-lag, der er stylet med QML. Brug Mouse over på lag med GC2's egen styling, eller vis laget som **Vector**.
+:::
+
+## References
+
+Når brugeren filtrerer laget, filtreres de lag, der står i **Referenced by**, også.
+
+I eksemplet har et lag med fredede områder fået **Referenced by**, der peger på et lag med udsigtspunkter. Hvert udsigtspunkt har fredningens `gid` i feltet `fred_gid`. Filtrerer brugeren de fredede områder, vises kun udsigtspunkterne i de fredninger, der er tilbage:
+
+```json
+[
+  {"rel": "natur.udsigtspunkter", "parent_column": "gid", "child_column": "fred_gid"}
+]
+```
+
+| Nøgle | Betydning |
+|---|---|
+| `rel` | Det andet lag, der også filtreres, skrevet som `skema.tabel`. I eksemplet udsigtspunkterne. |
+| `parent_column` | Feltet i dette lag. I eksemplet fredningens `gid`. |
+| `child_column` | Feltet i det andet lag, der skal matche `parent_column`. I eksemplet `fred_gid`. |
+
+<figure class="centered-figure">
+  <img src={metaReferencesSvg} alt="Gruppen References i Meta-dialogen, hvor Referenced by er udfyldt og markeret" style={{ width: '492px', maxWidth: '100%' }} />
+  <figcaption>Referenced by udfyldt under References på laget med de fredede områder.</figcaption>
+</figure>
+
+Vidi viser en pil ved begge lag i lagstyringen. Sæt [Disable check box](#disable-check-box) på det andet lag, hvis det kun må tændes, når dette lag er filtreret.
+
+<figure class="centered-figure">
+  <img src={referencesGif} alt="I Vidi er Udsigtspunkter låst. Brugeren filtrerer Fredede områder på navnet Hummelsø Fredning, tænder Udsigtspunkter og ser kun de tre punkter i fredningen" style={{ width: '100%' }} />
+  <figcaption>Udsigtspunkterne kan først tændes, når de fredede områder er filtreret, og viser kun punkterne i det filtrerede område.</figcaption>
+</figure>
+
+## CKAN
+
+**Description** er lagets beskrivelse i Vidi, som brugeren ser ved at klikke på lagets informationsikon. Den erstatter lagets **Beskrivelse** og skrives i Markdown. `{{lastmodified}}` indsætter, hvornår laget sidst er ændret:
+
+```markdown
+Søer, moser, enge, heder og overdrev, der er beskyttet efter naturbeskyttelseslovens § 3.
+
+- **Kilde:** <a href="https://arealinformation.miljoeportal.dk" target="_blank">Danmarks Arealinformation</a>
+- **Myndighed:** Silkeborg Kommune
+- **Opdateret:** {{lastmodified}}
+
+Registreringen er vejledende. Kontakt kommunen for en konkret vurdering.
+```
+
+Linket er skrevet som HTML med `target="_blank"`, så det åbner i en ny fane. Et almindeligt Markdown-link åbner i samme vindue, så brugeren forlader Vidi.
+
+Informationsikonet vises kun, når **Description** eller lagets **Beskrivelse** er udfyldt.
+
+<figure class="centered-figure">
+  <img src={metaCkanSvg} alt="Gruppen CKAN i Meta-dialogen, hvor Description er udfyldt med Markdown og markeret" style={{ width: '482px', maxWidth: '100%' }} />
+  <figcaption>Description udfyldt under CKAN.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={descriptionGif} alt="I Vidi klikker brugeren på informationsikonet ved Beskyttede naturtyper, og beskrivelsen åbner med en liste over kilde, myndighed og opdateringsdato" style={{ width: '100%' }} />
+  <figcaption>Beskrivelsen åbner, når brugeren klikker på lagets informationsikon.</figcaption>
+</figure>
+
+## Konflikt
+
+:::tip[Kræver conflictSearch]
+Felterne virker kun, når udvidelsen `conflictSearch` er slået til i Vidis konfiguration under [`enabledExtensions`](/gc2/konfigurationer/alle-indstillinger#enabledextensions).
+:::
+
+[Konfliktsøgningen](/vidi/vidi-menuen/konfliksoegning) søger i alle lag med geometri i Vidi-konfigurationens skemaer, også lag, der ikke er tændt. Baggrundskort og lag med **Skip conflict** under [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger) springes over. Resultatet viser de felter, der har [Vis i konflikt](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#vis-i-konflikt).
+
+Felterne under **Konflikt** styrer, hvad der vises om laget i resultatet:
+
+| Felt | Virkning |
+|---|---|
+| **Short description** | Tekst under lagets navn på fanen **Data fra konflikter**. |
+| **Long description** | Tekst bag linket **Lagbeskrivelse - klik her** på fanen **Data fra konflikter**. Teksten kommer også med i rapporten. |
+| **Buffer** | Ekstra buffer i meter for netop dette lag. Den lægges oven i brugerens buffer og vises på fanen **Med konflikter**. |
+| **Analyse** | SQL, der opsummerer konflikterne i en tabel på fanen **Analyse**. |
+| **Analyse header** | Overskriften på analysetabellens første kolonne. |
+
+Begge beskrivelser kan indeholde HTML.
+
+I eksemplet har laget med beskyttede naturtyper fået en kort og en lang beskrivelse, en buffer på 10 m og en analyse, der opgør konflikterne pr. naturtype. **Analyse header** er `Naturtype`, og **Analyse** er:
+
+```sql
+select json_object_agg(natyp_navn, json_build_object('Antal', antal, 'Areal (ha)', areal))
+from (
+  select natyp_navn, count(*) as antal, round(sum(areal_ha), 1) as areal
+  from natur.beskyttede_naturtyper
+  where @WHERE@
+  group by natyp_navn
+) t
+```
+
+Vidi erstatter `@WHERE@` med en betingelse, der finder lagets objekter i søgeområdet inklusive bufferen. SQL'en skal returnere ét JSON-objekt. Hver nøgle bliver en række i tabellen, og nøglerne i det indre objekt bliver kolonner. Her giver det én række pr. naturtype med kolonnerne Antal og Areal (ha).
+
+<figure class="centered-figure">
+  <img src={metaKonfliktSvg} alt="Gruppen Konflikt i Meta-dialogen, hvor Short description, Long description, Buffer, Analyse og Analyse header er udfyldt og markeret" style={{ width: '484px', maxWidth: '100%' }} />
+  <figcaption>Felterne under Konflikt udfyldt på laget med beskyttede naturtyper.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={konfliktGif} alt="Brugeren tegner et rektangel i konfliktsøgningen. Fanen Med konflikter viser Buffer 10 m ved Beskyttede naturtyper, fanen Data fra konflikter viser den korte beskrivelse, og den lange åbnes via linket Lagbeskrivelse. Til sidst viser fanen Analyse tabellen med naturtype, antal og areal" style={{ width: '100%' }} />
+  <figcaption>Konfliktsøgning med et tegnet rektangel. Bufferen, beskrivelserne og analysen kommer fra felterne under Konflikt.</figcaption>
+</figure>
+
+## Egne grupper
+
+Den, der driver GC2, kan tilføje egne grupper til Meta med `metaConfig` i GC2's `App.php`. Grupperne vises øverst i dialogen, og værdierne gemmes i lagets meta sammen med de andre felter. Vidi bruger dem ikke selv. De bruges af egne udvidelser til Vidi eller af andre systemer, der læser lagenes meta via GC2's API. De kan også bare bruges til at dokumentere lagene, f.eks. hvem der er dataansvarlig:
+
+```php
+"metaConfig" => [
+    [
+        "fieldsetName" => "Drift",
+        "fields" => [
+            ["name" => "dataansvarlig", "type" => "text", "title" => "Dataansvarlig"],
+            ["name" => "opdatering", "type" => "combo", "title" => "Opdateres",
+                "values" => [
+                    ["name" => "Dagligt", "value" => "dagligt"],
+                    ["name" => "Månedligt", "value" => "maanedligt"],
+                    ["name" => "Ved behov", "value" => "ved_behov"],
+                ]],
+        ],
+    ],
+],
+```
+
+<figure class="centered-figure">
+  <img src={metaEgneSvg} alt="Meta-dialogen med den egne gruppe Drift øverst. Dataansvarlig er udfyldt, og rullelisten Opdateres er åben med valgene Dagligt, Månedligt og Ved behov" style={{ width: '459px', maxWidth: '100%' }} />
+  <figcaption>Gruppen Drift fra eksemplet vises øverst i dialogen.</figcaption>
+</figure>
+
+`name` er nøglen i lagets meta, og `title` er feltets navn i dialogen. `type` kan være `text`, `textarea`, `checkbox`, `combo` eller `checkboxgroup`. `combo` og `checkboxgroup` tager en liste af valgmuligheder i `values`.
+
+:::caution[Brug et nyt gruppenavn]
+Har en egen gruppe samme navn som en indbygget gruppe, f.eks. `Filters`, erstatter den den indbyggede gruppe i dialogen.
+:::

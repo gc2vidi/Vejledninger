@@ -171,13 +171,12 @@ Nogle rapporter tager længere tid at danne. Ved rapporttyperne *Lang, kun hits*
 :::caution[Opsætning]
 Lag og egenskaber på lag administreres af GC2-administratoren. Det er ikke muligt selv at styre, hvilke lag og felter der medtages i en konfliktsøgning i Vidi.
 
-[Læs mere om lagets grundindstillinger i GC2 →](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger)
-[Læs mere om Meta i GC2 →](/gc2/skemaindstillinger/database/meta)
+[Læs mere om konfliktsøgningens opsætning i GC2 →](/gc2/skemaindstillinger/database/meta#konflikt)
 :::
 
 ### Gennemsyn af resultat
 Der findes følgende faner til visning af data og information til brugeren:
-- *Med konflikter* angiver en liste af lag, hvor der er fundet konflikter i forhold til den geografiske afgrænsning af søgningen. Det er en simpel oversigt, hvor der er mulighed for at tænde og slukke for hvert lag.
+- *Med konflikter* angiver en liste af lag, hvor der er fundet konflikter i forhold til den geografiske afgrænsning af søgningen. Listen viser antallet af konflikter og det samlede areal eller den samlede længde af overlappet. Har laget sin egen buffer, vises den også. Den lægges oven i den buffer, du har valgt. Du kan tænde og slukke for hvert lag.
 <figure class="centered-figure">
   <img 
     src={konfliktsoegningResultatMedKonflikterImg.src} 
@@ -187,7 +186,7 @@ Der findes følgende faner til visning af data og information til brugeren:
   <figcaption>Lag med konflikter</figcaption>
 </figure>
 
-- *Data fra konflikter* angiver en liste af felter, der er inkluderet til visning for hver af de fundne konflikter. Herfra kan du vælge at se konflikten eller gennemgå de oplysninger, der fremgår af analysen.
+- *Data fra konflikter* angiver en liste af felter, der er inkluderet til visning for hver af de fundne konflikter. Herfra kan du vælge at se konflikten eller gennemgå de oplysninger, der fremgår af analysen. Under lagets navn kan der stå en kort beskrivelse og linket *Lagbeskrivelse - klik her*, der viser en længere beskrivelse af laget.
 <figure class="centered-figure">
   <img 
     src={konfliktsoegningResultatMedDataImg.src} 
@@ -208,7 +207,7 @@ Der findes følgende faner til visning af data og information til brugeren:
 </figure>
 
 - *Fejl* viser fejlbeskeder, hvis der har været forespørgselsfejl i udvalgte analyselag. Det er vigtigt at være opmærksom på disse, så du ved, om konfliktsøgningen er foretaget korrekt på baggrund af de forventede lag.
-- *Analyse* kan afhængigt af opsætningen indeholde supplerende oplysninger om analysen.
+- *Analyse* viser en opsummering af konflikterne for de lag, hvor administratoren har sat en analyse op, f.eks. antal og areal pr. naturtype.
 
 :::tip
 Tjek altid fanen *Fejl* for detaljer.

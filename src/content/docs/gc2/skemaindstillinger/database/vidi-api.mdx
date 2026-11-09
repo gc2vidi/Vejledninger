@@ -1,0 +1,90 @@
+---
+title: Vidis JavaScript-API
+description: Tænd, sluk og filtrer lag og flyt kortet fra templates og funktioner i Meta
+---
+
+Vidi har et lille JavaScript-API, som du kan bruge i lagenes templates og funktioner under [Meta](/gc2/skemaindstillinger/database/meta). Med det kan du f.eks. tænde et andet lag eller filtrere et lag, når brugeren klikker på et objekt.
+
+API'et hedder `api` og findes i:
+
+- **Function** og **Select function** under [Info pop-up](/gc2/skemaindstillinger/database/meta#info-pop-up)
+- **Pop-up template**, f.eks. i en knap med `onclick`
+
+:::note[Indlejrede kort]
+`api` virker kun inde i Vidi. Skal en hjemmeside styre et indlejret Vidi-kort, så brug [Embed API](/vidi/extensions/embed#embed-api).
+:::
+
+## Funktioner
+
+| Funktion | Virkning |
+|---|---|
+| `api.turnOn(lag)` | Tænder laget. Er laget allerede tændt, sker der ingenting. |
+| `api.turnOff(lag)` | Slukker laget. |
+| `api.setView([breddegrad, længdegrad], zoom)` | Flytter kortet til punktet og zoomniveauet. |
+| `api.filter(lag, filter)` | Sætter et filter på laget, som brugeren selv kan på fanen **Vilkårlig**. |
+| `api.sqlFilter(lag, sql)` | Sætter et filter som SQL, som i **Filter editor**. |
+| `api.resetFilters(lag)` | Fjerner filtrene fra `filter` og `sqlFilter`. |
+
+`lag` er lagets navn som `skema.tabel`, f.eks. `natur.fredede_omraader`. `turnOn` kan også tage lagtypen som præfiks, f.eks. `v:natur.fredede_omraader` for at tænde laget som vektor. Præfikset virker kun, hvis typen er valgt under [Layer type](/gc2/skemaindstillinger/database/meta#layer-type).
+
+## Tænd og sluk lag
+
+En knap i en Pop-up template, som tænder et andet lag:
+
+```html
+<button class="btn btn-sm btn-outline-success" onclick="api.turnOn('natur.skovbyggelinjer')">
+  Vis skovbyggelinjer
+</button>
+```
+
+## Flyt kortet
+
+```js
+api.setView([56.112, 9.556], 14);
+```
+
+Koordinaterne er breddegrad og længdegrad i WGS84. Zoomniveauet er det samme som i Vidis URL.
+
+## Filtrer lag
+
+`api.filter` tager et filter med samme opbygning som fanen **Vilkårlig**:
+
+```js
+api.filter('natur.beskyttede_naturtyper', {
+  match: 'any',
+  columns: [
+    { fieldname: 'naturtype', expression: '=', value: 'Mose', restriction: false }
+  ]
+});
+```
+
+| Nøgle | Betydning |
+|---|---|
+| `match` | `any` (OR) eller `all` (AND) mellem rækkerne |
+| `columns` | Én række pr. betingelse |
+| `fieldname` | Feltets navn i databasen |
+| `expression` | `=`, `<>`, `<`, `>`, `<=`, `>=` eller `like`. `like` finder tekst, der indeholder værdien. |
+| `value` | Værdien som tekst |
+| `restriction` | Skal være `false` |
+
+Har laget [Predefined filters](/gc2/skemaindstillinger/database/meta#predefined-filters), lægges filteret oven i dem med AND.
+
+`api.sqlFilter` erstatter derimod lagets øvrige filtre, ligesom **Filter editor**:
+
+```js
+api.sqlFilter('natur.beskyttede_naturtyper', "naturtype = 'Mose' AND areal_ha > 5");
+```
+
+`api.resetFilters` fjerner begge slags filtre igen. Lagets Predefined filters bliver.
+
+:::caution[Kendt fejl i resetFilters]
+Ligger laget i en gruppe, som brugeren ikke har foldet ud i lagstyringen, giver `api.resetFilters` en fejl, og laget bliver tomt. Fjern i stedet et filter fra `api.filter` med `api.filter(lag, { match: 'any', columns: [] })`. Et filter fra `api.sqlFilter` kan i den situation ikke fjernes via API'et.
+:::
+
+## Kort form
+
+I **Function** og **Select function** kan du nøjes med at skrive funktionens indhold. Vidi pakker det selv ind i en funktion med de samme argumenter:
+
+```js
+api.turnOn('natur.skovbyggelinjer');
+```

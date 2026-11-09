@@ -112,7 +112,7 @@ gennem:
 - **Beskrivelse:** Basis beskrivelse af laget
 - **Udvidet metadata:** Beskrivelse og ekstra information til brugeren
 
-[Læs mere om Meta og laginformation i GC2 →](/gc2/skemaindstillinger/database/meta)
+[Læs mere om Meta og laginformation i GC2 →](/gc2/skemaindstillinger/database/meta#ckan)
 :::
 
 ## Omrokering af lag
@@ -220,7 +220,7 @@ Hvilke labels der vises og hvordan de styles, konfigureres i GC2.
 
 Filtrering gør det muligt at vise kun de objekter i laget, der opfylder bestemte kriterier.
 
-**Simpelt filter**
+#### Simpelt filter
 
 1. Klik på <UiIcon set="bi" name="three-dots" title="Flere værktøjer" /> ved laget
 2. Klik på **tragtikonet** <UiIcon set="bi" name="filter" title="Filtre" />
@@ -234,13 +234,13 @@ Filtrering gør det muligt at vise kun de objekter i laget, der opfylder bestemt
 <figure class="centered-figure">
   <img 
     src={lagstyringFiltreEksImg.src} 
-    alt="Eksempel på tilføjelse af filter" 
+    alt="Laget Beskyttede naturtyper tændes, og filteret Naturtype = Mose tilføjes og anvendes. Filter editor viser SQL'en" 
     style={{ width: '450px', maxWidth: '100%' }} 
   />
-  <figcaption>Eksempel på tilføjelse af filter</figcaption>
+  <figcaption>Filteret Naturtype = Mose. Til sidst viser Filter editor det samme filter som SQL.</figcaption>
 </figure>
 
-**Avanceret filter**
+#### Avanceret filter
 
 Man kan opbygge avanceret filtre ved at kombinere flere betingelser for at lave mere præcise filtre:
 
@@ -251,9 +251,9 @@ Tilføj flere betingelser:
 
 Vælg hvordan betingelser skal kombineres:
 - **AND** – Alle betingelser skal være opfyldt (strengere filter)
-  - *Eksempel: Type = "Kontraventil" AND Diameter > 100 viser kun store kontraventiler*
+  - *Eksempel: Naturtype = "Mose" AND Besigtiget >= 01-01-2020 viser kun moser, der er besigtiget siden 2020*
 - **OR** – Mindst én betingelse skal være opfyldt (bredere filter)
-  - *Eksempel: Status = "Defekt" OR Status = "Til udskiftning" viser begge statusser*
+  - *Eksempel: Naturtype = "Sø" OR Naturtype = "Mose" viser både søer og moser*
 
 Opret blokke (grupper af betingelser):
 1. Klik på pil ned ikonet (efter <MenuPath items="+" />)
@@ -261,7 +261,7 @@ Opret blokke (grupper af betingelser):
 3. Blokken får sin egen AND/OR-indstilling
 4. Kombiner blokke med andre betingelser for komplekse filtre
 
-**Filter editor**
+#### Filter editor
 
 Filter editoren er til administratorer og erfarne brugere med SQL-kendskab:
 
@@ -272,10 +272,10 @@ Filter editoren er til administratorer og erfarne brugere med SQL-kendskab:
 <figure class="centered-figure">
   <img 
     src={lagstyringFilterAvanceretImg.src} 
-    alt="Filter opbygger med blokke og Filter editor" 
+    alt="Filteret Naturtype = Mose kombineres med AND og en blok med OR: Besigtiget fra 01-01-2020 eller Status = Forslag. Filter editor viser SQL'en" 
     style={{ width: '450px', maxWidth: '100%' }} 
   />
-  <figcaption>Eksempel på avanceret filter med AND/OR og blokke samt filter editor</figcaption>
+  <figcaption>Moser, der enten er besigtiget siden 2020 eller har status Forslag. Blokken har sin egen OR.</figcaption>
 </figure>
 
 :::note[Bemærk]
@@ -283,40 +283,40 @@ Filter editoren bruger feltnavnet fra databasen – ikke de visningsnavne (alias
 :::
 
 
-**Standard filtre**
+#### Standardfiltre
 :::note[Konfiguration]
-Standard filtre konfigureres i GC2.
+Standardfiltre konfigureres i GC2.
 
-[Læs mere om filterkonfiguration i GC2 →](/gc2/skemaindstillinger/database/meta)
+[Læs mere om filterkonfiguration i GC2 →](/gc2/skemaindstillinger/database/meta#filter-config)
 :::
 
-Det er muligt at definere standard filtre, der vil være parate til brug når filter menuen anvendes. Derved skal der blot skrives værdier i filtrene og klikkes <MenuPath items="Anvend" />.
+Et lag kan have filterrækker, der er gjort klar på fanen <MenuPath items="Vilkårlig" />. Du skal kun udfylde værdien og klikke på <MenuPath items="Anvend" />.
 
 <figure class="centered-figure">
   <img 
     src={lagstyringFilterConfigImg.src} 
-    alt="Eksempel på standard filtre" 
+    alt="Fanen Vilkårlig med de forudindstillede rækker Naturtype lig med og Besigtiget større end eller lig med" 
     style={{ width: '450px', maxWidth: '100%' }} 
   />
-  <figcaption>Eksempel på standard filtre</figcaption>
+  <figcaption>Rækkerne Naturtype og Besigtiget er gjort klar. Naturtype har en rulleliste med værdierne.</figcaption>
 </figure>
 
-**Foruddefineret filtre**
+#### Foruddefinerede filtre
 :::note[Konfiguration]
-Foruddefineret filtre konfigureres i GC2.
+Foruddefinerede filtre konfigureres i GC2.
 
-[Læs mere om filterkonfiguration i GC2 →](/gc2/skemaindstillinger/database/meta)
+[Læs mere om filterkonfiguration i GC2 →](/gc2/skemaindstillinger/database/meta#predefined-filters)
 :::
 
-Det er muligt at foruddefinere filtre. Dette giver en eller flere tjekbokse med de foruddefinerede filtre. Hvis der er opsat foruddefinerede filtre, vil der være to faner: en for <MenuPath items="Foruddefineret" /> og en for <MenuPath items="Vilkårlig" />.
+Foruddefinerede filtre er navngivne filtre, som du slår til og fra med et flueben på fanen <MenuPath items="Foruddefineret" />. Når laget tændes, er alle filtrene slået til, og laget viser de objekter, der passer på mindst ét af dem. Slår du alle filtrene fra, vises hele laget.
 
 <figure class="centered-figure">
   <img 
     src={lagstyringFilterPredefinedImg.src} 
-    alt="Eksempel på foruddefinerede filtre" 
+    alt="Fanen Foruddefineret med fluebenene Sø og Mose" 
     style={{ width: '450px', maxWidth: '100%' }} 
   />
-  <figcaption>Eksempel på foruddefinerede filtre</figcaption>
+  <figcaption>Filtrene Sø og Mose er slået til, så laget kun viser søer og moser.</figcaption>
 </figure>
 
 

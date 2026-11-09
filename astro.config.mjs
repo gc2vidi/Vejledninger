@@ -172,6 +172,7 @@ export default defineConfig({
                     { label: "Tjenester og API", link: "/gc2/skemaindstillinger/database/tjenester-og-api" },
                     { label: "Tags", link: "/gc2/skemaindstillinger/database/tags" },
                     { label: "Meta", link: "/gc2/skemaindstillinger/database/meta" },
+                    { label: "Vidis JavaScript-API", link: "/gc2/skemaindstillinger/database/vidi-api" },
                   ],
                 },
                 {
