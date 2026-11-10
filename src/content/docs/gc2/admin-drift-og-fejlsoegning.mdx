@@ -37,21 +37,7 @@ De første kontroller kan udføres med adgang til den fejlende løsning. Serverl
 
 ## Installationens `config.js`
 
-Vidi-serverens `config.js` indeholder indstillinger, som ikke kan ændres fra en GC2-gemt runtime-konfiguration. De vigtigste for en GC2-administrator er:
-
-- `gc2.host`: hvilken GC2-server Vidi bruger
-- `extensions.browser`: udvidelser kompileret til browseren
-- `extensions.server`: installerede serverdele til udvidelser
-- `searchModules`: tilgængelige søgemoduler
-- `print.templates`: installerede printdefinitioner og papirformater
-- `configUrl`: ekstern kilde til filbaserede runtime-konfigurationer
-- `autoLoadingConfig` og `defaultConfig`: automatisk valg og fallback
-
-Serveroperatøren kan også sætte GC2-adressen med miljøvariablen `GC2_HOST` og Vidi-porten med `PORT`.
-
-:::note[Hvorfor er dette relevant?]
-Hvis `enabledExtensions` indeholder `symbols`, men `symbols` ikke findes i `extensions.browser`, er JSON-dokumentet korrekt uden at funktionen kan starte. Det kræver en ændring og normalt en genstart eller rebuild af Vidi-installationen.
-:::
+Vidi-serverens `config.js` indeholder indstillinger, som ikke kan ændres fra en Vidi-konfiguration i Kontrolcentret, f.eks. GC2-serveren, de udvidelser, der er bygget med, og printskabelonerne. Står en udvidelse i `enabledExtensions` uden at være bygget med, starter den ikke, selv om Vidi-konfigurationen er korrekt. Se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs).
 
 ## Login og OAuth-klienter
 

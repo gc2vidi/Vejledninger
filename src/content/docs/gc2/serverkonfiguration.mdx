@@ -1,0 +1,76 @@
+---
+title: Serverkonfiguration
+description: Indstillinger i GC2's App.php og Vidis config.js, som kun kan ændres på serveren
+---
+
+Nogle indstillinger ligger hverken i Kontrolcentret eller i en Vidi-konfiguration, men i filer på serveren: `App.php` for GC2 og `config.js` for Vidi. Kun den, der driver installationen, kan ændre dem. Er jeres installation hostet, så kontakt leverandøren.
+
+:::note[Navn, udseende og funktioner i Vidi]
+Titel, `brandName`, `theme`, lag, søgning og udvidelser for et bestemt kort sættes i Vidi-konfigurationen i Kontrolcentret. Se [Konfigurationer](/gc2/konfigurationer) og [Alle indstillinger i en Vidi-konfiguration](/gc2/konfigurationer/alle-indstillinger).
+:::
+
+## GC2's App.php
+
+`App.php` ligger i `app/conf/` i GC2-installationen. Filen er ikke med i GC2's repository, men GC2's Docker-opsætning bygger den ud fra skabelonen [docker/conf/gc2/App.php](https://github.com/mapcentia/geocloud2/blob/master/docker/conf/gc2/App.php). Indstillingerne skrives i listen `$param`:
+
+```php
+static $param = array(
+    // ...
+    "vidiUrl" => "https://kort.example.dk",
+    "showConflictOptions" => ["demo" => true],
+);
+```
+
+GC2 læser filen ved hver forespørgsel, så en ændring kræver ikke en genstart. Genindlæs administrationsmodulet bagefter. Kører GC2 i Docker, skal ændringen ind i det image eller den fil, containeren bygges fra. Ellers forsvinder den ved næste build.
+
+Nogle indstillinger gælder kun for de databaser, der står i listen, f.eks. `["demo" => true]`. `enableWorkflow` og `gc2scheduler` kan også tage `"*"` for alle databaser.
+
+### Indstillinger, der ændrer administrationsmodulet
+
+| Indstilling | Virkning | Se også |
+|---|---|---|
+| `metaConfig` | Egne grupper og felter øverst i Meta-dialogen. | [Meta → Egne grupper](/gc2/skemaindstillinger/database/meta#egne-grupper) |
+| `showConflictOptions` | Viser kolonnen **Skip conflict** i lagoversigten og **Vis i konflikt** under Struktur for de nævnte databaser. | [Meta → Konflikt](/gc2/skemaindstillinger/database/meta#konflikt) |
+| `showExtraLayerProperty` og `extraLayerPropertyName` | Viser kolonnen **Extra** i lagoversigten og giver den et andet navn. | [Database](/gc2/skemaindstillinger/database) |
+| `enableWorkflow` | Viser fanen **Workflow**. | [Workflow](/gc2/skemaindstillinger/workflow) |
+| `gc2scheduler` | Viser fanen **Scheduler**. | [Scheduler](/gc2/skemaindstillinger/scheduler) |
+| `esIndexingInGui` | Tillader indeksering i Elasticsearch fra administrationsmodulet. | |
+| `reverseLayerOrder` | Vender lagenes rækkefølge, så et lavt **Sort id** ligger øverst. Gælder også i Vidi. | [Lagets grundindstillinger](/gc2/skemaindstillinger/database/lagets-grundindstillinger) |
+| `defaultPrimaryKey` | Bruger denne kolonne som nøgle for alle lag, også tabeller med en anden primærnøgle. | [Views og eksterne kilder](/gc2/skemaindstillinger/database/opret-og-importer-lag#views-og-eksterne-kilder) |
+| `epsg` og `encoding` | Standardværdierne for koordinatsystem og tegnsæt ved import. Uden dem er det `4326` og `UTF8`. | [Opret og importer lag](/gc2/skemaindstillinger/database/opret-og-importer-lag) |
+| `colorPalette` | Farverne i administrationsmodulets farvevælger, som en liste af hex-koder uden `#`, f.eks. `["2E7D32", "1565C0"]`. | [Klasser, symboler og labels](/gc2/skemaindstillinger/kort/klasser-symboler-og-labels) |
+| `baseLayers` og `mapAttribution` | Baggrundskortene og kildeangivelsen i administrationsmodulets kort. | |
+| `vidiUrl` | Adressen på Vidi, som knapperne **VIDI** i Kontrolcentret åbner. | [Log ind og kontrolcenter](/gc2/log-ind-og-dashboard) |
+| `locale` | Låser administrationsmodulets sprog, f.eks. `da_DK`. Uden den følger sproget browseren. | |
+
+:::caution[defaultPrimaryKey gælder alle lag]
+Med `defaultPrimaryKey` bruger GC2 kolonnen som nøgle for alle lag i alle databaser, også tabeller, der har en primærnøgle med et andet navn. Brug den kun, hvis alle lag har kolonnen.
+:::
+
+Skabelonen indeholder også indstillinger til den tekniske drift, f.eks. Redis (`sessionHandler` og `appCache`), MapCache, S3 og CORS (`AccessControlAllowOrigin`). De er forklaret med kommentarer i skabelonen.
+
+## Vidis config.js
+
+`config.js` ligger i `config/` i Vidi-installationen. Vidis Docker-opsætning bygger den ud fra skabelonen [docker/conf/vidi/config.js](https://github.com/mapcentia/vidi/blob/master/docker/conf/vidi/config.js).
+
+Filen har to dele:
+
+- **Indstillinger, der kun kan ændres på serveren.** De står øverst i skabelonen og er beskrevet herunder.
+- **Standardværdier for Vidi-konfigurationen**, f.eks. `brandName`, `enabledExtensions` og `baseLayers`. En Vidi-konfiguration fra Kontrolcentret overskriver dem. Se [Alle indstillinger i en Vidi-konfiguration](/gc2/konfigurationer/alle-indstillinger).
+
+| Indstilling | Virkning |
+|---|---|
+| `gc2.host` | Den GC2-server, Vidi bruger. Kan også sættes med miljøvariablen `GC2_HOST`. |
+| `redis.host` og `redis.db` | Gemmer sessioner i Redis, standard database 3. Uden `redis.host` gemmer Vidi sessioner som filer i `/tmp/sessions`. Se [Installation og opstart](/gc2/installation-og-opstart). |
+| `sessionMaxAge` | Hvor længe en session varer, i sekunder. Standard er 86400 (et døgn). |
+| `extensions.browser` og `extensions.server` | De udvidelser, der bygges med i Vidi. En udvidelse skal stå her, før den kan slås til med [`enabledExtensions`](/gc2/konfigurationer/alle-indstillinger#enabledextensions). |
+| `searchModules` | De søgemoduler, der bygges med, f.eks. `danish`. |
+| `print.templates` | Printskabelonerne og deres papirformater. Printskabelonen skal stå her, før den kan slås til med `enabledPrints`. |
+| `configUrl`, `autoLoadingConfig` og `defaultConfig` | Hvor Vidi henter filbaserede konfigurationer, og hvilken konfiguration der bruges, når URL'en ikke angiver en. |
+| `configSwitcher` | Viser en liste over konfigurationer, når Vidi åbnes uden skema, konfiguration eller andet i adressen. |
+
+Vidis port sættes med miljøvariablen `PORT`. Standard er 3000.
+
+:::note[Genstart eller nyt build]
+Vidi læser `config.js`, når serveren starter, så en ændring kræver en genstart. Ændrer du `extensions`, `searchModules` eller `print.templates`, skal Vidi også bygges igen, fordi de indgår i den kode, browseren henter. Står en udvidelse i `enabledExtensions` uden at være bygget med, starter den ikke, selv om Vidi-konfigurationen er korrekt.
+:::

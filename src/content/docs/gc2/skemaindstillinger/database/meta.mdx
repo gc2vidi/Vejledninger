@@ -77,7 +77,7 @@ Felterne bruger biblioteker, som Vidi indeholder. Deres egen dokumentation viser
 | Pop-up template, Tooltip template og mouse-over | [Handlebars](https://handlebarsjs.com/guide/) |
 | Style function, Point to layer, Function og Selected style | [Leaflet 1.9](https://leafletjs.com/reference.html), f.eks. [styling](https://leafletjs.com/reference.html#path-option) og [kortets metoder](https://leafletjs.com/reference.html#map-methods-for-modifying-map-state) |
 | Klasser og ikoner i templates | [Bootstrap 5.3](https://getbootstrap.com/docs/5.3/getting-started/introduction/) og [Bootstrap Icons](https://icons.getbootstrap.com/) |
-| Function, Select function og Pop-up template | Vidis `api` til at tænde, slukke og filtrere lag: [Vidis JavaScript-API](/gc2/skemaindstillinger/database/vidi-api) |
+| Function, Select function og Pop-up template | Vidis `api` til at tænde, slukke og filtrere lag: [Vidis JavaScript-API](#vidis-javascript-api) |
 
 ## Oversigt
 
@@ -254,7 +254,7 @@ function (feature, layer, layerKey, sqlQuery, store, map) {
   <figcaption>Funktionen zoomer ind til det område, brugeren klikker på.</figcaption>
 </figure>
 
-Du kan også nøjes med at skrive funktionens indhold, f.eks. kun linjen med `map.flyToBounds`. Vidi pakker det selv ind i en funktion med de samme argumenter. Med [Vidis JavaScript-API](/gc2/skemaindstillinger/database/vidi-api) kan funktionen også tænde, slukke og filtrere lag.
+Du kan også nøjes med at skrive funktionens indhold, f.eks. kun linjen med `map.flyToBounds`. Vidi pakker det selv ind i en funktion med de samme argumenter. Med [Vidis JavaScript-API](#vidis-javascript-api) kan funktionen også tænde, slukke og filtrere lag.
 
 ### Select function
 
@@ -269,7 +269,7 @@ function (id, layer, key, sqlQuery) {
 }
 ```
 
-`layer.feature.properties` indeholder det valgte objekts felter, og `key` er lagets navn. Filteret sættes med [Vidis JavaScript-API](/gc2/skemaindstillinger/database/vidi-api#filtrer-lag).
+`layer.feature.properties` indeholder det valgte objekts felter, og `key` er lagets navn. Filteret sættes med [Vidis JavaScript-API](#filtrer-lag).
 
 <figure class="centered-figure">
   <img src={selectFunctionGif} alt="Brugeren klikker på en mose med Info. Bagefter viser lagets filterværktøj filteret Naturtype = Mose på fanen Vilkårlig" style={{ width: '100%' }} />
@@ -622,7 +622,7 @@ Informationsikonet vises kun, når **Description** eller lagets **Beskrivelse** 
 Felterne virker kun, når udvidelsen `conflictSearch` er slået til i Vidis konfiguration under [`enabledExtensions`](/gc2/konfigurationer/alle-indstillinger#enabledextensions).
 :::
 
-[Konfliktsøgningen](/vidi/vidi-menuen/konfliksoegning) søger i alle lag med geometri i Vidi-konfigurationens skemaer, også lag, der ikke er tændt. Baggrundskort og lag med **Skip conflict** under [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger) springes over. Resultatet viser de felter, der har [Vis i konflikt](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#vis-i-konflikt).
+[Konfliktsøgningen](/vidi/vidi-menuen/konfliksoegning) søger i alle lag med geometri i Vidi-konfigurationens skemaer, også lag, der ikke er tændt. Baggrundskort og lag med **Skip conflict** under [Lagets grundindstillinger](/gc2/skemaindstillinger/database/lagets-grundindstillinger) springes over. Resultatet viser de felter, der har [Vis i konflikt](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#vis-i-konflikt).
 
 Felterne under **Konflikt** styrer, hvad der vises om laget i resultatet:
 
@@ -660,6 +660,86 @@ Vidi erstatter `@WHERE@` med en betingelse, der finder lagets objekter i søgeom
   <figcaption>Konfliktsøgning med et tegnet rektangel. Bufferen, beskrivelserne og analysen kommer fra felterne under Konflikt.</figcaption>
 </figure>
 
+## Vidis JavaScript-API
+
+Vidi har et lille JavaScript-API, som du kan bruge i lagenes templates og funktioner. Med det kan du f.eks. tænde et andet lag eller filtrere et lag, når brugeren klikker på et objekt.
+
+API'et hedder `api` og findes i:
+
+- [Function](#function) og [Select function](#select-function) under Info pop-up
+- [Pop-up template](#pop-up-template), f.eks. i en knap med `onclick`
+
+:::note[Indlejrede kort]
+`api` virker kun inde i Vidi. Skal en hjemmeside styre et indlejret Vidi-kort, så brug [Embed API](/vidi/extensions/embed#embed-api).
+:::
+
+### Funktioner
+
+| Funktion | Virkning |
+|---|---|
+| `api.turnOn(lag)` | Tænder laget. Er laget allerede tændt, sker der ingenting. |
+| `api.turnOff(lag)` | Slukker laget. |
+| `api.setView([breddegrad, længdegrad], zoom)` | Flytter kortet til punktet og zoomniveauet. |
+| `api.filter(lag, filter)` | Sætter et filter på laget, som brugeren selv kan på fanen **Vilkårlig**. |
+| `api.sqlFilter(lag, sql)` | Sætter et filter som SQL, som i **Filter editor**. |
+| `api.resetFilters(lag)` | Fjerner filtrene fra `filter` og `sqlFilter`. |
+
+`lag` er lagets navn som `skema.tabel`, f.eks. `natur.fredede_omraader`. `turnOn` kan også tage lagtypen som præfiks, f.eks. `v:natur.fredede_omraader` for at tænde laget som vektor. Præfikset virker kun, hvis typen er valgt under [Layer type](#layer-type).
+
+### Tænd og sluk lag
+
+En knap i en Pop-up template, som tænder et andet lag:
+
+```html
+<button class="btn btn-sm btn-outline-success" onclick="api.turnOn('natur.skovbyggelinjer')">
+  Vis skovbyggelinjer
+</button>
+```
+
+### Flyt kortet
+
+```js
+api.setView([56.112, 9.556], 14);
+```
+
+Koordinaterne er breddegrad og længdegrad i WGS84. Zoomniveauet er det samme som i Vidis URL.
+
+### Filtrer lag
+
+`api.filter` tager et filter med samme opbygning som fanen **Vilkårlig**:
+
+```js
+api.filter('natur.beskyttede_naturtyper', {
+  match: 'any',
+  columns: [
+    { fieldname: 'naturtype', expression: '=', value: 'Mose', restriction: false }
+  ]
+});
+```
+
+| Nøgle | Betydning |
+|---|---|
+| `match` | `any` (OR) eller `all` (AND) mellem rækkerne |
+| `columns` | Én række pr. betingelse |
+| `fieldname` | Feltets navn i databasen |
+| `expression` | `=`, `<>`, `<`, `>`, `<=`, `>=` eller `like`. `like` finder tekst, der indeholder værdien. |
+| `value` | Værdien som tekst |
+| `restriction` | Skal være `false` |
+
+Har laget [Predefined filters](#predefined-filters), lægges filteret oven i dem med AND.
+
+`api.sqlFilter` erstatter derimod lagets øvrige filtre, ligesom **Filter editor**:
+
+```js
+api.sqlFilter('natur.beskyttede_naturtyper', "naturtype = 'Mose' AND areal_ha > 5");
+```
+
+`api.resetFilters` fjerner begge slags filtre igen. Lagets Predefined filters bliver.
+
+:::caution[Kendt fejl i resetFilters]
+Ligger laget i en gruppe, som brugeren ikke har foldet ud i lagstyringen, giver `api.resetFilters` en fejl, og laget bliver tomt. Fjern i stedet et filter fra `api.filter` med `api.filter(lag, { match: 'any', columns: [] })`. Et filter fra `api.sqlFilter` kan i den situation ikke fjernes via API'et.
+:::
+
 ## Egne grupper
 
 Den, der driver GC2, kan tilføje egne grupper til Meta med `metaConfig` i GC2's `App.php`. Grupperne vises øverst i dialogen, og værdierne gemmes i lagets meta sammen med de andre felter. Vidi bruger dem ikke selv. De bruges af egne udvidelser til Vidi eller af andre systemer, der læser lagenes meta via GC2's API. De kan også bare bruges til at dokumentere lagene, f.eks. hvem der er dataansvarlig:
@@ -687,6 +767,8 @@ Den, der driver GC2, kan tilføje egne grupper til Meta med `metaConfig` i GC2's
 </figure>
 
 `name` er nøglen i lagets meta, og `title` er feltets navn i dialogen. `type` kan være `text`, `textarea`, `checkbox`, `combo` eller `checkboxgroup`. `combo` og `checkboxgroup` tager en liste af valgmuligheder i `values`.
+
+`App.php` ligger i `app/conf/` i GC2-installationen. `metaConfig` skrives i listen `$param` sammen med de andre indstillinger. Filen er ikke med i GC2's repository, men GC2's Docker-opsætning bygger den ud fra skabelonen [docker/conf/gc2/App.php](https://github.com/mapcentia/geocloud2/blob/master/docker/conf/gc2/App.php). Se også [Serverkonfiguration](/gc2/serverkonfiguration). De indbyggede grupper er defineret i `$metaConfig` i [app/inc/Globals.php](https://github.com/mapcentia/geocloud2/blob/master/app/inc/Globals.php) og kan bruges som eksempel.
 
 :::caution[Brug et nyt gruppenavn]
 Har en egen gruppe samme navn som en indbygget gruppe, f.eks. `Filters`, erstatter den den indbyggede gruppe i dialogen.

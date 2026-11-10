@@ -30,7 +30,7 @@ Brug først `Avanceret`, når lagets almindelige Database- og Meta-indstillinger
 | `File source` | Filbaseret kilde eller reference, afhængigt af lagtypen. |
 | `Enable SQL filtering in Viewer` | Tillader viewer-relateret SQL-filtrering. Brug kun med en forstået sikkerhedsmodel. |
 | `ES trigger table` | Knytter Elasticsearch-opdatering til en tabel. Kræver fungerende indeksdrift. |
-| `Feature id` | Vælger stabil identifikation af features. Må ikke være tilfældig eller ikke-entydig. |
+| `Feature id` | Gemmes, men bruges ikke af GC2. Et view skal derfor have kolonnen `gid`, se [Views og eksterne kilder](/gc2/skemaindstillinger/database/opret-og-importer-lag#views-og-eksterne-kilder). |
 | `QML` | QGIS-stil knyttet til laget. Se [QML og QGIS-styling](/gc2/skemaindstillinger/kort/qml-og-qgis-styling). |
 | `View definition` | Skrivebeskyttet visning af SQL-definitionen for et view. |
 

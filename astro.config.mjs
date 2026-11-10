@@ -163,8 +163,8 @@ export default defineConfig({
                   collapsed: false,
                   items: [
                     { label: "Oversigt", link: "/gc2/skemaindstillinger/database" },
-                    { label: "Opret, importer og organiser lag", link: "/gc2/skemaindstillinger/database/opret-importer-og-organiser-lag" },
-                    { label: "Lagoversigt og grundindstillinger", link: "/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger" },
+                    { label: "Opret og importer lag", link: "/gc2/skemaindstillinger/database/opret-og-importer-lag" },
+                    { label: "Lagets grundindstillinger", link: "/gc2/skemaindstillinger/database/lagets-grundindstillinger" },
                     { label: "Tabelstruktur, data og felter", link: "/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter" },
                     { label: "Privilegier og authentication", link: "/gc2/skemaindstillinger/database/privilegier-og-authentication" },
                     { label: "Editerbare lag", link: "/gc2/skemaindstillinger/database/editerbare-lag" },
@@ -172,7 +172,6 @@ export default defineConfig({
                     { label: "Tjenester og API", link: "/gc2/skemaindstillinger/database/tjenester-og-api" },
                     { label: "Tags", link: "/gc2/skemaindstillinger/database/tags" },
                     { label: "Meta", link: "/gc2/skemaindstillinger/database/meta" },
-                    { label: "Vidis JavaScript-API", link: "/gc2/skemaindstillinger/database/vidi-api" },
                   ],
                 },
                 {
@@ -227,6 +226,7 @@ export default defineConfig({
                 { label: "Installation og opstart", link: "/gc2/installation-og-opstart" },
                 { label: "Teknisk arkitektur og lagvisning", link: "/gc2/teknisk-arkitektur-og-lagvisning" },
                 { label: "QGIS og eksterne datakilder", link: "/gc2/qgis-og-eksterne-datakilder" },
+                { label: "Serverkonfiguration", link: "/gc2/serverkonfiguration" },
                 { label: "Admin-drift og fejlsøgning", link: "/gc2/admin-drift-og-fejlsoegning" },
               ],
             },

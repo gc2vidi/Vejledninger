@@ -1,5 +1,5 @@
 ---
-title: Opret, importer og organiser lag
+title: Opret og importer lag
 description: Opret et skema, importer data og kontrollér resultatet før videre opsætning
 ---
 
@@ -54,7 +54,23 @@ Kontrollér især:
 
 ## Views og eksterne kilder
 
-Et view er nyttigt til et filtreret eller afledt datasæt uden datakopi. Et kortlag baseret på et view bør have en stabil unik nøgle og et brugbart geometrifelt. Ekstern WMS kan bruges som reference, men tilgængelighed og svartid ejes da af den eksterne tjeneste.
+Et view er nyttigt til et filtreret eller afledt datasæt uden datakopi. Et kortlag baseret på et view skal have et brugbart geometrifelt og en kolonne, der hedder `gid`, med unikke værdier.
+
+:::caution[Et view skal have kolonnen gid]
+Et view har ingen primærnøgle, så GC2 bruger altid kolonnen `gid` som nøgle. Mangler den, tegnes laget ikke, og GC2 viser ingen fejl. Hedder nøglen noget andet i den bagvedliggende tabel, så omdøb den i viewet:
+
+```sql
+CREATE VIEW natur.fredninger AS
+SELECT id AS gid, fred_navn, the_geom
+FROM natur.fredede_omraader_kilde;
+```
+
+**Feature id** under [Avancerede lagindstillinger](/gc2/skemaindstillinger/database/avancerede-lagindstillinger) ændrer ikke på det. Den eneste vej uden om er `defaultPrimaryKey` i [serverkonfigurationen](/gc2/serverkonfiguration), som gælder alle lag. Tabeller bruger ellers deres egen primærnøgle, uanset hvad den hedder.
+:::
+
+Det anbefales, at geometrifeltet hedder `the_geom`, ligesom i de tabeller, GC2 selv opretter og importerer. Så ligner views og tabeller hinanden. Geometrifeltets navn indgår desuden i lagets nøgle, f.eks. `natur.fredninger.the_geom`, og lagets indstillinger gemmes under nøglen. Omdøber du geometrifeltet senere, får laget derfor en ny nøgle uden de gamle indstillinger.
+
+Ekstern WMS kan bruges som reference, men tilgængelighed og svartid ejes da af den eksterne tjeneste.
 
 ## Kontrollér importen
 
@@ -65,4 +81,4 @@ Et view er nyttigt til et filtreret eller afledt datasæt uden datakopi. Et kort
 5. Åbn `Kort`, og kontrollér udbredelse og koordinatsystem.
 6. Se i `Log`, hvis importen afsluttes med fejl eller manglende data.
 
-Fortsæt med [Lagoversigt og grundindstillinger](/gc2/skemaindstillinger/database/lagoversigt-og-grundindstillinger).
+Fortsæt med [Lagets grundindstillinger](/gc2/skemaindstillinger/database/lagets-grundindstillinger).
