@@ -1,58 +1,77 @@
 ---
 title: Lagets grundindstillinger
-description: Konfigurer identitet, organisering, publicering og adgang i Database-gridet
+description: Titel, beskrivelse, gruppe, Sort id, OWS og de andre kolonner i lagoversigten
 ---
 
-:::note[Krævet adgang]
-Ændringer kræver adgang til at administrere det valgte lag. `Name` og `Type` er ikke direkte redigerbare i gridet; brug den særskilte omdøbningsfunktion, hvis relationens navn skal ændres.
+import layerGridSvg from '../../resources/gc2-database-layer-grid.svg?url';
+import treeSortIdSvg from '../../resources/vidi-layer-tree-sortid.svg?url';
+import sortIdGc2Svg from '../../resources/gc2-database-sortid.svg?url';
+import treeOwsSvg from '../../resources/vidi-layer-tree-ows.svg?url';
+
+Lagoversigten under <MenuPath items="Database" /> har én række pr. lag. Dobbeltklik i en celle for at rette værdien. Ændringen gemmes med det samme.
+
+<figure class="centered-figure">
+  <img src={layerGridSvg} alt="Lagoversigten under Database med kolonnerne Relation, Type, Navn, Titel, Beskrivelse, Notat, Gruppe, OWS, Sort id, Authentication og Skrivebar. Kolonnerne fra Titel til Skrivebar er markeret" style={{ width: '100%' }} />
+  <figcaption>Lagoversigten. Kolonnerne fra Titel til Skrivebar kan rettes.</figcaption>
+</figure>
+
+## Kolonnerne
+
+| Kolonne | Virkning |
+|---|---|
+| **Relation** | Om laget er en tabel (`T`), et view (`V`), et materialized view (`MV`) eller en foreign table (`FT`). Kan ikke rettes. Et view skal have kolonnen `gid`, se [Views og eksterne kilder](/gc2/skemaindstillinger/database/opret-og-importer-lag#views-og-eksterne-kilder). |
+| **Type** | Geometritypen, f.eks. `MULTIPOLYGON`. Kan ikke rettes. |
+| **Navn** | Tabellens navn i databasen. Rettes med <MenuPath items="Omdøb layer" />, se [Database](/gc2/skemaindstillinger/database#lag-og-skema). |
+| **Titel** | Lagets navn i Vidis lagtræ, signaturforklaring og klik-info. Uden en titel vises **Navn**. |
+| **Beskrivelse** | Vises, når brugeren holder musen over eller klikker på lagets informationsikon i Vidi, se [Info om lag](/vidi/vidi-menuen/lagstyring#info-om-lag). **Description** under [Meta](/gc2/skemaindstillinger/database/meta#ckan) erstatter den. |
+| **Notat** | En intern note. Vises ikke i Vidi. |
+| **Gruppe** | Gruppen i Vidis lagtræ. Vælg en eksisterende gruppe, eller skriv en ny. Et lag uden gruppe vises ikke i lagtræet. |
+| **OWS** | Udstiller laget som WMS og WFS. Uden fluebenet tegner Vidi ikke laget som tile-lag, se [OWS](#ows). |
+| **Sort id** | Lagets rækkefølge, se [Sort id](#sort-id). |
+| **Authentication** | Om læsning og skrivning kræver login: `None`, `Write` eller `Read/write`. Se [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication#authentication). |
+| **Skrivebar** | Om GC2 tager imod ændringer i laget fra Vidi og WFS-T. Se [Editerbare lag](/gc2/skemaindstillinger/database/editerbare-lag). |
+
+Nogle installationer har desuden kolonnerne **Extra** og **Skip conflict**. **Extra** er et felt til installationens eget brug og kan have et andet navn. **Skip conflict** udelader laget fra [konfliktsøgningen](/gc2/skemaindstillinger/database/meta#konflikt). Begge slås til i [serverkonfigurationen](/gc2/serverkonfiguration).
+
+Beskrivelsen gemmes som en kommentar på tabellen i PostgreSQL. Retter du kommentaren i f.eks. pgAdmin eller QGIS, ændres **Beskrivelse** også.
+
+## Sort id
+
+**Sort id** bestemmer lagenes rækkefølge i Vidi:
+
+- Inden for en gruppe står laget med det højeste Sort id øverst i lagtræet og tegnes øverst i kortet.
+- Lag med samme Sort id står alfabetisk efter titel.
+- Grupperne står i rækkefølge efter det højeste Sort id i gruppen.
+
+I eksemplet har lagene i Beskyttet natur Sort id i 200'erne og lagene i Beskyttelseslinjer i 100'erne:
+
+<figure class="centered-figure">
+  <img src={sortIdGc2Svg} alt="Lagoversigten sorteret efter Sort id. Lagene i gruppen Beskyttet natur har 240, 230, 220 og 210, og lagene i Beskyttelseslinjer har 150 til 110. Kolonnen Sort id er markeret" style={{ width: '100%' }} />
+  <figcaption>Sort id i lagoversigten.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={treeSortIdSvg} alt="Vidis lagtræ med gruppen Beskyttet natur øverst og lagene Udsigtspunkter, Beskyttede naturtyper, Fredede områder og Natura 2000 med Sort id 240, 230, 220 og 210 skrevet ved siden af. Derunder gruppen Beskyttelseslinjer med Sort id 110–150" style={{ width: '646px', maxWidth: '100%' }} />
+  <figcaption>Lagene står i rækkefølge efter Sort id fra 240 til 210. Gruppen står over Beskyttelseslinjer, hvor lagene har 110 til 150.</figcaption>
+</figure>
+
+:::tip[Brug spring på 10 og et hundrede pr. gruppe]
+Giv lagene Sort id i spring på 10 eller mere, f.eks. 10, 20 og 30. Så kan du senere sætte et lag ind imellem, f.eks. med 25, uden at rette de andre lag.
+
+Har du flere grupper, så giv hver gruppe sit eget hundrede, f.eks. 200'erne til den øverste gruppe og 100'erne til den næste. Så er det tydeligt, hvilken gruppe et lag hører til, og grupperne bytter ikke plads, når du flytter lag inden for en gruppe. Med mange grupper kan du starte højere, f.eks. med 1900, 1800 og så videre.
 :::
 
-## Indstillinger i den viste rækkefølge
+Brugeren kan selv flytte lagene i Vidi, se [Omrokering af lag](/vidi/vidi-menuen/lagstyring#omrokering-af-lag).
 
-| Felt | Betydning og eksempel |
-|---|---|
-| `Relation` | Viser om kilden er tabel, view, materialized view eller foreign table. Bruges til at forstå begrænsninger, ikke som præsentationstekst. |
-| `Type` | Lagets registrerede geometri- eller relationstype. Kontrollér den mod data, især før redigering. |
-| `Name` | Teknisk relationsnavn, f.eks. `lokalplan`. Brug små bogstaver og stabile navne uden brugerrettet pynt. |
-| `Title` | Brugertitel, f.eks. `Lokalplaner`. Dette er normalt den tekst, brugeren skal møde. |
-| `Description` | Kort faglig beskrivelse af indhold, aktualitet og anvendelse. |
-| `Note` | Intern eller supplerende note; brug den ikke som erstatning for dokumenteret ejerskab. |
-| `Group` | Hovedgruppe i Vidi-lagtræet, f.eks. `Plan`. Samme stavning samler lagene. |
-| `Extra` | Installationsspecifikt felt, som kun vises nogle steder. Dokumentér lokal betydning, før det bruges. |
-| `OWS` | Styrer publicering gennem OGC-webservices. Kontrollér resultatet med capabilities. |
-| `Sort id` | Numerisk rækkefølge inden for gruppen. Brug mellemrum mellem værdier, så nye lag kan indsættes senere. |
-| `Authentication` | `None`, `Write` eller `Read/write`. Bestemmer om læsning og/eller skrivning kræver godkendelse. |
-| `Editable` | Markerer laget som kandidat til redigering; privilegier, Meta og Vidi-udvidelse skal også være korrekte. |
-| `Skip conflict` | Laget springes over i [konfliktsøgningen](/gc2/skemaindstillinger/database/meta#konflikt). Kolonnen vises kun, når installationen er sat op til konfliktsøgning med `showConflictOptions`, se [Serverkonfiguration](/gc2/serverkonfiguration). |
+Installationen kan vende rækkefølgen, så det laveste Sort id står øverst. Det styres af `reverseLayerOrder` i [serverkonfigurationen](/gc2/serverkonfiguration).
 
-<MediaPlaceholder
-  title="Grundindstillinger i Database-gridet"
-  file="gc2-database-layer-grid.png"
-  format="PNG"
->
-  Vis kolonnerne fra Relation til Editable og eventuelle installationsfelter. Brug to testlag med tydelige Title, Group, Sort id og forskellige Authentication-værdier.
-</MediaPlaceholder>
+## OWS
 
-## Et praktisk eksempel
+Vidi henter tile-lag som kortbilleder fra GC2's WMS. Fjerner du fluebenet i **OWS**, forsvinder laget fra WMS og WFS. I Vidi står det stadig i lagtræet, men det tegnes ikke som tile-lag, og der vises et rødt kryds ved laget. Som vektorlag virker det fortsat, fordi Vidi henter vektorlag på en anden måde.
 
-| Indstilling | Værdi |
-|---|---|
-| Name | `lokalplan` |
-| Title | `Lokalplaner` |
-| Description | `Gældende og vedtagne lokalplaner` |
-| Group | `Plan` |
-| Sort id | `20` |
-| Authentication | `Write` for offentligt lag eller `Read/write` for beskyttet lag |
-| Editable | Kun `true`, hvis en kontrolleret redigeringsproces er etableret |
+<figure class="centered-figure">
+  <img src={treeOwsSvg} alt="Vidis lagtræ med gruppen Beskyttet natur. Beskyttede naturtyper (§3) er tændt og har et rødt kryds efter navnet. Rækken er markeret" style={{ width: '486px', maxWidth: '100%' }} />
+  <figcaption>Laget med beskyttede naturtyper uden flueben i OWS. Det er tændt, men har et rødt kryds og tegnes ikke.</figcaption>
+</figure>
 
-## Authentication er ikke det samme som privilegier
-
-Authentication fastlægger, om tjenesten kræver en godkendt bruger. Privilegier fastlægger, hvad den konkrete subuser må på laget. Læs [Privilegier og authentication](/gc2/skemaindstillinger/database/privilegier-og-authentication), før et beskyttet lag publiceres.
-
-## Kontrollér ændringen
-
-1. Gem én logisk ændring ad gangen.
-2. Genindlæs lagoversigten og kontrollér den gemte værdi.
-3. Kontrollér gruppe og rækkefølge i Vidi.
-4. Test både anonymt og med en realistisk brugerrolle.
-5. Kontrollér capabilities, hvis `OWS` eller adgang er ændret.
+Fjern kun fluebenet for lag, som ikke skal ses i Vidi eller i andre programmer som tile-lag, f.eks. hjælpetabeller.
