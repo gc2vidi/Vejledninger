@@ -141,7 +141,7 @@ Et minimalt eksempel på en embed-konfiguration kan se sådan ud:
       "maxZoom": 22,
       "maxNativeZoom": 20,
       "inDrawer": true,
-      "thumbnail": "https://static.geopartner.dk/images/drawer_forvaltning_sag.png"
+      "thumbnail": "https://kort.example.dk/images/drawer_forvaltning_sag.png"
     }
   ]
 }
@@ -280,7 +280,7 @@ Denne type opsætning er nyttig, når embed-kortet stadig skal være enkelt, men
 
 ## Komplet HTML-eksempel
 
-Her er et enkelt HTML-eksempel på, hvordan et embed kan indsættes på en side:
+Live demoen herunder er lavet med denne HTML-side. Den indlejrer GeoFA's offentlige kort med `embed.js` og et token og bruger [Embed API](#embed-api) til at tænde to lag og zoome ind på Aarhus, når kortet er klar:
 
 ```html
 <!DOCTYPE html>
@@ -288,72 +288,112 @@ Her er et enkelt HTML-eksempel på, hvordan et embed kan indsættes på en side:
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Eksempel på indlejret Vidi-kort</title>
-    <script src="https://mapgovidi.geopartner.dk/js/embed.js"></script>
+    <title>Live demo af indlejret Vidi-kort</title>
+    <script src="https://geofa-kort.geodanmark.dk/js/embed.js"></script>
     <style>
+      html,
       body {
-        font-family: sans-serif;
-        margin: 2rem;
-      }
-
-      .embed-wrapper {
-        max-width: 1200px;
+        margin: 0;
+        overflow: hidden;
       }
     </style>
   </head>
   <body>
-    <h1>Eksempel på indlejret kort</h1>
-
-    <p>
-      Her vises et Vidi-projekt som embed på en almindelig HTML-side.
-      Kortet hentes via et token og bruger en tilknyttet konfigurationsfil.
-    </p>
-
-    <div class="embed-wrapper">
-      <div
-        data-vidi-token="eksempel-token-skal-erstattes"
-        data-vidi-width="1200px"
-        data-vidi-height="800px"
-        data-vidi-tmpl="embed.tmpl"
-        data-vidi-use-config="true"
-        data-vidi-legend="none"
-        data-vidi-layer="none"
-      ></div>
-    </div>
+    <div
+      data-vidi-token="eyJpZCI6IiIsImhvc3QiOiJodHRwczovL2dlb2ZhLWtvcnQuZ2VvZGFubWFyay5kayIsImRhdGFiYXNlIjoiZmtnIiwiY29uZmlnIjoiL2FwaS92Mi9jb25maWd1cmF0aW9uL2ZrZy9jb25maWd1cmF0aW9uX2ZrZ191ZGdpdmV0XzVmNDY1ZjVkMzE4MWY2ODczNTMyNjAuanNvbiJ9"
+      data-vidi-width="100%"
+      data-vidi-height="760px"
+      data-vidi-tmpl="embed.tmpl"
+      data-vidi-use-config="true"
+      data-vidi-signin="none"
+      data-vidi-frame-name="geofa"
+      data-vidi-title="Live demo af indlejret Vidi-kort"
+    ></div>
+    <script>
+      // Når Vidi er klar: tænd to lag og zoom ind på Aarhus.
+      // Lagene tændes lidt efter, fordi lagstyringen først skal være indlæst.
+      embedApi.vidiReady["geofa"] = function () {
+        setTimeout(function () {
+          embedApi.switchLayer("fkg.t_6800_parl_fl", true, "geofa");
+          embedApi.switchLayer("fkg_foto_gpx_link.t_5800_fac_pkt", true, "geofa");
+          setTimeout(function () {
+            embedApi.setView([56.142, 10.170], 12, "geofa");
+          }, 1000);
+        }, 2000);
+      };
+    </script>
   </body>
 </html>
 ```
 
-I dette eksempel:
+I eksemplet:
 
-- hentes `embed.js` fra den konkrete Vidi-installation
-- bruges et projekt-token, som også indeholder reference til en konfigurationsfil
-- sættes størrelse direkte i HTML med `1200px` og `800px`
+- hentes `embed.js` fra den Vidi-installation, kortet ligger i
+- peger tokenet på GeoFA's konfiguration. Normalt kopierer du tokenet fra et projekt i jeres egen Vidi, se [Opsætning af projekt i Vidi](#opsætning-af-projekt-i-vidi). Så gemmer projektet lag og udsnit, og scriptet er ikke nødvendigt
 - vælges `embed.tmpl`, så kortet bruger embed-layoutet
-- bruges `data-vidi-use-config="true"`, så den tilknyttede konfigurationsfil aktiveres
-- skjules signaturforklaring og lagliste direkte i embed-visningen
+- bruges `data-vidi-use-config="true"`, så konfigurationen i tokenet bruges
+- skjules knappen **Log ind**
+- får kortet navnet `geofa`, så Embed API kan finde det
 
-Det komplette eksempel ligger også som separate filer på GitHub:
-
-- [Se HTML-filen på GitHub](https://github.com/gc2vidi/Vejledninger/blob/main/public/embed-demo.html)
-- [Se config-filen på GitHub](https://github.com/gc2vidi/Vejledninger/blob/main/public/embed-demo-config.json)
+[Se HTML-filen på GitHub](https://github.com/gc2vidi/Vejledninger/blob/main/public/embed-demo.html)
 
 ## Live demo
-
-Nedenfor vises et rigtigt eksempel på et indlejret kort. Demoen henter en separat HTML-side fra dokumentationssitets `public`-mappe, som igen indlæser `embed.js`, projekt-token og konfiguration.
 
 <iframe
   src={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/embed-demo.html`}
   title="Live eksempel på indlejret Vidi-kort"
   width="100%"
-  height="580px"
+  height="762px"
+  scrolling="no"
   loading="lazy"
-  style="display: block; width: 100%; height: 580px; border: 1px solid #d6d3d1; border-radius: 12px; background: #fff; overflow: hidden;"
+  style="display: block; width: 100%; height: 762px; border: 1px solid #d6d3d1; border-radius: 12px; background: #fff; overflow: hidden;"
 ></iframe>
 
+GeoFA's velkomstbesked vises første gang, fordi den ikke er slået fra for `embed.tmpl` i GeoFA's konfiguration.
+
 :::note[Godt at vide]
-GitHub-linket viser selve HTML-koden bag demoen. Hvis demoen ikke loader i `iframe`-visningen, er det typisk fordi den eksterne Vidi-installation, tokenet eller den tilknyttede konfiguration ikke er tilgængelig.
+Hvis demoen ikke loader, er det typisk fordi den eksterne Vidi-installation, tokenet eller konfigurationen ikke er tilgængelig.
 :::
+
+## Simpel iframe uden token
+
+Har du ikke et projekt at lave et token fra, f.eks. fordi kortet ligger i en andens Vidi, kan du indlejre Vidi direkte med en `iframe`. Adressen er den samme som i browseren, tilføjet `tmpl=embed.tmpl`:
+
+```html
+<iframe
+  src="https://geofa-kort.geodanmark.dk/app/fkg/?config=/api/v2/configuration/fkg/configuration_fkg_udgivet_5f465f5d3181f687353260.json&tmpl=embed.tmpl&sig=none#Basis_kort/12/10.170/56.142/fkg.t_6800_parl_fl,fkg_foto_gpx_link.t_5800_fac_pkt"
+  title="GeoFA-kort"
+  width="100%"
+  height="760"
+  style="border: 0"
+  allow="fullscreen; geolocation"
+></iframe>
+```
+
+Efter `#` står baggrundskortet, zoomniveauet, længdegrad, breddegrad og de tændte lag adskilt med komma. Det er det samme, som står i Vidis adresselinje, så du kan stille kortet op i Vidi og kopiere adressen.
+
+Vis/skjul-attributterne kan skrives i adressen i stedet, f.eks. `&sig=none` for at skjule **Log ind**. Navnene er de samme, som `embed.js` bruger:
+
+| Attribut | I adressen |
+|---|---|
+| `data-vidi-search` | `sea` |
+| `data-vidi-history` | `his` |
+| `data-vidi-legend` | `leg` |
+| `data-vidi-layer` | `lay` |
+| `data-vidi-background` | `bac` |
+| `data-vidi-fullscreen` | `ful` |
+| `data-vidi-about` | `abo` |
+| `data-vidi-location` | `loc` |
+| `data-vidi-reset` | `res` |
+| `data-vidi-measurement` | `mea` |
+| `data-vidi-clear` | `cle` |
+| `data-vidi-boxzoom` | `box` |
+| `data-vidi-signin` | `sig` |
+| `data-vidi-screenshot` | `scr` |
+| `data-vidi-brand` | `bra` |
+| `data-vidi-toggler` | `tog` |
+
+Vil du bruge [Embed API](#embed-api) eller [callbacks](#callbacks-når-kortet-er-klar), så brug `embed.js` som i det komplette eksempel.
 
 ## Embed API
 
@@ -363,14 +403,17 @@ De mest brugte funktioner er:
 
 - `embedApi.switchLayer(layername, on, frame)`  
   Tænder/slukker et lag.
-- `embedApi.allOff(frame)`  
+- `embedApi.switchAllOff(frame)`  
   Slukker alle tændte lag.
+- `embedApi.setView([breddegrad, længdegrad], zoom, frame)`  
+  Flytter kortet til punktet og zoomniveauet.
 
 Eksempler:
 
 ```javascript
 embedApi.switchLayer('planer.lokalplan', true, 'plankort')
-embedApi.allOff('plankort')
+embedApi.switchAllOff('plankort')
+embedApi.setView([56.1373, 10.0975], 12, 'plankort')
 ```
 
 Hvis du vil bruge Embed API, er det en god idé at sætte `data-vidi-frame-name`, så du entydigt kan referere til det indlejrede kort.
@@ -397,7 +440,9 @@ embedApi.activeLayersReady['kort1'] = () => {
 ```
 
 :::note[Godt at vide]
-Aktive lag fra projektet loades først efter at Vidi har meldt sig klar.
+Aktive lag fra projektet loades først efter at Vidi har meldt sig klar. `activeLayersReady` kaldes kun, når tokenet peger på et projekt med tændte lag.
+
+Lagstyringen er heller ikke altid indlæst, når `vidiReady` kaldes. Vil du tænde lag med `switchLayer` uden et projekt, så vent et øjeblik, f.eks. med `setTimeout`, som i [live demoen](#live-demo).
 :::
 
 ## Fejlfinding og godt at vide

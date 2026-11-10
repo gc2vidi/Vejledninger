@@ -54,7 +54,7 @@
       "maxZoom": 22,
       "maxNativeZoom": 20,
       "inDrawer": true,
-      "thumbnail": "https://static.geopartner.dk/images/drawer_forvaltning_sag.png"
+      "thumbnail": "https://kort.example.dk/images/drawer_forvaltning_sag.png"
     },
     {
       "type": "wms",
@@ -85,7 +85,7 @@
       "maxNativeZoom": 22,
       "transparent": true,
       "inDrawer": true,
-      "thumbnail": "https://static.geopartner.dk/images/drawer_matrikel.png"
+      "thumbnail": "https://kort.example.dk/images/drawer_matrikel.png"
     },
     {
       "type": "WMTS",
@@ -101,7 +101,7 @@
       "maxZoom": 22,
       "maxNativeZoom": 20,
       "inDrawer": true,
-      "thumbnail": "https://static.geopartner.dk/images/drawer_orto.png"
+      "thumbnail": "https://kort.example.dk/images/drawer_orto.png"
     }
   ]
 }
