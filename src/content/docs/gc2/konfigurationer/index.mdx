@@ -164,7 +164,7 @@ Flere konfigurationer kan dele de samme indstillinger, f.eks. baggrundskort. Læ
 }
 ```
 
-Vidi-serveren henter den anden konfiguration og sætter dens `baseLayers` ind. Den anden konfiguration skal være udgivet, hvis brugere uden login skal kunne åbne kortet.
+Vidi-serveren henter den anden konfiguration og sætter dens `baseLayers` ind. Serveren henter den uden login, så den anden konfiguration skal altid være udgivet. Kan den ikke hentes, åbner kortet alligevel, men uden de indstillinger, se [En indstilling har ingen virkning](/gc2/admin-drift-og-fejlsoegning#en-indstilling-har-ingen-virkning).
 
 ## Konfigurationer som filer
 

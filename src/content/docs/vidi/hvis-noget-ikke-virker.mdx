@@ -1,0 +1,52 @@
+---
+title: Hvis noget ikke virker
+description: Genindlæs eller nulstil Vidi i browseren, og send de rigtige oplysninger videre, hvis kortet ikke virker
+---
+
+**Forfatter:** [Henrik Larsen](mailto:hbl@geopartner.dk)
+
+Vidi gemmer kortets tilstand i browseren, f.eks. tændte lag, kortudsnit og tegninger. Er de gemte data forældede eller beskadigede, kan kortet indlæses forkert, vise en gammel opsætning eller ikke reagere. Prøv trinene i rækkefølge.
+
+## 1. Genindlæs siden
+
+Tryk på <Key items={['Ctrl', 'F5']} />. Det henter siden helt forfra fra serveren i stedet for fra browserens cache.
+
+## 2. Nulstil Vidi i browseren
+
+Hjælper det ikke, så ryd de data, browseren har gemt for Vidi. Fremgangsmåden herunder gælder Google Chrome og Microsoft Edge. I Firefox, se Mozillas vejledning [Ryd cookies og webstedsdata i Firefox](https://support.mozilla.org/kb/clear-cookies-and-site-data-firefox).
+
+:::caution[Det slettes ved en nulstilling]
+- Du bliver logget ud.
+- Tændte lag, kortudsnit og tegninger, der ikke er gemt i et [projekt](/vidi/vidi-menuen/projekter).
+- Rettelser fra [editoren](/vidi/extensions/editor), der er lavet uden forbindelse og endnu ikke sendt til serveren.
+- Områder, der er gemt til brug uden forbindelse.
+
+Data på serveren, f.eks. gemte projekter og indsendte rettelser, slettes ikke. Nulstillingen gælder kun siden med Vidi, ikke andre hjemmesider.
+:::
+
+1. Åbn Vidi på den side, hvor problemet opstår.
+2. Tryk på <Key items="F12" /> for at åbne browserens udviklerværktøjer. På nogle bærbare computere skal du holde <Key items="Fn" /> nede samtidig.
+3. Vælg fanen **Application**. Kan du ikke se den, ligger den under `>>`.
+4. Vælg **Storage** i menuen til venstre.
+5. Klik på **Clear site data**.
+6. Luk udviklerværktøjerne, og tryk på <Key items={['Ctrl', 'F5']} />.
+
+<MediaPlaceholder
+  title="Nulstil Vidi i Chrome"
+  file="vidi-nulstil-chrome.gif"
+  format="GIF"
+>
+  Vidi åbent i Chrome. Udviklerværktøjerne åbnes med F12, fanen Application vælges, Storage vælges i menuen til venstre, og der klikkes på Clear site data. Til sidst lukkes udviklerværktøjerne, og siden genindlæses.
+</MediaPlaceholder>
+
+## 3. Kontakt den, der står for kortet
+
+Virker kortet stadig ikke, så kontakt den, der står for kortet i din organisation, og send:
+
+- adressen på kortet, kopieret fra browserens adresselinje. Den viser også kortudsnittet og de tændte lag.
+- hvad du gjorde, hvad du forventede, og hvad der skete
+- et skærmbillede
+- tidspunktet, og hvilken browser du bruger
+- om du har prøvet at nulstille Vidi
+
+Administratoren kan derefter finde årsagen med [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning#faktapakke-til-support).

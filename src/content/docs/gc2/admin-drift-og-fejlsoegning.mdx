@@ -1,153 +1,150 @@
 ---
 title: Admin-drift og fejlsøgning
-description: Forstå de serverafhængigheder som en GC2-administrator skal kunne genkende og beskrive
+description: Find ud af, om en fejl ligger i GC2, i Vidi-konfigurationen, i Vidi-installationen eller i en ekstern tjeneste
 sidebar:
   order: 1
 ---
 
-Denne sektion er ikke en installationsvejledning. Se [Installation og opstart](/gc2/installation-og-opstart), hvis du skal etablere et testmiljø eller afgrænse kravene til produktion. Se [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning), hvis fejlen afhænger af forskellen mellem Tile, Vector, MVT, WebGL, WMS og WFS. Her forklares den del af driften, som en GC2-administrator skal kende for at kunne skelne mellem:
-
-- en fejl i GC2-data eller rettigheder
-- en fejl i kørselskonfigurationen
-- en Vidi-funktion, der ikke er installeret
-- en server-, proxy- eller ekstern tjenestefejl
-
-Målet er, at du kan gennemføre de første kontroller og give serveroperatøren eller et AI-værktøj præcise oplysninger.
+Når et kort ikke virker, er det første skridt at finde ud af, hvilken del der fejler. Denne side beskriver de kontroller, en GC2-administrator selv kan lave i browseren, og hvornår sagen skal videre til den, der driver serveren. Installation står under [Installation og opstart](/gc2/installation-og-opstart), og lagtyperne under [Teknisk arkitektur og lagvisning](/gc2/teknisk-arkitektur-og-lagvisning).
 
 :::note[Krævet adgang]
-De første kontroller kan udføres med adgang til den fejlende løsning. Serverlogs, processer, containere, miljøvariabler og buildkonfiguration kræver normalt serveroperatør.
+Kontrollerne på denne side kræver kun adgang til kortet og Kontrolcentret. Serverlogs, `config.js` og builds kræver adgang til serveren.
 :::
 
 ## Systemerne og deres ansvar
 
-| Del | Typisk ansvar |
+| Del | Ansvar |
 |---|---|
-| GC2 | Databaser, lag, metadata, brugere, privilegier og publicerede konfigurationer |
-| Vidi-server | Henter GC2-konfigurationer, stiller frontend til rådighed, proxyer kald og genererer print |
-| Vidi-browser | Fortolker runtime-konfigurationen og viser kortets brugerflade |
-| Eksterne tjenester | Baggrundskort, søgning, gadefoto, ruter og andre integrationer |
+| GC2 | Databaser, lag, metadata, brugere, privilegier og Vidi-konfigurationer |
+| Vidi-serveren | Henter konfigurationer fra GC2 eller `configUrl`, sender kald videre til GC2 og laver print. Styres af [`config.js`](/gc2/serverkonfiguration#vidis-configjs). |
+| Vidi i browseren | Læser konfigurationen og viser kortet |
+| Eksterne tjenester | Baggrundskort, søgning, skrå- og gadefoto, ruter og andre integrationer |
+
+## Browserens udviklerværktøjer
+
+De fleste fejl kan findes med browserens udviklerværktøjer, som åbnes med <Key items="F12" /> i Vidi. De er en del af browseren, ikke af GC2 eller Vidi. Tre ting er nyttige:
+
+- **Fanen Network** viser hvert kald og dets status. Skriv `config` i filteret for at finde kaldet, der henter konfigurationen.
+- **Fanen Console** viser Vidis egne meddelelser, f.eks. når en konfiguration ikke kan hentes, eller en udvidelse mangler.
+- **`vidiConfig`** skrevet i fanen Console viser de indstillinger, Vidi faktisk bruger. `vidiConfig.searchConfig` viser f.eks. den søgning, kortet kører med.
 
 <MediaPlaceholder
-  title="Driftsgrænsen mellem GC2 og Vidi"
-  file="gc2-admin-drift-arkitektur.svg"
-  format="SVG"
+  title="Network-fanen med et kald, der fejler"
+  file="vidi-network-config-403.png"
+  format="PNG"
 >
-  Tegn GC2, Vidi-server, browser og eksterne tjenester som fire tydelige bokse. Vis konfigurationsflow, dataforespørgsler, proxykald og print som navngivne pile. Diagrammet skal kunne forstås uden resten af siden.
+  Vidi åbnet med en konfiguration, der ikke er udgivet. Udviklerværktøjernes Network-fane er filtreret på `config` og viser kaldet `/api/gc2/config/<database>/<id>.json` med status 403. Markér kaldet og status med en rød boks.
 </MediaPlaceholder>
 
-## Installationens `config.js`
+## Typiske fejl
 
-Vidi-serverens `config.js` indeholder indstillinger, som ikke kan ændres fra en Vidi-konfiguration i Kontrolcentret, f.eks. GC2-serveren, de udvidelser, der er bygget med, og printskabelonerne. Står en udvidelse i `enabledExtensions` uden at være bygget med, starter den ikke, selv om Vidi-konfigurationen er korrekt. Se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs).
+### Kortet åbner som "MapCentia Vidi" uden lag
 
-## Login og OAuth-klienter
+Konfigurationen kunne ikke hentes. Vidi åbner så med installationens standardværdier: titlen er "MapCentia Vidi", lagtræet er tomt, og kortet viser hele verden. Er `defaultConfig` sat i `config.js`, åbner Vidi i stedet den konfiguration.
 
-Kontrolcenteret logger ind via GC2's indbyggede OpenID Connect-login med OAuth-klienten `gc2-cli`. Klienterne ligger i tabellen `settings.clients` i hver database og kan kun ændres via GC2's API (`/api/v4/client`), ikke i kontrolcenteret eller administrationsmodulet. To indstillinger er nyttige at kende:
+I fanen Console står `Could not load:` efterfulgt af konfigurationens adresse. I fanen Network har kaldet `/api/gc2/config/<database>/<id>.json` status 403. Vidi svarer 403 uanset årsagen, så den skal findes i GC2:
 
-- **Redirect-adresser:** Klienten skal have kontrolcenterets adresse som redirect-adresse. Mangler den, stopper login med fejlen `invalid_client` og teksten “is not registered with redirect uri”.
-- **To-faktor-login:** Er `two_factor` slået til på klienten, sender GC2 en engangskode på e-mail efter adgangskoden. Koden gælder i 10 minutter og skrives i feltet **One-time code from e-mail**. Det kræver, at serveroperatøren har sat mailafsendelse op i GC2 (`notification` i `App.php`), og at brugeren har en e-mailadresse. Indstillingen er slået fra som standard.
+| Årsag | Kontrol |
+|---|---|
+| Konfigurationen er ikke udgivet | Se, om **Udgivet** har flueben. En konfiguration, der ikke er udgivet, kan kun åbnes af den bruger, der har oprettet den. |
+| Forkert id eller database i adressen | Kopiér adressen med <MenuPath items="Kopier link" /> i Kontrolcentret, og åbn den. Svarer GC2 404, findes konfigurationen ikke under det id. |
+| JSON med fejl | Kontrolcentret kan ikke gemme JSON med fejl, men det kan ske, hvis konfigurationen er ændret via API'et. Vidi-serveren svarer så 500. |
 
-## En enkel fejlmodel
+Åbnes kortet med et filnavn (`?config=natur.json`), hentes filen fra [`configUrl`](/gc2/serverkonfiguration#filer-fra-configurl). Findes filen ikke, svarer `/api/config/<database>/<fil>` 404 med teksten "Could not get the requested config JSON file."
 
-### Konfigurationen kan ikke hentes
+### En indstilling har ingen virkning
 
-**Symptomer:** `403`, `404`, tom standardløsning eller “Could not get the requested config JSON file”.
+Resten af konfigurationen virker, men én indstilling gør ikke. Skriv `vidiConfig.<indstilling>` i fanen Console:
 
-Kontroller:
-
-1. rå `.json`-adresse
-2. publiceringsstatus
-3. database og konfigurations-id
-4. om Vidi peger på den rigtige GC2-host
-5. Vidi-serverens proxylog
-
-### Konfigurationen hentes, men en nøgle har ingen effekt
-
-**Symptomer:** Resten af konfigurationen virker, men én indstilling gør ikke.
-
-Kontroller:
-
-1. nøglens præcise navn og datatype
-2. om nøglen findes i [Alle indstillinger i en Vidi-konfiguration](/gc2/konfigurationer/alle-indstillinger)
-3. om projekt, state eller embed overstyrer værdien
-4. browserkonsollen
-5. Vidi-versionen
+| Resultat | Årsag |
+|---|---|
+| `undefined` | Navnet er stavet forkert eller findes ikke. Vidi ignorerer ukendte indstillinger uden en fejl. Sammenlign med [Alle indstillinger](/gc2/konfigurationer/alle-indstillinger). |
+| `{"$ref": "…"}` | Henvisningen med [`$ref`](/gc2/konfigurationer#genbrug-indstillinger-med-ref) blev ikke løst. Den anden konfiguration er ikke udgivet, adressen er forkert, eller Vidi-serveren kan ikke nå den. |
+| Den rigtige værdi | Noget andet går forud, f.eks. et link, et gemt projekt eller brugerens eget valg. Se [Hvad går forud](/gc2/konfigurationer/alle-indstillinger#hvad-går-forud). |
 
 ### En udvidelse mangler
 
-**Symptomer:** Id'et står i `enabledExtensions`, men der kommer ingen knap eller funktion.
+Udvidelsen står i `enabledExtensions`, men der kommer ingen knap eller funktion. Står der i fanen Console:
 
-Kontroller:
+```text
+Following extensions need to be enabled, but they were not initially compiled: ["symbols"]
+```
 
-1. “not initially compiled” i browserkonsollen
-2. `extensions.browser`
-3. eventuel `extensions.server`
-4. `extensionConfig`
-5. GC2-lag og privilegier
+er udvidelsen ikke bygget med i Vidi. Den skal tilføjes `extensions.browser` i `config.js`, og Vidi skal bygges igen, se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs). Kommer meddelelsen ikke, så se udvidelsens `extensionConfig` og privilegierne på de lag, den bruger.
 
 ### Eksternt indhold fejler
 
-**Symptomer:** Baggrundskort, søgning, gadefoto eller ruter giver netværksfejl.
+Baggrundskort, søgning, gadefoto eller ruter giver fejl i fanen Network. Kontrollér:
 
-Kontroller:
+1. status og adresse på kaldet, der fejler
+2. nøgle, abonnement eller begrænsning på domæne eller IP-adresse hos udbyderen
+3. CORS, certifikat og DNS
+4. om tjenesten kan nås fra Vidi-serveren og ikke kun fra din egen computer
 
-1. HTTP-status og fejladresse i browserens Network-panel
-2. proxyens serverlog
-3. nøgle, abonnement, referer- eller IP-begrænsning
-4. CORS, TLS-certifikat og DNS
-5. om tjenesten kan nås fra Vidi-serveren og ikke kun din egen pc
+### Print giver ingen PDF
 
-### Printdialogen virker, men PDF fejler
+Vidi-serveren laver print ved at åbne kortet i en Chrome uden skærm på serveren og gemme det som PDF. Alt i kortet, også baggrundskort og eksterne lag, skal derfor kunne hentes fra serveren.
 
-Kontroller Vidi-serverens printlog, headless browser, ressourceforbrug, timeout og adgang til alle eksterne ressourcer. Se [`enabledPrints`](/gc2/konfigurationer/alle-indstillinger#enabledprints).
+Printet stopper efter 60 sekunder, og serveren laver højst to print ad gangen. Begge dele kan ændres i `config.js` med `print.timeout` (i millisekunder) og `puppeteerProcesses.max`. Vidi-serverens log skriver `Printing` med kortets adresse, når et print starter, og `Destroying browser after timeout`, når det er stoppet.
+
+## Login og OAuth-klienter
+
+Kontrolcentret logger ind via GC2's indbyggede OpenID Connect-login med OAuth-klienten `gc2-cli`. Klienterne ligger i tabellen `settings.clients` i hver database og kan kun ændres via GC2's API (`/api/v4/client`), ikke i Kontrolcentret eller administrationsmodulet. To indstillinger er nyttige at kende:
+
+- **Redirect-adresser:** Klienten skal have Kontrolcentrets adresse som redirect-adresse. Mangler den, stopper login med fejlen `invalid_client` og teksten "is not registered with redirect uri".
+- **To-faktor-login:** Er `two_factor` slået til på klienten, sender GC2 en engangskode på e-mail efter adgangskoden. Koden gælder i 10 minutter og skrives i feltet **One-time code from e-mail**. Det kræver, at serveroperatøren har sat mailafsendelse op i GC2 (`notification` i `App.php`), og at brugeren har en e-mailadresse. Indstillingen er slået fra som standard.
 
 ## Faktapakke til support
 
-Indsaml dette, før du beder om hjælp:
+Faktapakken er til, når du som administrator sender en sag videre til den, der driver serveren, eller til leverandøren. Den første del er de oplysninger, brugerne bliver bedt om under [Hvis noget ikke virker](/vidi/hvis-noget-ikke-virker#3-kontakt-den-der-står-for-kortet). Den anden del udfylder du selv med kontrollerne på denne side.
 
 ```text
-Tidspunkt og tidszone:
-Miljø og Vidi-URL:
-GC2-database:
-Konfigurations-id:
-Brugerrolle (ikke password/token):
-Forventet resultat:
-Faktisk resultat:
-Kan rå .json hentes anonymt? ja/nej
-HTTP-status og fejladresse:
-Browserkonsollens fejl:
+Fra brugeren
+Adresse på kortet:
+Hvad brugeren gjorde, forventede, og hvad der skete:
+Skærmbillede: vedlagt ja/nej
+Tidspunkt og browser:
+Er Vidi nulstillet i browseren? ja/nej
+
+Fra administratoren
+GC2-database og konfigurations-id:
+Brugerrolle (ikke adgangskode eller token):
+Kan konfigurationen hentes i et privat browservindue? ja/nej
+Status og adresse på kaldet, der fejler:
+Fejl i browserens Console:
 Seneste ændring:
-Virker en kendt tidligere konfiguration? ja/nej
+Virker en tidligere konfiguration? ja/nej
 ```
 
-Fjern cookies, tokens, passwords, API-nøgler og personoplysninger, før pakken deles.
+Fjern cookies, tokens, adgangskoder, API-nøgler og personoplysninger, før pakken deles.
 
 ## Brug dokumentationen med et AI-værktøj
 
-En agent kan hjælpe bedre, når problemet er afgrænset og kildehenvisningerne er med. Brug eksempelvis:
+Et AI-værktøj hjælper bedst, når problemet er afgrænset, og dokumentationen er med. F.eks.:
 
 ```text
-Hjælp mig med at diagnosticere denne GC2/Vidi-fejl.
-Skeln mellem GC2-data/rettigheder, runtime-konfiguration,
-Vidi build/server og ekstern tjeneste. Foreslå først read-only kontroller.
-Gæt ikke på passwords eller hemmelige værdier.
+Hjælp mig med at finde årsagen til denne GC2/Vidi-fejl.
+Skeln mellem GC2-data og rettigheder, Vidi-konfigurationen,
+Vidi-installationen og eksterne tjenester. Foreslå først kontroller,
+der ikke ændrer noget. Gæt ikke på adgangskoder eller hemmelige værdier.
 
 Faktapakke:
 <indsæt den udfyldte faktapakke>
 
-Relevant dokumentation:
+Dokumentation:
 <indsæt links til Konfigurationer, Alle indstillinger og denne side>
 ```
 
-Giv helst agenten adgang til den samme version af `geocloud2`- og `vidi`-repositoryet, som dokumentationen bygger på. Bed den citere fil og linje for tekniske påstande.
+Giv helst værktøjet adgang til den version af `geocloud2` og `vidi`, som installationen kører, og bed det henvise til fil og linje for tekniske påstande.
 
-## Hvornår skal du eskalere?
+## Hvornår skal sagen videre?
 
-Kontakt serveroperatøren, når løsningen kræver ændring af:
+Kontakt den, der driver serveren, når løsningen kræver ændring af:
 
-- miljøvariabler eller serverens `config.js`
-- kompilerede udvidelser eller søgemoduler
-- proxy-, certifikat-, DNS- eller firewallopsætning
-- printservice, processer, containere eller serverressourcer
+- miljøvariabler eller `config.js`
+- udvidelser eller søgemoduler, der skal bygges med
+- proxy, certifikater, DNS eller firewall
+- print, processer, containere eller serverressourcer
 - logs, som GC2-administratoren ikke har adgang til
 
-Send faktapakken og beskriv, hvilke kontroller du allerede har gennemført. Det reducerer både svartid og risikoen for, at problemet undersøges i det forkerte system.
+Send faktapakken med, og skriv, hvilke kontroller du allerede har lavet.

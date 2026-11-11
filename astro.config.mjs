@@ -136,6 +136,10 @@ export default defineConfig({
                 directory: "vidi/extensions",
               },
             },
+            {
+              label: "Hvis noget ikke virker",
+              link: "/vidi/hvis-noget-ikke-virker",
+            },
           ],
         },
         {
