@@ -13,6 +13,7 @@ import selectFunctionGif from '../../resources/vidi-meta-select-function.gif?url
 import accordionGif from '../../resources/vidi-meta-accordion.gif?url';
 import mouseoverImg from '../../resources/vidi-meta-mouseover.png';
 import mouseoverGif from '../../resources/vidi-meta-mouseover-template.gif?url';
+import styleFunctionGif from '../../resources/vidi-meta-style-function.gif?url';
 import lineHighlightImg from '../../resources/vidi-meta-line-highlight.png';
 import metaDialogSvg from '../../resources/gc2-meta-dialog.svg?url';
 import metaLayerTypeSvg from '../../resources/gc2-meta-layer-type.svg?url';
@@ -38,6 +39,8 @@ import metaEditorSvg from '../../resources/gc2-meta-editor.svg?url';
 import metaVectorSvg from '../../resources/gc2-meta-vector-settings.svg?url';
 import metaFiltersSvg from '../../resources/gc2-meta-filters.svg?url';
 import metaReferencesSvg from '../../resources/gc2-meta-references.svg?url';
+
+**Forfatter:** [Martin Høgh](mailto:mh@mapcentia.com), [Henrik Brændskov Larsen](mailto:hbl@geopartner.dk)
 
 :::note[Krævet adgang]
 Du skal kunne ændre lagets egenskaber. Meta gælder i alle Vidi-konfigurationer, der viser laget.
@@ -134,7 +137,7 @@ Placerer laget i en undergruppe i lagets gruppe i Vidis lagstyring. Brug `|` til
 
 ### Open tools
 
-Værktøjer, der er åbne, når brugeren tænder laget. Skriv dem som en JSON-liste:
+Værktøjer, der er åbne, når brugeren tænder laget. De skrives som en JSON-liste. I eksemplet herunder åbner filtrene, når laget tændes:
 
 ```json
 ["filters"]
@@ -162,7 +165,7 @@ Felterne i klik-info vælges under [Tabelstruktur, data og felter](/gc2/skemaind
 
 ### Pop-up template
 
-Erstatter hele klik-info for laget. Templaten er HTML med lagets felter i dobbelte krøllede parenteser:
+Erstatter hele klik-info for laget. Templaten er HTML med lagets felter i dobbelte krøllede parenteser. Eksemplet herunder viser naturtypen som overskrift og arealet og status under den:
 
 ```handlebars
 <h3>{{naturtype}}</h3>
@@ -325,7 +328,7 @@ I eksemplet har de fredede områder **Accordion summery** `fred_navn` og **Accor
 | **Tiled** | Laget hentes i små kortbilleder i stedet for ét billede for hele kortet. |
 | **Selected style** | Stylingen af det objekt, brugeren har valgt i klik-info. Standard er en rød kant. |
 
-**Selected style** er JSON med Leaflet-stylingens navne:
+**Selected style** er JSON med Leaflet-stylingens navne. Eksemplet herunder giver det valgte objekt en orange kant:
 
 ```json
 {"color": "#FF6F00", "weight": 4, "fillOpacity": 0.1}
@@ -358,33 +361,13 @@ Vidi viser ikke de første objekter op til grænsen, men slet ingen. Brugeren f�
 :::
 
 <figure class="centered-figure">
-  <img src={lineHighlightImg.src} alt="Vidi med laget Beskyttede vandløb tændt i lagstyringen og blå vandløb, som hver har en bred gul streg under sig" style={{ width: '100%' }} />
-  <figcaption>Vandløbene har en blå Style function og en gul Line highlight style med <code>{'{"color": "#FFEB3B", "weight": 8}'}</code>.</figcaption>
-</figure>
-
-<figure class="centered-figure">
   <img src={metaLineHighlightSvg} alt="Nederst i gruppen Vector settings i Meta-dialogen er Line highlight style udfyldt og markeret" style={{ width: '476px', maxWidth: '100%' }} />
   <figcaption>Line highlight style udfyldt nederst under Vector settings.</figcaption>
 </figure>
 
-### Style function
-
-Uden en style function tegner Vidi laget med en standard blå farve. Funktionen får hvert objekt og returnerer Leaflet-styling. Den kan bruge objektets felter:
-
-```js
-function (feature) {
-  if (feature.properties.type === 'Kirkefredning') {
-    return { color: '#B71C1C', weight: 3, fillOpacity: 0.1 };
-  }
-  return { color: '#6A1B9A', weight: 2, fillColor: '#AB47BC', fillOpacity: 0.35 };
-}
-```
-
-`color` og `weight` er kanten, og `fillColor` og `fillOpacity` er fladen.
-
 <figure class="centered-figure">
-  <img src={metaStyleFunctionSvg} alt="Gruppen Vector settings i Meta-dialogen, hvor Style function er udfyldt og markeret" style={{ width: '498px', maxWidth: '100%' }} />
-  <figcaption>Style function udfyldt under Vector settings.</figcaption>
+  <img src={lineHighlightImg.src} alt="Vidi med laget Beskyttede vandløb tændt i lagstyringen og blå vandløb, som hver har en bred gul streg under sig" style={{ width: '100%' }} />
+  <figcaption>Vandløbene har en blå Style function og en gul Line highlight style med <code>{'{"color": "#FFEB3B", "weight": 8}'}</code>.</figcaption>
 </figure>
 
 ### Point to layer
@@ -410,9 +393,38 @@ function (feature, latlng) {
 
 Uden `pane` lægger Leaflet ikonerne øverst over alle andre lag. Med `pane` sat til `skema-tabel` følger de lagets plads i lagstyringen.
 
+### Style function
+
+Uden en style function tegner Vidi laget med en standard blå farve. Funktionen får hvert objekt og returnerer Leaflet-styling, så farven kan afhænge af objektets felter. Eksemplet herunder farver fredninger efter fredningstypen i feltet `fred_tnavn`:
+
+```js
+function (feature) {
+  switch (feature.properties.fred_tnavn) {
+    case 'Kirkefredning':
+      return { color: '#B71C1C', weight: 3, fillOpacity: 0.1 };
+    case 'Arealfredning':
+      return { color: '#6A1B9A', weight: 2, fillColor: '#AB47BC', fillOpacity: 0.35 };
+    default:
+      return { color: '#757575', weight: 1, fillOpacity: 0.2 };
+  }
+}
+```
+
+Hver fredningstype har sin egen `case`. `default` tegner alle andre typer gråt, så objekter med en ukendt type stadig kan ses. `color` og `weight` er kanten, og `fillColor` og `fillOpacity` er fladen.
+
+<figure class="centered-figure">
+  <img src={metaStyleFunctionSvg} alt="Gruppen Vector settings i Meta-dialogen, hvor Style function er udfyldt og markeret" style={{ width: '498px', maxWidth: '100%' }} />
+  <figcaption>Style function udfyldt under Vector settings.</figcaption>
+</figure>
+
+<figure class="centered-figure">
+  <img src={styleFunctionGif} alt="Vidi med Fredede områder tændt i lagstyringen. Musen holdes over en rød kirkefredning og en lilla arealfredning, og en boks viser fredningstypen i samme farve som området" style={{ width: '100%' }} />
+  <figcaption>Kirkefredningen er rød, og arealfredningen er lilla. Når musen holdes over en fredning, vises fredningstypen, som funktionen farver efter. Boksen er sat op under <a href="#mouse-over">Mouse over</a> med sin egen template.</figcaption>
+</figure>
+
 ### Tooltip template
 
-En fast etiket ved hvert objekt, skrevet som en template:
+En fast etiket ved hvert objekt, skrevet som en template. Eksemplet herunder viser feltet `navn`:
 
 ```handlebars
 {{navn}}
@@ -491,7 +503,7 @@ Et filter skjuler kun data i Vidi. Data, som brugerne ikke må se, skal beskytte
 
 ### HTML template
 
-HTML, der vises under lagets filtre, f.eks. en kort vejledning eller et link:
+HTML, der vises under lagets filtre, f.eks. en kort vejledning eller et link. Et eksempel ses herunder:
 
 ```html
 <div class="small text-muted border-top pt-2">
@@ -512,22 +524,20 @@ HTML, der vises under lagets filtre, f.eks. en kort vejledning eller et link:
 
 ## Mouse over
 
-Sæt flueben i **Activate mouse over** for at vise en boks med felterne, når musen holdes over et objekt. Felterne vælges med **Vis i mouse-over** under [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#visning-i-klik-info-og-mouse-over).
-
-Uden en template viser boksen felterne med deres alias. Standardtemplaten løber listen `data` igennem:
-
-```handlebars
-{{#each data}}
-  {{this.title}}: {{this.value}}<br>
-{{/each}}
-```
+Sæt flueben i **Activate mouse over** for at vise en boks med felterne, når musen holdes over et objekt. Felterne vælges med **Vis i mouse-over** under [Tabelstruktur, data og felter](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#visning-i-klik-info-og-mouse-over). Mere skal der ikke til. Boksen viser så hvert felt med alias og værdi.
 
 <figure class="centered-figure">
   <img src={mouseoverImg.src} alt="Vidi-kort, hvor musen holdes over en sø, og en hvid boks viser Status, Areal (ha) og Naturtype" style={{ width: '100%' }} />
-  <figcaption>Standardtemplaten med de tre felter, der har Vis i mouse-over.</figcaption>
+  <figcaption>Boksen uden en template. Den viser de tre felter, der har Vis i mouse-over.</figcaption>
 </figure>
 
-**Template** ændrer boksens indhold og kan bruge felterne direkte ligesom en Pop-up template. På et tile-lag findes kun felterne med **Vis i mouse-over** i templaten. Denne template viser naturtypen i en grøn overskrift og arealet og status under den:
+:::caution[Kendt fejl med QGIS-styling]
+Mouse-over virker ikke på tile-lag, der er stylet med QML. Brug Mouse over på lag med GC2's egen styling, eller vis laget som **Vector**.
+:::
+
+### Egen template
+
+**Template** er valgfri og ændrer boksens udseende. Templaten kan bruge felterne direkte ligesom en Pop-up template. På et tile-lag findes kun felterne med **Vis i mouse-over** i templaten. Eksemplet herunder viser naturtypen i en grøn overskrift og arealet og status under den:
 
 ```handlebars
 <div style="margin: -5px; min-width: 200px">
@@ -553,10 +563,6 @@ Uden en template viser boksen felterne med deres alias. Standardtemplaten løber
   <img src={mouseoverGif} alt="Musen flyttes over flere naturområder, og en boks med grøn overskrift skifter mellem Sø og Mose og viser areal og status" style={{ width: '100%' }} />
   <figcaption>Boksen følger musen og viser naturtypen for det område, den peger på.</figcaption>
 </figure>
-
-:::caution[Kendt fejl med QGIS-styling]
-Mouse-over virker ikke på tile-lag, der er stylet med QML. Brug Mouse over på lag med GC2's egen styling, eller vis laget som **Vector**.
-:::
 
 ## References
 
@@ -698,6 +704,8 @@ En knap i en Pop-up template, som tænder et andet lag:
 
 ### Flyt kortet
 
+`api.setView` flytter kortet. Eksemplet herunder flytter det til et punkt ved Silkeborg i zoomniveau 14:
+
 ```js
 api.setView([56.112, 9.556], 14);
 ```
@@ -706,7 +714,7 @@ Koordinaterne er breddegrad og længdegrad i WGS84. Zoomniveauet er det samme so
 
 ### Filtrer lag
 
-`api.filter` tager et filter med samme opbygning som fanen **Vilkårlig**:
+`api.filter` tager et filter med samme opbygning som fanen **Vilkårlig**. Eksemplet herunder viser kun moser:
 
 ```js
 api.filter('natur.beskyttede_naturtyper', {
