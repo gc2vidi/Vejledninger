@@ -1,65 +1,185 @@
 ---
 title: Konfigurationer
-description: Forstå hvordan GC2 gemmer en Vidi-konfiguration, og hvordan Vidi bruger den ved opstart
+description: Opret en Vidi-konfiguration i GC2, udgiv den og åbn den i Vidi
 ---
 
-En **Vidi-konfiguration** er den JSON-opskrift, som samler færdige GC2-lag til en bestemt kortløsning. Den vælger blandt andet data, aktive lag, baggrundskort, søgning, funktioner og udseende.
+import tilfoejSvg from '../resources/gc2-konfigurationer-tilfoej.svg?url';
+import knapperSvg from '../resources/gc2-konfigurationer-knapper.svg?url';
+import formSvg from '../resources/gc2-konfiguration-form.svg?url';
+import friluftskortGif from '../resources/vidi-konfiguration-friluftskort.gif?url';
 
-GC2 gemmer og udgiver konfigurationen. Vidi henter og fortolker JSON-indholdet.
+En **Vidi-konfiguration** bestemmer, hvordan et kort i Vidi ser ud, og hvad det kan: hvilke lag og baggrundskort det har, hvor det starter, og hvilken søgning og hvilke værktøjer brugeren får. Konfigurationen er et JSON-dokument, som GC2 gemmer, og som Vidi henter, når kortet åbnes. De samme lag kan bruges i flere konfigurationer, f.eks. i et internt og et offentligt kort.
 
-:::note[Krævet adgang]
-Du skal kunne administrere konfigurationer i GC2-kontrolcenteret. En udgivet konfiguration kan hentes offentligt, så den må ikke indeholde passwords, tokens eller andre hemmeligheder.
+Hvilke indstillinger en konfiguration kan have, står under [Alle indstillinger](/gc2/konfigurationer/alle-indstillinger).
+
+:::note[Indstillinger på serveren]
+Nogle indstillinger kan ikke sættes i en konfiguration, f.eks. hvilken GC2-server Vidi bruger, og hvilke udvidelser og printskabeloner der er bygget med. De står i Vidis `config.js`, se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs).
 :::
 
-## Før du begynder
+## Opret en konfiguration
 
-Klargør først lagene under [Skemaindstillinger](/gc2/skemaindstillinger):
+1. Åbn Kontrolcentret, og vælg fanen <MenuPath items="Konfigurationer" />.
+2. Klik på <MenuPath items="Tilføj" />, og udfyld formularen.
+3. Klik på <MenuPath items="Gem" />.
 
-- forståelige titler og grupper
-- korrekte felter og aliaser
-- authentication og privilegier
-- relevant Meta
-- testet styling og labels
+<figure class="centered-figure">
+  <img src={tilfoejSvg} alt="Kontrolcentret med fanerne Konfigurationer og Sub-brugere. Under Konfigurationer står knappen Tilføj og konfigurationerne Friluftskort for Silkeborg og Natur i Silkeborg. Fanen og knappen Tilføj er markeret" style={{ width: '100%' }} />
+  <figcaption>Fanen Konfigurationer og knappen Tilføj i Kontrolcentret.</figcaption>
+</figure>
 
-En konfiguration kan vælge og præsentere lag, men den retter ikke fejl i data, adgang eller styling.
+Formularen har disse felter:
 
-## Konfigurationen som GC2-post og JSON
+- **Navn** og **Beskrivelse**: navnet er det, du ser i listen.
+- **JSON-feltet**: selve konfigurationen. Under feltet står, om den er uden fejl, og <MenuPath items="Formater JSON" /> sætter indrykningen pænt op.
+- **Udgivet**: sæt flueben, når kortet skal kunne åbnes af andre, se [Udgiv](#udgiv).
 
-GC2-posten har navn, beskrivelse, publiceringsstatus, et genereret id og JSON-indholdet. Selve JSON-dokumentet kan begynde enkelt:
+<figure class="centered-figure">
+  <img src={formSvg} alt="Formularen for konfigurationen Friluftskort for Silkeborg med felterne Navn og Beskrivelse, JSON-feltet med konfigurationen, teksten Konfiguration er uden fejl, knappen Formater JSON, fluebenet Udgivet og knappen Gem" style={{ width: '100%' }} />
+  <figcaption>Formularen med konfigurationen fra [Et større eksempel](#et-større-eksempel).</figcaption>
+</figure>
+
+## Eksempler
+
+### Et lille eksempel
 
 ```json
 {
-  "schemata": ["plan"],
-  "activeLayers": ["v:plan.lokalplan"],
+  "title": "Natur i Silkeborg",
+  "schemata": ["natur"],
+  "activeLayers": ["natur.beskyttede_naturtyper", "v:natur.fredede_omraader"],
+  "initZoomCenter": "/12/9.57/56.165",
   "enabledSearch": "danish",
-  "title": "Plankort"
+  "searchConfig": { "komkode": ["740"] }
 }
 ```
 
-I tekniske beskrivelser kaldes JSON-dokumentet også en **kørselskonfiguration**, fordi Vidi læser det ved opstart. I denne dokumentation bruger vi normalt det mere direkte ord Vidi-konfiguration.
+Kortet får titlen "Natur i Silkeborg", viser lagene i skemaet `natur`, tænder to af dem, starter over Silkeborg og søger efter adresser i Silkeborg Kommune.
 
-## Sådan finder Vidi konfigurationen
+### Et større eksempel
 
-En typisk adresse er:
+Et friluftskort med de indstillinger, der oftest ændres:
 
-```text
-https://kort.eksempel.dk/app/min-database/?config=/api/v2/configuration/min-database/konfigurations-id.json
+```json
+{
+  "title": "Friluftskort for Silkeborg",
+  "brandName": "Friluftskort",
+  "aboutBox": "<p>Fredninger, udsigtspunkter og Natura 2000-områder i Silkeborg Kommune.</p><p>Data: Danmarks Miljøportal.</p>",
+  "startUpModal": "<p>Klik på et udsigtspunkt for at se, hvad der er at se.</p>",
+
+  "schemata": ["natur.fredede_omraader", "tag:friluftsliv"],
+  "activeLayers": ["natur.fredede_omraader", "v:natur.udsigtspunkter"],
+  "initZoomCenter": "/12/9.57/56.165",
+
+  "openLayerTreeGroups": ["Beskyttet natur"],
+  "showLayerGroupCheckbox": true,
+  "layerTreeFilterPlaceholder": "Find et lag",
+
+  "enabledSearch": "danish",
+  "searchConfig": {
+    "komkode": ["740"],
+    "placeholderText": "Søg efter adresse i Silkeborg Kommune"
+  },
+
+  "enabledExtensions": ["coordinates", "streetView"],
+  "extensionConfig": {
+    "coordinates": { "default": "utm", "lockUtmZoneTo": 32 }
+  },
+  "enabledPrints": ["print"],
+
+  "featureInfoTableOnMap": true,
+  "popupDraggable": true,
+  "cssFiles": ["natur.css"]
+}
 ```
 
-Vidi prioriterer:
+- **Tekster:** titel i fanebladet, navn i topbjælken, en tekst under **Om** og en velkomstbesked.
+- **Indhold:** laget med fredede områder og alle lag med tagget `friluftsliv`. Fredningerne er tændt som almindeligt lag og udsigtspunkterne som vektorlag, og kortet starter over Silkeborg.
+- **Lagtræ:** gruppen "Beskyttet natur" er foldet ud, grupperne har flueben, og søgefeltet over lagene har sin egen tekst.
+- **Søgning og værktøjer:** adressesøgning i Silkeborg Kommune, koordinater i UTM og skrå- og gadefoto. **Log ind** vises ikke, fordi `session` ikke er med.
+- **Klik-info og udseende:** klikker brugeren på en fredning, vises resultatet i en boks i kortet, der kan trækkes. Udsigtspunkterne er et vektorlag og har deres egen boks, se [Klik-info](/gc2/konfigurationer/alle-indstillinger#klik-info). Topbjælken er grøn med [`natur.css`](/gc2/konfigurationer/alle-indstillinger#cssfiles).
 
-1. `config` i URL'en
-2. automatisk konfiguration, hvis installationen bruger `autoLoadingConfig`
-3. installationens `defaultConfig`
-4. indbyggede standardværdier
+<figure class="centered-figure">
+  <img src={friluftskortGif} alt="Vidi med konfigurationen Friluftskort for Silkeborg og en grøn topbjælke. Der klikkes på en fredning, kortet zoomer ind, og en boks med fredningens oplysninger åbnes. Boksen trækkes til side, og Tilbage viser resultatet som en tabel" style={{ width: '100%' }} />
+  <figcaption>Konfigurationen i Vidi. Et klik på en fredning åbner en boks, der kan trækkes. <MenuPath items="Tilbage" /> viser resultatet som en tabel.</figcaption>
+</figure>
 
-Vidi kopierer kun kendte top-level-indstillinger fra det hentede dokument. Stavefejl og ukendte navne kan derfor blive ignoreret uden en synlig fejl.
+Alle indstillingerne er beskrevet under [Alle indstillinger](/gc2/konfigurationer/alle-indstillinger).
 
-## Dokumentationens rækkefølge
+:::caution[Ukendte indstillinger ignoreres]
+Vidi bruger kun de indstillinger, den kender. Staver du en indstilling forkert, ignoreres den uden en fejl. Formatet kontrolleres også kun som JSON, ikke om værdierne giver mening.
+:::
 
-1. [Opret, udgiv og test](/gc2/konfigurationer/opret-udgiv-og-test)
-2. [Vælg data, lag og baggrundskort](/gc2/konfigurationer/data-lag-og-baggrundskort)
-3. [Konfigurer søgning, funktioner og udseende](/gc2/konfigurationer/soegning-funktioner-og-udseende)
-4. [Slå alle indstillinger op](/gc2/konfigurationer/alle-indstillinger)
+## Udgiv
 
-Start med få indstillinger, og test én ny funktion ad gangen.
+En udgivet konfiguration kan hentes af alle uden login. En konfiguration uden flueben i **Udgivet** kan kun hentes af den bruger, der har oprettet den, og kun når brugeren er logget ind. I listen har den et ikon, der viser, at den ikke er udgivet.
+
+Skriv derfor aldrig adgangskoder, API-nøgler eller andre hemmeligheder i en konfiguration.
+
+Udgivelsen styrer kun, hvem der kan hente konfigurationen. Hvilke lag brugerne kan se, styres af lagenes [Authentication og privilegier](/gc2/skemaindstillinger/database/privilegier-og-authentication).
+
+## Åbn i Vidi
+
+I listen under <MenuPath items="Konfigurationer" /> klikker du på en konfiguration for at se dens link og knapper:
+
+<figure class="centered-figure">
+  <img src={knapperSvg} alt="Konfigurationen Friluftskort for Silkeborg er foldet ud og viser linket og knapperne Vidi, Kopier link, Ændre og Slet, som er markeret" style={{ width: '100%' }} />
+  <figcaption>Knapperne ved en konfiguration.</figcaption>
+</figure>
+
+
+| Knap | Virkning |
+|---|---|
+| <MenuPath items="Vidi" /> | Åbner kortet i Vidi med konfigurationen. |
+| <MenuPath items="Kopier link" /> | Kopierer adressen på konfigurationens JSON. |
+| <MenuPath items="Ændre" /> | Åbner konfigurationen, så du kan rette den. |
+| <MenuPath items="Slet" /> | Sletter konfigurationen. |
+
+Adressen til kortet har konfigurationens adresse i parameteren `config`:
+
+```text
+https://kort.example.dk/app/<database>/?config=/api/v2/configuration/<database>/<id>.json
+```
+
+Det er den adresse, brugerne skal have, og som du f.eks. linker til fra en hjemmeside.
+
+### Når konfigurationen ikke kan hentes
+
+Kan Vidi ikke hente konfigurationen, åbner kortet med Vidis standardindstillinger. Fanebladet hedder så "MapCentia Vidi", og der er ingen lag. Typiske årsager:
+
+- Konfigurationen er ikke udgivet, og du er ikke logget ind som den, der har oprettet den.
+- Adressen peger på en forkert database eller et forkert id.
+
+Åbn adressen i et privat browservindue for at se kortet, som en bruger uden login ser det.
+
+## Genbrug indstillinger med `$ref`
+
+Flere konfigurationer kan dele de samme indstillinger, f.eks. baggrundskort. Læg dem i én konfiguration, og henvis til dem med `$ref`:
+
+```json
+{
+  "schemata": ["natur"],
+  "baseLayers": {
+    "$ref": "https://gc2.example.dk/api/v2/configuration/demo/faelles_baggrundskort.json#/baseLayers"
+  }
+}
+```
+
+Vidi-serveren henter den anden konfiguration og sætter dens `baseLayers` ind. Den anden konfiguration skal være udgivet, hvis brugere uden login skal kunne åbne kortet.
+
+## Konfigurationer som filer
+
+En installation kan også hente konfigurationer som JSON-filer fra en mappe, f.eks. et repository på GitHub. Mappen er sat med `configUrl` i serverkonfigurationen, se [Filer fra configUrl](/gc2/serverkonfiguration#filer-fra-configurl), og kortet åbnes med filnavnet:
+
+```text
+https://kort.example.dk/app/<database>/?config=natur.json
+```
+
+Filerne kan læses af alle, ligesom en udgivet konfiguration. Ligger de i et offentligt repository, kan hele historikken også læses. Skriv derfor heller aldrig hemmeligheder i dem.
+
+## Ret en konfiguration
+
+Klik på <MenuPath items="Ændre" />, ret JSON, og klik på <MenuPath items="Gem" />. Adressen er den samme, så brugerne får ændringen, næste gang de åbner kortet.
+
+:::tip[Gem en kopi først]
+Kopiér den fungerende JSON til en fil, før du laver større ændringer. Så kan du hurtigt sætte den tilbage, hvis noget går galt.
+:::

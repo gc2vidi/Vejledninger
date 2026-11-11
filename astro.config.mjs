@@ -213,10 +213,7 @@ export default defineConfig({
               collapsed: true,
               items: [
                 { label: "Introduktion", link: "/gc2/konfigurationer" },
-                { label: "Opret, udgiv og test", link: "/gc2/konfigurationer/opret-udgiv-og-test" },
-                { label: "Data, lag og baggrundskort", link: "/gc2/konfigurationer/data-lag-og-baggrundskort" },
-                { label: "Søgning, funktioner og udseende", link: "/gc2/konfigurationer/soegning-funktioner-og-udseende" },
-                { label: "Alle indstillinger i en Vidi-konfiguration", link: "/gc2/konfigurationer/alle-indstillinger" },
+                { label: "Alle indstillinger", link: "/gc2/konfigurationer/alle-indstillinger" },
               ],
             },
             {

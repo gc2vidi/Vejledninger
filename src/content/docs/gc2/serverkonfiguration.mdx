@@ -36,7 +36,7 @@ Nogle indstillinger gælder kun for de databaser, der står i listen, f.eks. `["
 | `gc2scheduler` | Viser fanen **Scheduler**. | [Scheduler](/gc2/skemaindstillinger/scheduler) |
 | `esIndexingInGui` | Tillader indeksering i Elasticsearch fra administrationsmodulet. | |
 | `reverseLayerOrder` | Vender lagenes rækkefølge, så et lavt **Sort id** ligger øverst. Gælder også i Vidi. | [Lagets grundindstillinger](/gc2/skemaindstillinger/database/lagets-grundindstillinger) |
-| `defaultPrimaryKey` | Bruger denne kolonne som nøgle for alle lag, også tabeller med en anden primærnøgle. | [Views og eksterne kilder](/gc2/skemaindstillinger/database/opret-og-importer-lag#views-og-eksterne-kilder) |
+| `defaultPrimaryKey` | Bruger denne kolonne som nøgle for alle lag, også tabeller med en anden primærnøgle. | [Database view](/gc2/skemaindstillinger/database/opret-og-importer-lag#database-view) |
 | `epsg` og `encoding` | Standardværdierne for koordinatsystem og tegnsæt ved import. Uden dem er det `4326` og `UTF8`. | [Opret og importer lag](/gc2/skemaindstillinger/database/opret-og-importer-lag) |
 | `colorPalette` | Farverne i administrationsmodulets farvevælger, som en liste af hex-koder uden `#`, f.eks. `["2E7D32", "1565C0"]`. | [Klasser, symboler og labels](/gc2/skemaindstillinger/kort/klasser-symboler-og-labels) |
 | `baseLayers` og `mapAttribution` | Baggrundskortene og kildeangivelsen i administrationsmodulets kort. | |
@@ -66,11 +66,34 @@ Filen har to dele:
 | `extensions.browser` og `extensions.server` | De udvidelser, der bygges med i Vidi. En udvidelse skal stå her, før den kan slås til med [`enabledExtensions`](/gc2/konfigurationer/alle-indstillinger#enabledextensions). |
 | `searchModules` | De søgemoduler, der bygges med, f.eks. `danish`. |
 | `print.templates` | Printskabelonerne og deres papirformater. Printskabelonen skal stå her, før den kan slås til med `enabledPrints`. |
-| `configUrl`, `autoLoadingConfig` og `defaultConfig` | Hvor Vidi henter filbaserede konfigurationer, og hvilken konfiguration der bruges, når URL'en ikke angiver en. |
+| `configUrl` | Adressen på den mappe, Vidi henter konfigurationer, CSS-filer og skabeloner fra, se [Filer fra configUrl](#filer-fra-configurl). |
+| `autoLoadingConfig` og `defaultConfig` | Hvilken konfiguration der bruges, når URL'en ikke angiver en. |
 | `configSwitcher` | Viser en liste over konfigurationer, når Vidi åbnes uden skema, konfiguration eller andet i adressen. |
 
 Vidis port sættes med miljøvariablen `PORT`. Standard er 3000.
 
 :::note[Genstart eller nyt build]
 Vidi læser `config.js`, når serveren starter, så en ændring kræver en genstart. Ændrer du `extensions`, `searchModules` eller `print.templates`, skal Vidi også bygges igen, fordi de indgår i den kode, browseren henter. Står en udvidelse i `enabledExtensions` uden at være bygget med, starter den ikke, selv om Vidi-konfigurationen er korrekt.
+:::
+
+### Filer fra `configUrl`
+
+`configUrl` peger på en mappe med konfigurationer, CSS-filer og skabeloner, som Vidi henter ved filnavn:
+
+```js
+configUrl: "https://config.example.dk/vidi",
+```
+
+```text
+vidi/
+├── friluftskort.json    → ?config=friluftskort.json
+└── natur.css            → "cssFiles": ["natur.css"]
+```
+
+Vidi-serveren henter filerne, så mappen skal kunne nås fra serveren uden login. Filerne hentes, hver gang et kort åbnes, så en ændring kræver ikke en genstart. Alle, der kender adressen, kan læse filerne, så skriv aldrig hemmeligheder i dem.
+
+:::tip[Hvor kan mappen ligge?]
+- **Et repository, der er udgivet som hjemmeside**, f.eks. `https://<organisation>.github.io/vidi-config`. Ændringer kan følges og rulles tilbage.
+- **En mappe på en webserver**, f.eks. `https://config.example.dk/vidi`.
+- **En mappe i Vidi selv** under `public/`, f.eks. `public/configs` med `configUrl: "https://kort.example.dk/configs"`, hvor `kort.example.dk` er Vidis egen adresse. Filerne skal så med i installationen, og en ændring kræver, at de lægges ind igen.
 :::

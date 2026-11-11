@@ -1,484 +1,515 @@
 ---
-title: Alle indstillinger i en Vidi-konfiguration
-description: Komplet opslagsværk med standardværdier, eksempler og kendte samspil
+title: Alle indstillinger
+description: Alle indstillinger i en Vidi-konfiguration med standardværdi og eksempel
 ---
 
-Denne side følger allow-listen i `vidi/browser/modules/init.js` i det medfølgende Vidi-repository. Når Vidi henter JSON, kopieres kun top-level-navne fra denne liste. En installation kan være en anden version eller have lokale ændringer.
+Her er alle de indstillinger, en Vidi-konfiguration kan have. Eksemplerne er fra et naturkort over Silkeborg med lag i skemaet `natur`. Hvordan du opretter og udgiver en konfiguration, står under [Konfigurationer](/gc2/konfigurationer).
 
-:::caution[Ukendte indstillinger ignoreres]
-En stavefejl giver ikke nødvendigvis en synlig fejl. Kontrollér navn, datatype og den konkrete installation.
+:::caution[Kun kendte indstillinger bruges]
+Vidi bruger kun indstillingerne på denne side. En stavefejl i et navn ignoreres uden en fejl.
 :::
 
-## Alfabetisk indeks
+## Hvad går forud
 
-`activateMainTab` · `activeLayers` · `advancedBaseLayerSwitcher` · `aboutBox` · `autoPanPopup` · `autoUpdate` · `baseLayerGroups` · `baseLayers` · `baselayerDrawer` · `brandName` · `configSwitcher` · `crossMultiSelect` · `crs` · `cssFiles` · `dateFormats` · `doNotCloseLoadScreen` · `dontUseAdvancedBaseLayerSwitcher` · `editorAlwaysActivated` · `emptyInfoCallback` · `enabledExtensions` · `enabledPrints` · `enabledSearch` · `expandFirstInLayerTree` · `extensionConfig` · `featureInfoTableOnMap` · `forceOffCanvasInfo` · `infoCallback` · `infoClickCursorStyle` · `initFunction` · `initZoomCenter` · `layerTreeFilterPlaceholder` · `loadingTimeout` · `loadCheckingInterval` · `maxZoom` · `minZoom` · `mode` · `openLayerTreeGroups` · `popupDraggable` · `removeDisabledLayersFromLegend` · `schemata` · `searchConfig` · `showLayerGroupCheckbox` · `showOffcanvas` · `singleTiled` · `snapshot` · `startUpModal` · `startupModalSupressionTemplates` · `statelessDraw` · `template` · `theme` · `title` · `vectorTable` · `wmsUriReplace`
+En indstilling kan komme fra flere steder. Vidi bruger dem i denne rækkefølge, hvor det sidste går forud:
 
-## Sådan læses posterne
+1. **Vidis egne standardværdier**, som står ved hver indstilling på denne side.
+2. **Installationens `config.js`**, se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs).
+3. **Konfigurationen.** En indstilling i konfigurationen erstatter hele værdien fra `config.js`, også i lister og objekter. En `searchConfig` eller `extensionConfig` skal derfor indeholde alle de undernøgler, kortet skal bruge.
 
-**Type og standard** kommer fra Vidi-kildens `defaults`. **Eksempel** viser JSON, når værdien kan gemmes i GC2. **Samspil** fremhæver typiske afhængigheder og overstyringer.
+Enkelte indstillinger kan selv blive overstyret, eller de overstyrer noget andet end `config.js`:
 
-## Data og opstart
+| Indstilling | Hvad sker der |
+|---|---|
+| [`activeLayers`](#activelayers) | Lag, der er tændt i et link, tændes oven i. Et gemt projekt erstatter dem. |
+| [`initZoomCenter`](#initzoomcenter) | Går forud for udsnittet i et link, i et gemt projekt og for skemaets udstrækning i GC2. |
+| [`snapshot`](#snapshot) | Et projekt i adressen (`?state=`) går forud. |
+| [`template`](#template) | En skabelon i adressen (`?tmpl=`) går forud. |
+| [`theme`](#theme) | Brugerens valg med temaknappen går forud. |
+| [`cssFiles`](#cssfiles) | Går forud for Vidis egen CSS efter de almindelige CSS-regler. |
+| [`crossMultiSelect`](#crossmultiselect) | Er altid slået til i indlejrede kort. |
+| [`featureInfoTableOnMap`, `forceOffCanvasInfo`](#featureinfotableonmap-og-forceoffcanvasinfo) og [`popupDraggable`](#autopanpopup-og-popupdraggable) | Virker ikke ved klik på vektorlag, se [Klik-info](#klik-info). |
+
+## Indhold og start
 
 ### `schemata`
 
-**Formål:** Indlæser skemaer, enkelte lag eller tags. **Type og standard:** array, `[]`.
+Skemaer, enkelte lag og tags, som kortet skal vise i lagtræet. Standard er `[]`.
 
 ```json
-{ "schemata": ["plan", "miljoe.natur", "tag:borgerkort"] }
+{ "schemata": ["natur"] }
 ```
 
-**Samspil:** GC2-rettigheder gælder stadig. Brug stabile tag- og lagnavne.
+Et element kan være et skema (`natur`), et enkelt lag (`natur.udsigtspunkter`) eller et tag (`tag:friluftsliv`). Brugerne ser kun de lag, de har adgang til efter lagenes [Authentication og privilegier](/gc2/skemaindstillinger/database/privilegier-og-authentication).
 
 ### `activeLayers`
 
-**Formål:** Tænder lag efter opstart. **Type og standard:** array, `[]`.
+Lag, der er tændt, når kortet åbner. Standard er `[]`.
 
 ```json
-{ "activeLayers": ["v:plan.lokalplan", "mvt:trafik.vejarbejde"] }
+{ "activeLayers": ["natur.beskyttede_naturtyper", "v:natur.fredede_omraader"] }
 ```
 
-**Samspil:** Laget skal være indlæst og tilgængeligt. Projekt, snapshot eller URL-state kan overstyre.
+Lagnavnet kan have et præfiks, der bestemmer lagtypen. Uden præfiks tændes laget som tile-lag. Typen skal være valgt under lagets [Layer type](/gc2/skemaindstillinger/database/meta#layer-type).
 
-### `snapshot`
+| Præfiks | Lagtype |
+|---|---|
+| Intet eller `t:` | Tile-lag |
+| `v:` | Vektorlag |
+| `mvt:` | Vektortiles |
 
-**Formål:** Indlæser en gemt state snapshot. **Type og standard:** string eller `null`, `null`.
-
-```json
-{ "snapshot": "state_snapshot_eksempel" }
-```
-
-**Samspil:** Snapshot kan overstyre skemaer, aktive lag og korttilstand. Test også uden snapshot.
+Åbnes kortet fra et link med tændte lag, tændes linkets lag oven i lagene i `activeLayers`. Åbnes det fra et gemt projekt, bruges kun projektets lag.
 
 ### `initZoomCenter`
 
-**Formål:** Sætter startzoom og centrum. **Type og standard:** slash-opdelt string eller `null`, `null`.
+Zoomniveau og centrum, kortet starter med. Standard er `null`, hvor kortet zoomer til lagenes udstrækning.
 
 ```json
-{ "initZoomCenter": "/12/9.55/56.15" }
+{ "initZoomCenter": "/12/9.57/56.165" }
 ```
 
-**Samspil:** Formatet er `/zoom/x/y`. Det tilsidesætter normal extent-opstart, og koordinaterne skal passe til `crs`.
+Formatet er `/zoom/længdegrad/breddegrad` i WGS84. Det er de samme tal som i Vidis adresselinje. Knappen, der nulstiller udsnittet, går også hertil.
+
+`initZoomCenter` går forud for udsnittet i et link. Deler en bruger et link til et bestemt sted, åbner kortet derfor alligevel her.
+
+### `snapshot`
+
+Et gemt projekt, kortet åbner med. Standard er `null`.
+
+```json
+{ "snapshot": "state_snapshot_8f2b1c40-6c1e-11f1-9a3e-0242ac120002" }
+```
+
+Projektets id står i projektets link, se [Projekter](/vidi/vidi-menuen/projekter). Et projekt i adressen (`?state=`) går forud. Er `initZoomCenter` sat, bruges dens udsnit i stedet for projektets.
 
 ### `crs`
 
-**Formål:** Vælger kortets koordinatsystem. **Type og standard:** string, `"EPSG:3857"`.
+Kortets koordinatsystem. Standard er `"EPSG:3857"` (Web Mercator).
 
 ```json
 { "crs": "EPSG:25832" }
 ```
 
-**Samspil:** Den medfølgende kode definerer `EPSG:3857` og `EPSG:25832`. Skriv kolon i EPSG-koden.
+Vidi understøtter kun `EPSG:3857` og `EPSG:25832`. Baggrundskortene skal findes i samme koordinatsystem.
 
 ### `minZoom` og `maxZoom`
 
-**Formål:** Begrænser kortets zoomområde. **Type og standard:** number eller `null`, `null`.
+Begrænser, hvor langt brugeren kan zoome ud og ind. Standard er `null`, uden begrænsning.
 
 ```json
-{ "minZoom": 6, "maxZoom": 20 }
+{ "minZoom": 9, "maxZoom": 20 }
 ```
-
-**Samspil:** Lag og baggrundskort kan have egne grænser.
-
-### `singleTiled`
-
-**Formål:** Standardstrategi for relevante raster/WMS-lag. **Type og standard:** boolean, `true`.
-
-```json
-{ "singleTiled": false }
-```
-
-**Samspil:** Meta og lagtype kan påvirke den faktiske leveringsform. Test performance og feature-info.
-
-### `mode`
-
-**Formål:** Vidi-intern runtime-tilstand. **Type og standard:** number, `0`.
-
-```json
-{ "mode": 0 }
-```
-
-**Samspil:** Brug kun en anden værdi, når den konkrete kode eller installation dokumenterer betydningen.
-
-### `autoUpdate`
-
-**Formål:** Aktiverer Vidi-kernens automatiske opdateringsadfærd. **Type og standard:** boolean, `false`.
-
-```json
-{ "autoUpdate": true }
-```
-
-**Samspil:** Afklar brugeroplevelse, cache og netværksbelastning før aktivering.
 
 ## Baggrundskort
 
 ### `baseLayers`
 
-**Formål:** Definerer baggrundskort. **Type og standard:** array, `[]`.
+Baggrundskortene. Det første kort i listen vises, når kortet åbner. Standard er `[]`, og så bruges listen fra `config.js`.
 
 ```json
 {
   "baseLayers": [
-    {"id": "osm", "name": "OpenStreetMap"},
-    {"type": "wms", "id": "topo", "name": "Topografisk", "url": "/api/topo", "layers": ["topo"]}
+    { "id": "osm", "name": "OpenStreetMap" },
+    {
+      "type": "XYZ",
+      "id": "osm_xyz",
+      "name": "OpenStreetMap (XYZ)",
+      "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": "© OpenStreetMap"
+    },
+    {
+      "type": "wms",
+      "id": "ortofoto",
+      "name": "Ortofoto",
+      "url": "https://kort.example.dk/wms",
+      "layers": ["orto_foraar"],
+      "maxZoom": 22,
+      "maxNativeZoom": 20
+    }
   ]
 }
 ```
 
-**Samspil:** Felter varierer efter kilde. Proxy, licens og API-nøgler hører til serverdrift.
+`type` bestemmer, hvor kortet hentes fra:
+
+| `type` | Kilde |
+|---|---|
+| Ingen | Et indbygget kort, f.eks. `osm`, `dtkSkaermkort`, `dtkSkaermkortDaempet` eller `geodkBright`, eller et GC2-lag som `schema.tabel` |
+| `XYZ` | Tiles fra `url` med `{z}`, `{x}` og `{y}` |
+| `wms` | WMS fra `url` med lagene i `layers` |
+| `WMTS` | WMTS fra `url` med `layer` og `tileMatrixSet` |
+| `MVT` | Vektortiles, hvor `url` er en MapLibre-stil |
+
+Alle typer kan desuden have:
+
+| Nøgle | Betydning |
+|---|---|
+| `id` og `name` | Kortets id og navnet i listen. |
+| `minZoom`, `maxZoom` og `maxNativeZoom` | Zoomgrænser. Over `maxNativeZoom` forstørres de sidste tiles. |
+| `attribution` | Kildeangivelsen nederst i kortet. |
+| `abstract` | En beskrivelse i HTML, som vises ved kortets informationsknap. |
+| `opacity` | Gennemsigtighed fra start, 0 til 100. |
+| `inDrawer` og `thumbnail` | Viser kortet med et billede i skuffen, se [`baselayerDrawer`](#baselayerdrawer). |
+
+Mangler et kort, f.eks. fordi tjenesten er nede, skifter Vidi selv til det næste i listen.
+
+:::caution[Adgangsnøgler i adressen]
+En nøgle eller et token i `url` kan læses af alle, der kan åbne konfigurationen. Brug en tjeneste uden nøgle, eller lad Vidi-serveren hente kortet med nøglen.
+:::
 
 ### `baseLayerGroups`
 
-**Formål:** Samler baggrundskort i grupper. **Type og standard:** array, `[]`.
+Samler baggrundskort i grupper, der kan foldes ud i listen. Standard er `[]`.
 
 ```json
-{ "baseLayerGroups": [{"groupName": "Grundkort", "layers": ["osm", "topo"]}] }
+{
+  "baseLayerGroups": [
+    { "groupName": "Luftfoto", "layers": ["ortofoto", "ortofoto_2023"] }
+  ]
+}
 ```
 
-**Samspil:** Id'erne skal findes i `baseLayers`.
-
-### `advancedBaseLayerSwitcher`
-
-**Formål:** Styrer den avancerede baggrundskortvælger. **Type og standard:** object, `{"mode":3,"default":1,"active":false}`.
-
-```json
-{ "advancedBaseLayerSwitcher": {"mode": 3, "default": 1, "active": true} }
-```
-
-**Samspil:** Betydningen af mode/default skal testes mod den konkrete UI.
-
-### `dontUseAdvancedBaseLayerSwitcher`
-
-**Formål:** Deaktiverer den avancerede vælger. **Type og standard:** boolean, `false`.
-
-```json
-{ "dontUseAdvancedBaseLayerSwitcher": true }
-```
-
-**Samspil:** Kan gøre `advancedBaseLayerSwitcher` uden synlig effekt.
+`layers` er kortenes `id` fra `baseLayers`.
 
 ### `baselayerDrawer`
 
-**Formål:** Viser baggrundskort gennem drawer-layout. **Type og standard:** boolean, `false`.
+Viser en knap i kortet, der åbner en skuffe med de baggrundskort, som har `inDrawer`. Uden skuffen skifter knappen mellem de to første kort. Standard er `false`. Knappen vises kun i [indlejrede kort](/vidi/extensions/embed).
 
 ```json
 { "baselayerDrawer": true }
 ```
 
-**Samspil:** Test med valgt template, mobil og embed.
+### `advancedBaseLayerSwitcher`
 
-### `wmsUriReplace`
-
-**Formål:** Erstatter WMS-adresser efter installationens regler. **Type og standard:** string/object eller `null`, `null`.
+Lader brugeren vise to baggrundskort på én gang. Standard er `{ "mode": 3, "default": 1, "active": false }`.
 
 ```json
-{ "wmsUriReplace": null }
+{ "advancedBaseLayerSwitcher": { "mode": 2, "active": true } }
 ```
 
-**Samspil:** Formatet er installationsafhængigt. Brug ikke en gættet erstatningsregel i produktion.
+| Nøgle | Betydning |
+|---|---|
+| `mode` | `1` side om side, `2` oven på hinanden med en skyder, `3` brugeren vælger. |
+| `default` | Den visning, der vælges først, når `mode` er `3`: `1` eller `2`. |
+| `active` | `true` slår visningen af to kort til fra start. |
 
-## Søgning og udvidelser
+### `dontUseAdvancedBaseLayerSwitcher`
+
+`true` fjerner muligheden for at vise to baggrundskort på én gang. Standard er `false`.
+
+## Søgning
 
 ### `enabledSearch`
 
-**Formål:** Vælger ét søgemodul. **Type og standard:** string, `"google"`.
+Søgemodulet i søgefeltet: `danish` eller `google`. Standard er `"google"`. Modulet skal være bygget med i Vidi, se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs).
 
 ```json
 { "enabledSearch": "danish" }
 ```
 
-**Samspil:** Modulet skal være kompileret i Vidi-installationen.
-
 ### `searchConfig`
 
-**Formål:** Konfigurerer det valgte søgemodul. **Type og standard:** object, `{}`.
+Indstillinger til søgemodulet. Standard er `{}`.
 
 ```json
 {
   "searchConfig": {
-    "komkode": ["851"], "advanced": true, "size": 10,
-    "esrSearchActive": true, "sfeSearchActive": true,
-    "placeholderText": "Søg efter adresse eller matrikel"
+    "komkode": ["740"],
+    "placeholderText": "Søg efter adresse eller matrikel i Silkeborg Kommune",
+    "size": 10
   }
 }
 ```
 
-**Samspil:** Google kan bruge `google.apiKey`, men offentligt JSON er ikke en sikker secret-store. Felter er modulspecifikke.
+For den danske søgning:
+
+| Nøgle | Betydning |
+|---|---|
+| `komkode` | Kommunekoder, som søgningen begrænses til, f.eks. `["740"]`. `"*"` søger i hele landet. |
+| `placeholderText` | Teksten i det tomme søgefelt. |
+| `size` | Antal resultater. Standard er 10. |
+| `esrSearchActive` og `sfeSearchActive` | Søgning på ejendomsnummer og SFE-nummer. Standard er `false`. |
+| `advanced` | Lader brugeren beholde flere resultater som tegninger i kortet. Standard er `false`. |
+
+Google-søgningen bruger `google.apiKey`. Nøglen kan læses af alle, så begræns den til jeres domæne hos Google.
+
+## Udvidelser og print
 
 ### `enabledExtensions`
 
-**Formål:** Aktiverer allerede kompilerede udvidelser. **Type og standard:** array, `[]`.
+Udvidelser, der er slået til i kortet. Standard er `[]`. En udvidelse skal også være bygget med i Vidi, se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs).
 
 ```json
-{ "enabledExtensions": ["session", "editor", "coordinates"] }
+{ "enabledExtensions": ["coordinates", "conflictSearch", "streetView", "session", "editor"] }
 ```
 
-**Samspil:** Browserkonsollen advarer, hvis en ønsket udvidelse ikke blev kompileret.
+Udvidelserne er beskrevet under [Udvidelser](/vidi/extensions/oversigt). `session` viser knappen **Log ind**, og `editor` gør det muligt at [redigere lag](/gc2/skemaindstillinger/database/editerbare-lag).
 
 ### `extensionConfig`
 
-**Formål:** Samler udvidelsers runtime-indstillinger. **Type og standard:** object, `{}`.
+Indstillinger til udvidelserne, med én nøgle pr. udvidelse. Standard er `{}`.
 
 ```json
 {
   "extensionConfig": {
-    "coordinates": {"lockUtmZoneTo": 32, "default": "utm"},
-    "streetView": {"mapillary": "https://example.invalid/{y}/{x}", "default": "mapillary"},
-    "editor": {"tooltip": true, "repeatMode": false, "defaultValues": {"status": "kladde"}},
-    "symbols": {"files": [{"file": "symboler.json", "title": "Symboler"}], "stateless": false},
-    "session": {"autoLogin": false, "autoLoginMaxAge": 86400},
-    "embed": {"useAltLayerTree": false}
+    "coordinates": { "default": "utm", "lockUtmZoneTo": 32 },
+    "conflictSearch": { "startBuffer": 40 }
   }
 }
 ```
 
-**Samspil:** Udvidelser kan have flere versionsafhængige felter. Kildekoden viser også konfiguration for `conflictSearch`, `directions`, `languages` og `offlineMap`; kontrollér deres konkrete modul før brug.
-
-## Identitet, layout og navigation
-
-### `title`, `brandName`, `aboutBox` og `startUpModal`
-
-**Formål:** Titel, brand og informationsindhold. **Standard:** `title` er `"MapCentia Vidi"`; de øvrige er tomme strings.
-
-```json
-{
-  "title": "Plankort",
-  "brandName": "Eksempel Kommune",
-  "aboutBox": "<p>Om kortet</p>",
-  "startUpModal": "<p>Velkommen</p>"
-}
-```
-
-**Samspil:** HTML skal være betroet. Cookie/adfærd kan påvirke om startmodalen vises igen.
-
-### `startupModalSupressionTemplates`
-
-**Formål:** Skjuler startmodalen for bestemte templates. **Type og standard:** array, `[]`.
-
-```json
-{
-  "startupModalSupressionTemplates": [
-    "print.tmpl",
-    {"regularExpression": true, "name": "print_[\\w]+\\.tmpl"}
-  ]
-}
-```
-
-**Samspil:** Navnet er stavet `Supression` i kilden og skal bruges sådan.
-
-### `template`
-
-**Formål:** Vælger overordnet Vidi-layout. **Type og standard:** string, `"default.tmpl"`.
-
-```json
-{ "template": "default.tmpl" }
-```
-
-**Samspil:** Layouttemplates bruger Mustache. Feature-/felttemplates bruger Handlebars.
-
-### `theme`
-
-**Formål:** Vælger tema. **Type og standard:** string, `"light"`.
-
-```json
-{ "theme": "light" }
-```
-
-**Samspil:** Temaer skal findes i installationen og testes med custom CSS.
-
-### `cssFiles`
-
-**Formål:** Indlæser ekstra CSS-filer gennem Vidis CSS-proxy. **Type og standard:** array af filnavne, `[]`.
-
-```json
-{ "cssFiles": ["kommunekort.css"] }
-```
-
-**Samspil:** Vidi henter hvert navn som `/api/css/<database>/<filnavn>`. Filen skal derfor ligge, hvor installationens CSS-controller forventer den; det er ikke en vilkårlig ekstern URL. CSS kan bryde templates og mobilvisning.
-
-### `activateMainTab`
-
-**Formål:** Vælger hovedfane ved start. **Type og standard:** string, `"layer"`.
-
-```json
-{ "activateMainTab": "legend" }
-```
-
-**Samspil:** Fanen skal findes i den valgte template og installation.
-
-### `showOffcanvas` og `forceOffCanvasInfo`
-
-**Formål:** Viser offcanvas og kan tvinge info dertil. **Type og standard:** boolean, begge `false`.
-
-```json
-{ "showOffcanvas": true, "forceOffCanvasInfo": true }
-```
-
-**Samspil:** Test sammen med `featureInfoTableOnMap`, template, mobil og embed.
-
-### `expandFirstInLayerTree`, `openLayerTreeGroups` og `showLayerGroupCheckbox`
-
-**Formål:** Styrer lagtræets starttilstand. **Standard:** `false`, `[]`, `false`.
-
-```json
-{
-  "expandFirstInLayerTree": true,
-  "openLayerTreeGroups": ["Plan"],
-  "showLayerGroupCheckbox": true
-}
-```
-
-**Samspil:** Gruppenavne skal matche GC2. Gemte states kan ændre den synlige tilstand.
-
-### `layerTreeFilterPlaceholder`
-
-**Formål:** Hjælpetekst i lagtræets filter. **Type og standard:** string eller `null`, `null`.
-
-```json
-{ "layerTreeFilterPlaceholder": "Filtrér lag" }
-```
-
-### `removeDisabledLayersFromLegend`
-
-**Formål:** Fjerner slukkede lag fra signaturen. **Type og standard:** boolean, `false`.
-
-```json
-{ "removeDisabledLayersFromLegend": true }
-```
-
-### `configSwitcher`
-
-**Formål:** Konfigurationsskifter, kommenteret som build-time-brug, men stadig allow-listet. **Type og standard:** boolean, `false`.
-
-```json
-{ "configSwitcher": false }
-```
-
-**Samspil:** Betragt den som installationsfunktion; aktiver ikke uden lokal validering.
-
-## Feature-info og popup
-
-### `autoPanPopup`, `crossMultiSelect`, `featureInfoTableOnMap` og `popupDraggable`
-
-**Formål:** Styrer popup-position, valg og feature-info-visning. **Standard:** alle `false`.
-
-```json
-{
-  "autoPanPopup": true,
-  "crossMultiSelect": false,
-  "featureInfoTableOnMap": true,
-  "popupDraggable": true
-}
-```
-
-**Samspil:** Embed og offcanvas kan overstyre eller ændre den praktiske oplevelse.
-
-### `infoClickCursorStyle`
-
-**Formål:** CSS-cursor ved infoforespørgsel. **Type og standard:** string, `"crosshair"`.
-
-```json
-{ "infoClickCursorStyle": "pointer" }
-```
-
-### `dateFormats`
-
-**Formål:** Navngivne datoformater til Handlebars-helperen `formatDate`. **Type og standard:** object, `{}`.
-
-```json
-{ "dateFormats": {"kortDato": "DD-MM-YYYY", "datoTid": "DD-MM-YYYY HH:mm"} }
-```
-
-### `emptyInfoCallback` og `infoCallback`
-
-**Formål:** Developer-callbacks ved tomt eller eksisterende inforesultat. **Type og standard:** function eller `null`, `null`.
-
-```json
-{ "emptyInfoCallback": null, "infoCallback": null }
-```
-
-**Samspil:** Funktioner kan ikke gemmes som funktioner i almindelig JSON. Implementér dem i betroet frontend/buildkode.
-
-## Print og tabeller
+| Udvidelse | Nøgler |
+|---|---|
+| `coordinates` | `default`: koordinatformatet fra start, `dd`, `dms` eller `utm`. `lockUtmZoneTo`: fast UTM-zone, f.eks. `32`. |
+| `conflictSearch` | `startBuffer`: bufferen i meter fra start. `searchString`: ekstra skemaer, der søges i. `searchLoadedLayers`: `false` søger kun i `searchString`. `getProperty`: søger med hele ejendommen, dvs. alle ejendommens matrikler, i stedet for adressen eller den enkelte matrikel. `getParcelFromAddress`: søger ved adressesøgning med den matrikel, adressen ligger på. |
+| `editor` | `alwaysActivate`: `false` skjuler redigeringen, til brugeren er logget ind. `addOnStart`: et lag (`schema.tabel`), hvor tilføj-tilstanden åbner fra start. `repeatMode`: starter et nyt objekt efter hver gem. `defaultValues`: standardværdier pr. felt. `tooltip`: hjælpetekst i HTML. |
+| `streetView` | `default`: den tjeneste, der vælges først. `cowi` og `mapillary`: adresser til tjenesterne. |
+| `symbols` | `files`: de symbolfiler, brugeren kan vælge imellem. |
 
 ### `enabledPrints`
 
-**Formål:** Vælger serverdefinerede printdefinitioner. **Type og standard:** array, `[]`.
+Printskabeloner, brugeren kan vælge imellem. Standard er `[]`. Skabelonerne skal findes i installationens `config.js`, se [Serverkonfiguration](/gc2/serverkonfiguration#vidis-configjs). `print` er den indbyggede skabelon.
 
 ```json
 { "enabledPrints": ["print"] }
 ```
 
-**Samspil:** Navnet skal findes under serverens `print.templates`.
+## Udseende
+
+### `title`, `brandName` og `aboutBox`
+
+```json
+{
+  "title": "Natur i Silkeborg",
+  "brandName": "Demo",
+  "aboutBox": "<p>Demokort til GC2/Vidi-vejledningerne.</p>"
+}
+```
+
+| Indstilling | Vises | Standard |
+|---|---|---|
+| `title` | I browserens faneblad | `"MapCentia Vidi"` |
+| `brandName` | Øverst til venstre i Vidi. Må indeholde HTML, f.eks. et logo. | Tom |
+| `aboutBox` | I vinduet **Om** som HTML | Tom |
+
+### `theme`
+
+Lyst eller mørkt tema: `light` eller `dark`. Standard er `"light"`.
+
+```json
+{ "theme": "dark" }
+```
+
+I standardskabelonen har brugeren en knap til at skifte tema, og der bestemmer brugerens eget valg eller computerens indstilling temaet. `theme` har derfor kun virkning i skabeloner uden knappen, f.eks. i [indlejrede kort](/vidi/extensions/embed).
+
+### `startUpModal`
+
+En velkomstbesked i HTML, der vises, når kortet åbner. Standard er tom.
+
+```json
+{ "startUpModal": "<p>Velkommen til naturkortet. Klik på et område for at se, hvilken beskyttelse der gælder.</p>" }
+```
+
+Brugeren kan vælge ikke at se beskeden igen. Ændrer du teksten, vises den igen for alle.
+
+### `template`
+
+Den skabelon, Vidi vises med. Standard er `"default.tmpl"`. `embed.tmpl` bruges til [indlejrede kort](/vidi/extensions/embed), og `print.tmpl` til print. En skabelon i adressen (`?tmpl=`) går forud.
+
+### `startupModalSupressionTemplates`
+
+Skabeloner, hvor velkomstbeskeden ikke vises, når skabelonen står i adressen. Standard er `[]`.
+
+```json
+{ "startupModalSupressionTemplates": ["embed.tmpl", "print.tmpl"] }
+```
+
+### `cssFiles`
+
+Ekstra CSS-filer, der ændrer Vidis udseende, f.eks. farver. Standard er `[]`. Filerne ligger i den mappe, installationens `configUrl` peger på, se [Filer fra configUrl](/gc2/serverkonfiguration#filer-fra-configurl). Det er derfor den, der driver installationen, der lægger dem op.
+
+```json
+{ "cssFiles": ["natur.css"] }
+```
+
+Denne `natur.css` giver topbjælken en grøn farve med hvid tekst og mørkegrønne knapper:
+
+```css
+/* Grøn topbjælke med hvid tekst og mørkegrønne knapper */
+.main-navbar {
+    background-color: #2E7D32 !important;
+}
+
+.main-navbar .navbar-brand {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.main-navbar .btn-primary {
+    --bs-btn-bg: #1B5E20;
+    --bs-btn-border-color: #1B5E20;
+    --bs-btn-hover-bg: #14451A;
+    --bs-btn-hover-border-color: #14451A;
+    --bs-btn-active-bg: #14451A;
+    --bs-btn-active-border-color: #14451A;
+}
+```
+
+Filerne indlæses efter Vidis egen CSS. En regel i din fil går derfor forud for en regel i Vidi, der rammer det samme lige så præcist. Vidi bruger Bootstrap 5.3, og nogle af Bootstraps hjælpeklasser har `!important`. Topbjælken har f.eks. klassen `bg-body-tertiary`, og derfor skal baggrundsfarven i eksemplet have `!important` for at slå igennem.
+
+Knappernes farver ændres nemmest med Bootstraps variabler som `--bs-btn-bg`. Find klasserne på det, du vil ændre, med browserens udviklerværktøjer (<Key items="F12" />).
+
+## Menu og lagtræ
+
+### `activateMainTab`
+
+Den fane i menuen, der er valgt, når kortet åbner. Standard er `"layer"`.
+
+```json
+{ "activateMainTab": "search" }
+```
+
+Værdierne er `layer` (lag), `info`, `search` (søgning), `baselayer` (baggrundskort), `legend` (signaturforklaring), `draw` (tegning), `state-snapshots` (projekter) og `print`. Udvidelser har deres egen, f.eks. `conflict`.
+
+### `showOffcanvas`
+
+`true` åbner menuen, når kortet åbner. `"mobile"` åbner den kun på store skærme. Standard er `false`.
+
+### `expandFirstInLayerTree` og `openLayerTreeGroups`
+
+Grupper i lagtræet, der er foldet ud, når kortet åbner. `expandFirstInLayerTree` folder den første gruppe ud, og `openLayerTreeGroups` folder de nævnte grupper ud. Standard er `false` og `[]`.
+
+```json
+{ "openLayerTreeGroups": ["Beskyttet natur"] }
+```
+
+### `showLayerGroupCheckbox`
+
+`true` giver grupperne i lagtræet et flueben, der tænder og slukker alle lag i gruppen. Standard er `false`.
+
+### `layerTreeFilterPlaceholder`
+
+Teksten i det tomme søgefelt over lagtræet. Standard er "Filter".
+
+```json
+{ "layerTreeFilterPlaceholder": "Find et lag" }
+```
+
+### `removeDisabledLayersFromLegend`
+
+`true` viser kun de tændte lag i signaturforklaringen. Standard er `false`.
+
+## Klik-info
+
+Når brugeren klikker i kortet, vises resultatet som standard i menuen under **Info**.
+
+:::note[Vektorlag har deres egen boks]
+Klikker brugeren på et objekt i et vektorlag (`v:` i [`activeLayers`](#activelayers)), vises det altid i en boks ved objektet. `featureInfoTableOnMap`, `forceOffCanvasInfo` og `popupDraggable` virker kun ved klik på almindelige lag og kun, når `crossMultiSelect` er slået fra.
+:::
+
+### `crossMultiSelect`
+
+`true` viser alle objekter, klikket rammer, på tværs af lag i én liste med en overskrift pr. objekt. Standard er `false`. Overskrifterne kan sættes under [Accordion summery](/gc2/skemaindstillinger/database/meta#accordion-summery). I [indlejrede kort](/vidi/extensions/embed) er den altid slået til, medmindre `featureInfoTableOnMap` eller `forceOffCanvasInfo` er sat.
+
+### `featureInfoTableOnMap` og `forceOffCanvasInfo`
+
+Viser resultatet et andet sted end under **Info**. Standard er `false`.
+
+| Indstilling | Resultatet vises |
+|---|---|
+| `featureInfoTableOnMap` | I en boks i kortet ved klikket |
+| `forceOffCanvasInfo` | I et panel i siden af kortet |
+
+Er begge sat, bruges `forceOffCanvasInfo`.
+
+### `autoPanPopup` og `popupDraggable`
+
+`autoPanPopup` flytter kortet, så hele info-boksen kan ses. `popupDraggable` lader brugeren trække boksen væk fra klikket. Standard er `false`.
+
+```json
+{ "autoPanPopup": true, "popupDraggable": true }
+```
+
+### `infoClickCursorStyle`
+
+Musemarkøren, når klik-info er aktivt: `crosshair` eller `pointer`. Standard er `"crosshair"`.
 
 ### `vectorTable`
 
-**Formål:** Placering og størrelse for vektortabellen. **Type og standard:** object, `{"position":"right","width":"30%","height":"250px"}`.
+Placering og størrelse af tabellen ved siden af kortet for lag med **Show table** under [Meta](/gc2/skemaindstillinger/database/meta#vector-settings). Standard er `{ "position": "right", "width": "30%", "height": "250px" }`.
 
 ```json
-{ "vectorTable": {"position": "bottom", "width": "100%", "height": "250px"} }
+{ "vectorTable": { "position": "bottom", "height": "300px" } }
 ```
 
-**Samspil:** Ved `bottom` er højden typisk vigtigst; ved `right` er bredden typisk vigtigst.
+`position` er `right` eller `bottom`. `width` bruges til højre og `height` i bunden.
 
-## Editor, tegning og indlæsning
+## Egen JavaScript
 
-### `editorAlwaysActivated`
-
-**Formål:** Holder editoradfærd aktiveret, når editoren findes. **Type og standard:** boolean, `true`.
-
-```json
-{ "editorAlwaysActivated": false }
-```
-
-**Samspil:** Nyere editorvalg ligger normalt under `extensionConfig.editor`.
-
-### `statelessDraw`
-
-**Formål:** Udelader tegnetilstand fra gemt state. **Type og standard:** boolean, `false`.
-
-```json
-{ "statelessDraw": true }
-```
-
-### `doNotCloseLoadScreen`
-
-**Formål:** Holder loadskærmen åben. **Type og standard:** boolean, `false`.
-
-```json
-{ "doNotCloseLoadScreen": true }
-```
-
-**Samspil:** Bruges kun i særlige integrationsflows; kan få løsningen til at se fastlåst ud.
-
-### `loadingTimeout` og `loadCheckingInterval`
-
-**Formål:** Millisekunder for load-timeout og brugerens lang-load-kontrol. **Standard:** `45000` og `15000`.
-
-```json
-{ "loadingTimeout": 60000, "loadCheckingInterval": 20000 }
-```
-
-**Samspil:** Højere værdier løser ikke langsomme services; mål årsagen først.
+Disse indstillinger indeholder JavaScript som tekst. Koden køres i alle brugernes browser, så brug dem med omtanke.
 
 ### `initFunction`
 
-**Formål:** Developer-hook ved initialisering. **Type og standard:** function eller `null`, `null`.
+En funktion, der køres, når alle lag er indlæst.
 
 ```json
-{ "initFunction": null }
+{ "initFunction": "function () { api.turnOn('natur.udsigtspunkter'); }" }
 ```
 
-**Samspil:** Kan ikke leveres som funktion i ren JSON. Brug betroet frontend/buildkode.
+### `infoCallback` og `emptyInfoCallback`
 
-## Server- og buildindstillinger
+Funktioner, der køres efter et klik i kortet. `infoCallback` får en liste med de lag, der havde et resultat. `emptyInfoCallback` køres, når klikket ikke ramte noget.
 
-Disse er ikke normale top-level-indstillinger i en GC2-gemt Vidi-konfiguration:
+```json
+{ "infoCallback": "function (layerKeys) { console.log(layerKeys); }" }
+```
 
-- `gc2.host` eller `GC2_HOST`
-- `PORT`
-- `extensions.browser` og `extensions.server`
-- `searchModules`
-- `print.templates`, printpool og print-timeout
-- `configUrl`, `autoLoadingConfig` og `defaultConfig`
+### `dateFormats`
 
-De styrer installationen eller valget af konfigurationskilde. Se [Admin-drift og fejlsøgning](/gc2/admin-drift-og-fejlsoegning).
+Navngivne datoformater til `formatDate` i [templates](/gc2/skemaindstillinger/database/tabelstruktur-data-og-felter#hjælpefunktioner). Standard er `{}`.
+
+```json
+{ "dateFormats": { "kort": "DD-MM-YYYY" } }
+```
+
+I en template skriver du så `{{formatDate besig_dato "kort"}}`.
+
+## Avanceret
+
+### `autoUpdate`
+
+Styrer, hvad der sker, når der er en ny version af Vidi. Med `false` opdaterer Vidi sig selv, når kortet åbnes. Med `true` får brugeren i stedet en besked med en knap til at opdatere. Standard er `false`.
+
+### `statelessDraw`
+
+`true` gør, at brugerens tegninger ikke huskes, når kortet åbnes igen. Standard er `false`.
+
+### `mode`
+
+Slår animationer og kontroller fra, f.eks. på langsomme computere. Standard er `0`. Tallene lægges sammen, f.eks. `5` for 1 og 4.
+
+| Værdi | Virkning |
+|---|---|
+| `1` | Menuen tones ikke ned, når kortet trækkes. |
+| `2` | Vidi kontrollerer ikke, om et lag er tomt. |
+| `4` | Ingen animation ved zoom. |
+
+### `wmsUriReplace`
+
+Erstatter adressen til GC2's WMS med en anden. `[navn]` erstattes med værdien af parameteren `navn` i adressen. Standard er `null`.
+
+```json
+{ "wmsUriReplace": "/wms/demo/[schema]?" }
+```
+
+### `loadCheckingInterval`
+
+Millisekunder, før brugeren får tilbudt at genindlæse, hvis kortet ikke er færdigt med at starte. Standard er `15000`.
+
+### `configSwitcher`
+
+Viser menupunktet **Konfigurationer**, hvor brugeren kan skifte konfiguration. Standard er `false`.
+
+## Indstillinger uden virkning
+
+`singleTiled`, `doNotCloseLoadScreen`, `editorAlwaysActivated` og `loadingTimeout` findes i Vidi, men bruges ikke, når de står i en konfiguration. Om et lag hentes som én eller flere tiles, styres af **Tiled** under [Meta](/gc2/skemaindstillinger/database/meta#tile-settings).
